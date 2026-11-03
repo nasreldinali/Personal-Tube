@@ -52,3 +52,5 @@ New tests cover collection bounds, classification schemas/quotes, encoded and mu
 ## YouTube connection correction
 
 Native Chrome channel resolution and latest-video retrieval were verified with the owner's unchanged saved key after correcting the default fetch receiver. The original failure was in application transport, not the key. No credentials were extracted. See [connection verification](YOUTUBE_CONNECTION.md).
+
+Follow-up live Chrome verification returned eight recommendations from 48 candidates with declared Arabic audio language and the requested view/like thresholds. Comment samples and their source links were visible; an unavailable-comment result was identified without failing the search. This is manual comment review, not a verified sentiment classifier. Original-catalog duration loading also succeeded for all 18 displayed videos. No application code changed during this follow-up.

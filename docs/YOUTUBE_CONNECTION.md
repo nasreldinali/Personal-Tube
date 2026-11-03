@@ -22,4 +22,6 @@ The earlier malformed-key hypothesis did not explain the owner's failure: their 
 
 MEASURED: `npm run check` passes 82 deterministic tests and detects nine deliberate defects. RED evidence is retained in ignored local reports. A fresh security review found no blocker, including the receiver and body-timeout changes.
 
+MEASURED: a subsequent native Chrome check with the same saved key returned eight recommendations from 48 candidates for an Arabic topic, using declared Arabic audio language, at least 100,000 views and 1,000 likes, ordered by views. Public comment samples and source links were displayed; one result reported unavailable comments without removing the other results. These samples support manual review and do not establish automatic positive-sentiment classification. Loading lengths for the original catalog updated all 18 displayed video durations successfully. This follow-up changed verification documentation only; application code and the recorded automated-check result are unchanged.
+
 Input validation (C3/CWE-20), secret handling (A04/A09/CWE-200), exception handling (A10), API authentication/configuration (API2/API8) and privacy P1/P2 apply. Existing local-app ASVS L1 scope and other reference mappings remain unchanged; no new model, hosting, dependency or credential permissions are introduced.
