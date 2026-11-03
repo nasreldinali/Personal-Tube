@@ -4,7 +4,7 @@ Reviewed: 2026-11-03.
 
 ## Automated checks
 
-`npm run check` passes 76 Node tests and detects eight deliberate defects in isolated scratch copies: community Origin enforcement, exact classification quote evidence, backup byte budget, strict community source validation, foreign Host refusal, key exclusion from backups, stale-tab refusal and stale-refresh refusal. It also checks JavaScript syntax, project-specific formatting, import cycles, domain boundaries, asset presence and source/brand SHA-256 integrity. This is not a general linter, coverage report or formal security certification.
+`npm run check` passes 82 Node tests and detects nine deliberate defects in isolated scratch copies: malformed-key rejection, community Origin enforcement, exact classification quote evidence, backup byte budget, strict community source validation, foreign Host refusal, key exclusion from backups, stale-tab refusal and stale-refresh refusal. It also checks JavaScript syntax, project-specific formatting, import cycles, domain boundaries, asset presence and source/brand SHA-256 integrity. This is not a general linter, coverage report or formal security certification.
 
 The same check also passes in a clean temporary copy without `.git`, `.local`, historical records or ignored original community source files.
 
@@ -48,3 +48,7 @@ A real Stack Exchange request scanned 300 comments and found no video links in t
 Browser verification covered original ordering, evidence disclosure, pagination from 24 to 48 cards, and the shared-recommender filter (12 results for the first card). The community grid was measured at 390px/820px/1200px: one/two/four columns with the sidebar collapsed, and three at 1200px expanded. English/light and Arabic/dark were inspected; no horizontal overflow was observed. No console warnings/errors were observed in the tested flow. These are browser viewport checks, not physical-device certification.
 
 New tests cover collection bounds, classification schemas/quotes, encoded and multi-link context, source credentials, same-origin routes, classifier argument policy and UTF-8 decoding, metadata enrichment, clearing and expiry during active work. Independent review found and helped close sort-before-analysis, UTF-8, global-clear and expiry-race issues. See [community security scope](COMMUNITY_SECURITY.md).
+
+## YouTube connection correction
+
+Native Chrome channel resolution and latest-video retrieval were verified with the owner's unchanged saved key after correcting the default fetch receiver. The original failure was in application transport, not the key. No credentials were extracted. See [connection verification](YOUTUBE_CONNECTION.md).

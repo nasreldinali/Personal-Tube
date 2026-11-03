@@ -5,6 +5,7 @@ import { parsePreferences } from '../domain/preferences.js';
 import { parseLibrary, parseBackup, validateChannels, validateBackupBudget } from '../domain/library.js';
 import { parseDiscovery } from '../domain/discovery.js';
 import { AppError } from '../domain/errors.js';
+import { validateYouTubeKey } from '../domain/youtube-key.js';
 
 export const PREFERENCE_KEY = 'personaltube.preferences.v1';
 export const LIBRARY_KEY = 'personaltube.library.v1';
@@ -46,8 +47,8 @@ export class BrowserStore {
   readKey() { return this.local.getItem(KEY_STORAGE) || this.session.getItem(KEY_STORAGE) || ''; }
   remembersKey() { return Boolean(this.local.getItem(KEY_STORAGE)); }
   saveKey(value, remember) {
-    if (typeof value !== 'string' || value.length > 250 || !value.trim()) throw new AppError('invalidKey');
-    (remember ? this.local : this.session).setItem(KEY_STORAGE, value.trim());
+    const key = validateYouTubeKey(value);
+    (remember ? this.local : this.session).setItem(KEY_STORAGE, key);
     (remember ? this.session : this.local).removeItem(KEY_STORAGE);
   }
   forgetKey() { this.local.removeItem(KEY_STORAGE); this.session.removeItem(KEY_STORAGE); }

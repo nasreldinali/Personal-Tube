@@ -1,20 +1,22 @@
 import { videoPattern, channelPattern } from '../config.js';
 import { parseChannel, safeImage } from '../domain/feed.js';
 import { AppError } from '../domain/errors.js';
+import { validateYouTubeKey } from '../domain/youtube-key.js';
 
 export class YouTubeClient {
-  constructor(key, fetcher = fetch) { this.key = key; this.fetcher = fetcher; }
+  constructor(key, fetcher = (url, options) => fetch(url, options)) { this.key = key; this.fetcher = fetcher; }
 
   async request(resource, params) {
     if (!['channels', 'playlistItems', 'videos', 'search', 'commentThreads'].includes(resource)) throw new AppError('invalidResource');
     const url = new URL(`https://www.googleapis.com/youtube/v3/${resource}`);
     url.search = new URLSearchParams(params);
+    const key = validateYouTubeKey(this.key);
     let response;
     try {
-      response = await this.fetcher(url, { headers: { 'X-Goog-Api-Key': this.key }, signal: AbortSignal.timeout(15000) });
-    } catch { throw new AppError('network'); }
+      response = await this.fetcher(url, { headers: { 'X-Goog-Api-Key': key }, signal: AbortSignal.timeout(15000) });
+    } catch (error) { throw new AppError(error?.name === 'TimeoutError' ? 'youtubeTimeout' : 'network'); }
     let data;
-    try { data = await response.json(); } catch { throw new AppError('invalidResponse'); }
+    try { data = await response.json(); } catch (error) { throw new AppError(error?.name === 'TimeoutError' ? 'youtubeTimeout' : 'invalidResponse'); }
     if (!response.ok) {
       const reason = data?.error?.errors?.[0]?.reason;
       if (['commentsDisabled', 'videoNotFound'].includes(reason) && resource === 'commentThreads') throw new AppError('commentsUnavailable');

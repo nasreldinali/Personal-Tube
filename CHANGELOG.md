@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.2.1
+
+- Fix native browser fetch invocation so saved YouTube keys can resolve channels and retrieve videos.
+- Reject malformed pasted YouTube keys before storage or requests, preserving any previously saved key.
+- Distinguish request/body timeouts from connection failures without exposing credential contents.
+
 ## 1.2.0
 
 - Reconnect original comment evidence and shared-recommender relationships without modifying the original source files.

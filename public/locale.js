@@ -183,6 +183,8 @@ const pairs = {
   duplicateChannel: ['This channel is already in your list.', 'هذه القناة موجودة في قائمتك بالفعل.'],
   channelLimit: ['You can follow up to 200 channels in this local dashboard.', 'يمكنك متابعة ٢٠٠ قناة كحد أقصى في هذه اللوحة المحلية.'],
   keyRequired: ['Connect a YouTube key in Settings first.', 'اربط مفتاح يوتيوب من الإعدادات أولاً.'],
+  keyFormat: ['The saved key contains invalid characters or is empty. In Settings, paste only the API key copied from Google Cloud, without labels, spaces or invisible formatting characters.', 'المفتاح فارغ أو يحتوي محارف غير صالحة. من الإعدادات الصق مفتاح API وحده من Google Cloud، دون عنوان أو مسافات أو محارف تنسيق مخفية.'],
+  youtubeTimeout: ['YouTube did not respond within 15 seconds. Retry and check your connection or VPN.', 'لم يستجب يوتيوب خلال ١٥ ثانية. أعد المحاولة وتحقق من الاتصال أو VPN.'],
   invalidKey: ['Check your API key, enabled service and website restrictions in Google Cloud.', 'راجع المفتاح وتفعيل الخدمة وقيود الموقع في Google Cloud.'],
   network: ['Could not reach YouTube. Check your connection and try again.', 'تعذّر الاتصال بيوتيوب. تحقق من اتصالك وحاول مجدداً.'],
   quota: ['The YouTube API quota is exhausted. Try again when it resets; cached results remain visible.', 'نفدت حصة واجهة يوتيوب. حاول بعد تجددها؛ تبقى النتائج المحفوظة ظاهرة.'],

@@ -4,6 +4,38 @@ import { YouTubeClient } from '../public/data/youtube.js';
 import { parseChannel } from '../public/domain/feed.js';
 import { apiResponse, CHANNEL, NOW } from './fixtures.js';
 
+test('default browser transport is never called with the client as its receiver', async () => {
+  const original = globalThis.fetch;
+  let received = false;
+  globalThis.fetch = function () {
+    if (this !== undefined && this !== globalThis) throw new TypeError('Illegal invocation');
+    received = true;
+    return Promise.resolve(apiResponse({ items: [] }));
+  };
+  try {
+    const client = new YouTubeClient('fixture');
+    assert.deepEqual(await client.request('channels', { part: 'snippet', forHandle: '@fixture' }), { items: [] });
+    assert.equal(received, true);
+  } finally { globalThis.fetch = original; }
+});
+
+test('malformed key characters reject before fetch and never become a network error', async () => {
+  let calls = 0;
+  for (const value of ['fixture\u200e', 'مفتاح', 'fixture\nheader', 'fixture key', '', 'x'.repeat(251)]) {
+    const client = new YouTubeClient(value, async () => { calls++; throw new TypeError('private fixture'); });
+    await assert.rejects(client.resolve('@fixture'), error => error.code === 'keyFormat' && !error.message.includes(value || 'private fixture'));
+  }
+  assert.equal(calls, 0);
+});
+test('timeout is distinct from blocked connections and error details stay private', async () => {
+  const client = new YouTubeClient('fixture', async () => { throw new DOMException('private fixture', 'TimeoutError'); });
+  await assert.rejects(client.resolve('@fixture'), error => error.code === 'youtubeTimeout');
+  client.fetcher = async () => ({ ok: true, json: async () => { throw new DOMException('private fixture', 'TimeoutError'); } });
+  await assert.rejects(client.resolve('@fixture'), error => error.code === 'youtubeTimeout');
+  client.fetcher = async () => { throw new TypeError('private fixture'); };
+  await assert.rejects(client.resolve('@fixture'), error => error.code === 'network' && !error.message.includes('private fixture'));
+});
+
 test('malformed URL escapes and oversized channel input fail with a safe typed error', () => {
   assert.throws(() => parseChannel('https://youtube.com/@bad%ZZ'), error => error.code === 'invalidChannel');
   assert.throws(() => parseChannel('@' + 'x'.repeat(10000)), error => error.code === 'invalidChannel');

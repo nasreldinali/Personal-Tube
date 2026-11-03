@@ -26,6 +26,7 @@ Open [PersonalTube](http://127.0.0.1:4173). The address needs the local server r
 1. Open [Google Cloud Console](https://console.cloud.google.com/), create a project and enable **YouTube Data API v3**.
 2. Create an API key. Restrict it to YouTube Data API v3 and website referrer `http://127.0.0.1:4173/*`.
 3. Enter it in **Settings & data**, not in source files or a chat.
+   Paste only the key value, without labels, internal spaces or invisible formatting characters. Invalid input is rejected without replacing your saved key; a saved key is verified by the next YouTube request.
 4. In **Manage channels**, add a handle such as `@lexfridman`, channel URL, or UC channel ID, with an optional category.
 5. **My channels** displays one latest public, published video per channel within 1, 3 or 7 days. Edit categories and remove channels in Manage channels.
 
@@ -64,9 +65,9 @@ The player uses `https://www.youtube.com/embed/VIDEO_ID` with an Open on YouTube
 npm run check
 ```
 
-This runs Node tests, syntax checks, project-specific lint/format checks, dependency cycles, domain purity, original-data/brand integrity, and eight deliberate defect plants in scratch copies. No dependencies are installed. This is not a full ESLint/Prettier or coverage report.
+This runs Node tests, syntax checks, project-specific lint/format checks, dependency cycles, domain purity, original-data/brand integrity, and nine deliberate defect plants in scratch copies. No dependencies are installed. This is not a full ESLint/Prettier or coverage report.
 
-See [verification](docs/VERIFICATION.md), [security](SECURITY.md), [contributing](CONTRIBUTING.md) and [architecture](docs/ARCHITECTURE.md). Real-key channel fetching and Premium remain unverified; automated API tests use synthetic responses.
+See [verification](docs/VERIFICATION.md), [security](SECURITY.md), [contributing](CONTRIBUTING.md) and [architecture](docs/ARCHITECTURE.md). Real-key channel resolution and latest-video retrieval were verified in Chrome; Premium remains unverified. Automated API tests use synthetic responses.
 
 ## Repository layout
 

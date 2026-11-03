@@ -5,6 +5,16 @@ import { emptyLibrary, toggleLibrary, parseBackup } from '../public/domain/libra
 import { emptyState } from '../public/domain/feed.js';
 import { memoryStorage, NOW, CHANNEL, VIDEO } from './fixtures.js';
 
+test('malformed pasted keys cannot replace a working saved key', () => {
+  const store = new BrowserStore(memoryStorage(), memoryStorage());
+  store.saveKey('fixture-secret', false);
+  for (const value of ['fixture\u200e', 'مفتاح', 'fixture key', 'fixture\r\nheader']) {
+    assert.throws(() => store.saveKey(value, true), error => error.code === 'keyFormat');
+    assert.equal(store.readKey(), 'fixture-secret');
+    assert.equal(store.remembersKey(), false);
+  }
+});
+
 test('library toggles are immutable and reject invalid IDs or actions', () => {
   const original = emptyLibrary();
   const changed = toggleLibrary(original, 'later', VIDEO.id);

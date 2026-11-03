@@ -4,6 +4,7 @@ import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const cases = [
+  { name: 'reject-malformed-youtube-key', file: 'public/data/browser-store.js', from: 'const key = validateYouTubeKey(value);', to: 'const key = value;', test: 'test/browser-store.test.js' },
   { name: 'community-origin-check', file: 'server/community-route.js', from: 'request.headers.origin !==', to: 'false && request.headers.origin !==', test: 'test/community-route.test.js' },
   { name: 'classification-quote-evidence', file: 'public/domain/community-evidence.js', from: ' || !input.text.includes(item.quote)', to: '', test: 'test/community-evidence.test.js' },
   { name: 'backup-byte-budget', file: 'public/domain/library.js', from: 'if (new TextEncoder()', to: 'if (false && new TextEncoder()', test: 'test/discovery-flow.test.js' },
