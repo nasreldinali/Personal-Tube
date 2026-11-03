@@ -12,10 +12,12 @@ Report a suspected vulnerability privately to the repository owner through an ex
 
 ## Verification and limitations
 
-`npm run check` includes security-focused validation and eight deliberately introduced defects in isolated scratch copies. The review target is applicable OWASP ASVS Level 1 controls for this local architecture, not formal certification. No guarantee of complete vulnerability or secret detection is made. Live-key API behavior and Premium playback require separate manual verification.
+`npm run check` includes security-focused validation and eleven deliberately introduced defects in isolated scratch copies. The review target is applicable OWASP ASVS Level 1 controls for this local architecture, not formal certification. No guarantee of complete vulnerability or secret detection is made. Live-key API behavior and Premium playback require separate manual verification.
 
 Before changing repository visibility, review all reachable history, author metadata, branches, tags, attachments and artifacts, plus data and brand licensing. Removing a file in a later commit does not remove earlier copies. History rewrites require explicit owner approval and coordination with existing clones.
 
 See [verification](docs/VERIFICATION.md) and [architecture](docs/ARCHITECTURE.md) for the measured scope and trust boundaries.
 
 Community collection and local Codex classification add same-origin POST and subprocess boundaries. See [the community security review](docs/COMMUNITY_SECURITY.md). Reddit tokens stay in page memory; model analysis uses the local Codex login and never receives those tokens.
+
+Automatic YouTube comment analysis uses the same restricted classifier with an explicit 160-comment maximum, exact quote checks and no unclassified fallback. The browser sends redacted public titles/comments only, never its YouTube key or author identifiers. See [analysis boundaries](docs/YOUTUBE_ANALYSIS.md).

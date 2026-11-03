@@ -35,16 +35,24 @@ export function candidateVideos(rows, input) {
   return videos.sort((a, b) => b[settings.sort] - a[settings.sort] || a.id.localeCompare(b.id));
 }
 
-export function commentSample(rows) {
+export function commentSample(rows, creatorId = '') {
   if (!Array.isArray(rows)) throw new AppError('invalidResponse');
   const seen = new Set();
+  const authors = new Set();
+  const texts = new Set();
   const comments = [];
   for (const row of rows.slice(0,20)) {
     const comment = row?.snippet?.topLevelComment;
     if (typeof comment?.id !== 'string' || !/^[\w-]{1,200}$/.test(comment.id) || seen.has(comment.id) || typeof comment.snippet?.textOriginal !== 'string') continue;
+    const author = comment.snippet.authorChannelId?.value;
+    const text = comment.snippet.textOriginal.trim().slice(0,1000);
+    const normalized = text.toLocaleLowerCase().replace(/\s+/g, ' ');
+    if (!text || texts.has(normalized) || (typeof author === 'string' && (author === creatorId || authors.has(author)))) continue;
+    texts.add(normalized);
+    if (typeof author === 'string') authors.add(author);
     seen.add(comment.id);
-    comments.push({ id: comment.id, text: comment.snippet.textOriginal.slice(0,1000), likes: Number.isSafeInteger(comment.snippet.likeCount) && comment.snippet.likeCount >= 0 ? comment.snippet.likeCount : 0 });
+    comments.push({ id: comment.id, text, likes: Number.isSafeInteger(comment.snippet.likeCount) && comment.snippet.likeCount >= 0 ? comment.snippet.likeCount : 0 });
   }
   comments.sort((a,b) => b.likes - a.likes);
-  return { sampled: comments.length, comments: comments.slice(0,5) };
+  return { sampled: comments.length, comments };
 }

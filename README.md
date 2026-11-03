@@ -34,7 +34,7 @@ The client resolves uploads with channels.list, reads playlistItems.list and ver
 
 ## Recommendations and communities
 
-Use **Recommendations** to enter a topic, choose declared audio language, set minimum published views/likes and sort by either count. An existing YouTube API key is required. Search is explicit, not automatic. Language filtering excludes unknown audio-language metadata; a creator declaration is not independent speech recognition. Up to eight results show public comment excerpts for your own review. No automatic positive-comment or quality score is claimed. Follow a result through **Add this channel**, or save the video. **Find a similar topic** in the player prepares an editable search.
+Use **Recommendations** to enter a topic, choose declared audio language, set minimum published views/likes and sort by either count. An existing YouTube API key is required. Search is explicit, not automatic. Language filtering excludes unknown audio-language metadata; a creator declaration is not independent speech recognition. Codex automatically analyzes up to 20 public comments on each of eight candidate videos. Only videos with at least two clear positive endorsements and more positives than criticism are shown, with counts and exact supporting quotes. Generic praise, advertising, questions and criticism do not qualify; identifiable creator comments and duplicates are excluded. Redacted public titles/comments are sent to the configured Codex provider using your local login and account allowance. A search has a two-minute analysis deadline; failures never fall back to unclassified recommendations. This limited sample cannot verify comment authenticity or represent the entire audience. See [automatic analysis](docs/YOUTUBE_ANALYSIS.md). Follow a result through **Add this channel**, or save the video. **Find a similar topic** in the player prepares an editable search.
 
 Use **Communities** to browse the original HackerTube ranking with supporting comments and the original co-recommendation graph. You can also collect bounded recent-comment samples from Hacker News or Stack Exchange directly. Reddit collection requires your approved OAuth access. New mentions are pending until classified; they are not treated as recommendations automatically.
 
@@ -65,7 +65,7 @@ The player uses `https://www.youtube.com/embed/VIDEO_ID` with an Open on YouTube
 npm run check
 ```
 
-This runs Node tests, syntax checks, project-specific lint/format checks, dependency cycles, domain purity, original-data/brand integrity, and nine deliberate defect plants in scratch copies. No dependencies are installed. This is not a full ESLint/Prettier or coverage report.
+This runs Node tests, syntax checks, project-specific lint/format checks, dependency cycles, domain purity, original-data/brand integrity, and eleven deliberate defect plants in scratch copies. No dependencies are installed. This is not a full ESLint/Prettier or coverage report.
 
 See [verification](docs/VERIFICATION.md), [security](SECURITY.md), [contributing](CONTRIBUTING.md) and [architecture](docs/ARCHITECTURE.md). Real-key channel resolution and latest-video retrieval were verified in Chrome; Premium remains unverified. Automated API tests use synthetic responses.
 

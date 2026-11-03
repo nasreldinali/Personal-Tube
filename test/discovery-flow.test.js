@@ -6,7 +6,7 @@ import { BrowserStore } from '../public/data/browser-store.js';
 import { parseCommunityImport } from '../public/domain/community.js';
 import { memoryStorage, NOW, VIDEO, CHANNEL } from './fixtures.js';
 
-test('recommendation path queries a topic, verifies metrics/audio and exposes a bounded public comment sample', async () => {
+test('recommendation path queries a topic, verifies metrics/audio and exposes analyzed positive evidence', async () => {
   const calls = [];
   const client = { request: async (resource, params) => {
     calls.push({ resource, params });
@@ -14,7 +14,7 @@ test('recommendation path queries a topic, verifies metrics/audio and exposes a 
     if (resource === 'videos') return { items: [{ id: VIDEO.id, snippet: { title: 'Fixture', channelId: CHANNEL.id, channelTitle: 'Fixture', defaultAudioLanguage: 'en' }, status: { privacyStatus: 'public' }, statistics: { viewCount: '500000', likeCount: '6000' } }] };
     return { items: ['Excellent explanation, highly recommended', 'Very helpful, worth watching'].map((text, i) => ({ snippet: { topLevelComment: { id: `fixture${i}`, snippet: { textOriginal: text, likeCount: 10 } } } })) };
   } };
-  const result = await recommendVideos(client, { ...parseRecommendationSettings(null), query: 'physics', language: 'en' });
+  const result = await recommendVideos(client, { ...parseRecommendationSettings(null), query: 'physics', language: 'en' }, async input => ({ version: 1, items: input.videos[0].comments.map((c,i) => ({ key: `${i}:${VIDEO.id}`, stance: 'rec', quote: c.text })) }));
   assert.equal(result.videos.length, 1);
   assert.equal(result.videos[0].channelCategory, 'physics');
   assert.equal(result.videos[0].evidence.comments.length, 2);

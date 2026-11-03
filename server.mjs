@@ -10,15 +10,18 @@ import { createCommunityAnalysis } from './server/community-analysis.js';
 import { createCodexClassifier } from './server/codex-classifier.js';
 import { boundedJSON } from './server/bounded-http.js';
 import { createCommunityMetadata } from './server/community-metadata.js';
+import { createYouTubeAnalysis } from './server/youtube-analysis.js';
 
 const root = new URL('./', import.meta.url);
 const log = event => console.error(JSON.stringify(event));
 const catalog = createCatalogRepository(root);
-const community = createCommunityController({ archive: createCommunityRepository({ root, catalog }), collect: createCommunityCollector({ request: boundedJSON, now: Date.now }), analyze: createCommunityAnalysis({ classify: createCodexClassifier() }), enrich: createCommunityMetadata({ request: boundedJSON, now: Date.now }), catalog, now: Date.now, id: randomUUID, schedule: (task, delay) => { const timer=setTimeout(task,delay); timer.unref(); return ()=>clearTimeout(timer); } });
+const classify = createCodexClassifier();
+const youtubeAnalysis = createYouTubeAnalysis({ classify, now: Date.now });
+const community = createCommunityController({ archive: createCommunityRepository({ root, catalog }), collect: createCommunityCollector({ request: boundedJSON, now: Date.now }), analyze: createCommunityAnalysis({ classify }), enrich: createCommunityMetadata({ request: boundedJSON, now: Date.now }), catalog, now: Date.now, id: randomUUID, schedule: (task, delay) => { const timer=setTimeout(task,delay); timer.unref(); return ()=>clearTimeout(timer); } });
 const server = createServer(createHandler({
   port: 4173,
   readAsset: file => readFile(new URL(`public/${file}`, root)),
-  catalog, community,
+  catalog, community, youtubeAnalysis,
   log,
 }));
 server.requestTimeout = 15000;

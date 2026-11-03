@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.3.0 — 2026-11-03
+
+- Automatically classify YouTube comment samples during recommendation search using the existing restricted Codex integration.
+- Display only videos meeting the positive-evidence threshold, with exact quotes, original links and dissent/sample counts.
+- Exclude identifiable creator comments and duplicates; enforce bounded same-origin analysis, cooldown and fail-closed output in English and Arabic.
+
 ## 1.2.1
 
 - Fix native browser fetch invocation so saved YouTube keys can resolve channels and retrieve videos.

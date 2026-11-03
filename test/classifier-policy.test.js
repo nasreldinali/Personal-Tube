@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { classifierArguments } from '../server/classifier-policy.js';
-import { parseClassifierEvents } from '../server/codex-classifier.js';
+import { parseClassifierEvents, createCodexClassifier } from '../server/codex-classifier.js';
 
 test('classifier invocation cannot select tools, hooks, execution or a user supplied model', () => {
   const args = classifierArguments('/scratch', '/scratch/schema.json');
@@ -22,4 +22,12 @@ test('Arabic quotes survive UTF-8 characters split across process output chunks'
   const output=Buffer.from(JSON.stringify({type:'item.completed',item:{type:'agent_message',text:JSON.stringify({version:1,items:[{quote:'أنصح بمشاهدة هذا الشرح'}]})}})+'\n{"type":"turn.completed"}\n');
   const split=output.indexOf(Buffer.from('أنصح'))+1;
   assert.equal(parseClassifierEvents([output.subarray(0,split),output.subarray(split)]).items[0].quote,'أنصح بمشاهدة هذا الشرح');
+});
+test('YouTube classifier bounds expand only for the explicit fixed mode', async () => {
+  const classify=createCodexClassifier({executable:process.execPath,environment:{}});
+  const row={videoIds:['abcdefghijk'],title:'Fixture',text:'Useful explanation'};
+  await assert.rejects(classify(Array(25).fill(row)),{code:'invalidCommunityEvidence'});
+  await assert.rejects(classify(Array(161).fill(row),'youtube'),{code:'invalidCommunityEvidence'});
+  await assert.rejects(classify([row],'unknown'),{code:'invalidCommunityEvidence'});
+  await assert.rejects(classify(Array(25).fill(row),'youtube'),{code:'classifierVersion'});
 });

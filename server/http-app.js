@@ -9,13 +9,17 @@ export const browserHeaders = {
   'Content-Security-Policy': "default-src 'self'; script-src 'self'; style-src 'self'; font-src 'self'; img-src 'self' https://i.ytimg.com https://yt3.ggpht.com https://yt3.googleusercontent.com; connect-src 'self' https://www.googleapis.com; frame-src https://www.youtube.com; object-src 'none'; base-uri 'none'; form-action 'none'; frame-ancestors 'none'",
 };
 
-export function createHandler({ readAsset, catalog, community, port = 4173, log = () => {} }) {
+export function createHandler({ readAsset, catalog, community, youtubeAnalysis, port = 4173, log = () => {} }) {
   return async (request, response) => {
     const send = (status, body, type = 'text/plain') => {
       response.writeHead(status, { ...browserHeaders, 'Content-Type': `${type}; charset=utf-8` });
       response.end(request.method === 'HEAD' ? undefined : body);
     };
     if (![`127.0.0.1:${port}`, `localhost:${port}`].includes(request.headers.host)) { send(403, 'Local access only'); return; }
+    if (request.url === '/api/youtube-analysis' && youtubeAnalysis) {
+      const result = await handleCommunityRequest(request, youtubeAnalysis, 600000);
+      send(result.status, JSON.stringify(result.body), 'application/json'); return;
+    }
     if (request.url === '/api/community' && community) {
       const result = await handleCommunityRequest(request, community);
       send(result.status, JSON.stringify(result.body), 'application/json'); return;

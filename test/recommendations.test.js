@@ -27,3 +27,11 @@ test('public comment sample is bounded, deduplicated and reports raw likes witho
   assert.equal('score' in sample, false);
   assert.equal('positive' in sample, false);
 });
+test('analysis sample excludes creators, repeated authors and duplicate text, retaining up to twenty', () => {
+  const comment = (id, text, author) => ({snippet:{topLevelComment:{id,snippet:{textOriginal:text,likeCount:1,authorChannelId:{value:author}}}}});
+  const rows = [comment('owner','Buy my course',CHANNEL.id),comment('a','Helpful tutorial','viewer-a'),comment('b','Another comment','viewer-a'),comment('c','  Helpful   tutorial ','viewer-b'),comment('d','   ','viewer-c'),...Array.from({length:20},(_,i)=>comment(`v${i}`,`Useful detail ${i}`,`author${i}`))];
+  const sample=commentSample(rows,CHANNEL.id);
+  assert.equal(sample.comments.length,16);
+  assert.equal(sample.comments[0].id,'a');
+  assert.equal(sample.comments.some(c=>['owner','b','c','d'].includes(c.id)),false);
+});
