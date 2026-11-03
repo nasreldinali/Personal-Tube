@@ -35,7 +35,12 @@ The client resolves uploads with channels.list, reads playlistItems.list and ver
 
 Use **Recommendations** to enter a topic, choose declared audio language, set minimum published views/likes and sort by either count. An existing YouTube API key is required. Search is explicit, not automatic. Language filtering excludes unknown audio-language metadata; a creator declaration is not independent speech recognition. Up to eight results show public comment excerpts for your own review. No automatic positive-comment or quality score is claimed. Follow a result through **Add this channel**, or save the video. **Find a similar topic** in the player prepares an editable search.
 
-Use **Communities** to import a small JSON/JSONL extract from Reddit, Hugging Face, Kaggle, Stack Exchange, Common Crawl or Wikipedia. [Format and source limitations](docs/COMMUNITY_FORMAT.md) explain extraction, attribution and access. A source mention is not automatically an endorsement. No huge archive download runs inside the browser. Google Books Ngrams contains word frequencies, so use its topics in search rather than importing it as video data.
+Use **Communities** to browse the original HackerTube ranking with supporting comments and the original co-recommendation graph. You can also collect bounded recent-comment samples from Hacker News or Stack Exchange directly. Reddit collection requires your approved OAuth access. New mentions are pending until classified; they are not treated as recommendations automatically.
+
+Choose **Analyze next batch with Codex**, or select the analysis option before collecting. The local Codex CLI uses your existing ChatGPT login, sends bounded public comment text to OpenAI and consumes your account allowance. No Claude API key is needed. Each explicit action classifies at most 24 comment/video pairs with a two-minute deadline. Inspect the supporting quotes; classifications can be wrong. The integration is verified against CLI 0.155.1 and refuses other versions pending review. Existing original classifications need no new model calls.
+
+An optional **Import extracts from other archives** section still accepts small JSON/JSONL video-reference extracts from Reddit, Hugging Face, Kaggle, Stack Exchange, Common Crawl or Wikipedia. These archive imports are separate from the live comment pipeline; they are not automatic archive crawlers or classified recommendations. [Community pipeline](docs/COMMUNITY_PIPELINE.md) and [import format](docs/COMMUNITY_FORMAT.md) describe the exact boundaries.
+
 
 From 1100px, the desktop grid shows exactly three cards per row with the sidebar expanded and four with it collapsed. Smaller screens use two columns, or one at 440px and below. Filters remain visible while scrolling. The logo is intentionally not clickable.
 
@@ -59,7 +64,7 @@ The player uses `https://www.youtube.com/embed/VIDEO_ID` with an Open on YouTube
 npm run check
 ```
 
-This runs Node tests, syntax checks, project-specific lint/format checks, dependency cycles, domain purity, original-data/brand integrity, and six deliberate defect plants in scratch copies. No dependencies are installed. This is not a full ESLint/Prettier or coverage report.
+This runs Node tests, syntax checks, project-specific lint/format checks, dependency cycles, domain purity, original-data/brand integrity, and eight deliberate defect plants in scratch copies. No dependencies are installed. This is not a full ESLint/Prettier or coverage report.
 
 See [verification](docs/VERIFICATION.md), [security](SECURITY.md), [contributing](CONTRIBUTING.md) and [architecture](docs/ARCHITECTURE.md). Real-key channel fetching and Premium remain unverified; automated API tests use synthetic responses.
 
@@ -74,7 +79,7 @@ See [verification](docs/VERIFICATION.md), [security](SECURITY.md), [contributing
 | `test/`, `scripts/` | Automated tests, validation and local launcher |
 | `docs/` | Architecture, community import format and verification |
 
-Unused original embeddings, related-video data, full comment archive and internal development records are excluded from the current source tree. They are not needed to run or test the app. Local archives and generated reports belong in ignored `.local/`.
+Exact supplied comments, related data and embeddings are preserved locally in ignored `data/hackertube/original/`, with hashes in `source-integrity.json`. The runtime uses a contact-redacted evidence index derived from the original comments and co-recommendation graph. Embeddings remain preserved for future semantic search; they are not used by the current classifier. Fresh checkouts run from the included evidence index. Internal development records and generated reports belong in ignored `.local/`.
 
 
 ## Source and attribution

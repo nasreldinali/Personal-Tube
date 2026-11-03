@@ -17,6 +17,7 @@
     "public/assets/logo/deeda-mark-96.png": "1cf12734a5b2ea5fcf08abe6ec93f681b251d332e0dee65d42002968bd4524ed",
     "public/assets/logo/deeda-mark-256.png": "425eca476370b717da3682a43a8a2a1f9096d5170b6f293b4cd669a366b5f2fe",
     "public/assets/logo/favicon.ico": "bd8db7824ab0b6adae20a22eb1d1c7fecce403b1bbbf5e4186e938e32657cb2f",
-    "public/assets/logo/apple-touch-icon.png": "f32fb08a4e60ea8b7ecd06f8a2e907ce5c62a813ac9305d8a248205e304e5922"
+    "public/assets/logo/apple-touch-icon.png": "f32fb08a4e60ea8b7ecd06f8a2e907ce5c62a813ac9305d8a248205e304e5922",
+    "data/hackertube/evidence.json": "1743a3a32bf4b47818c8f330f361b1c57ecefe30a673224172b6790bcf8bf9b8"
   }
 }

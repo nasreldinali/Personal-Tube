@@ -8,6 +8,8 @@ Sources: [HackerTube](https://hackertube.org/about), [open-index/hacker-news](ht
 
 This repository uses the supplied data export, not Karpathy's original application/server source. It is an independent project, unaffiliated with YouTube, HackerTube or their owners.
 
+The derived `data/hackertube/evidence.json` preserves original stance labels, bounded redacted excerpts and comment permalinks; it is not a new independent source. Live Stack Exchange content retains source links and its applicable CC BY-SA attribution requirements. Live third-party comments stay in memory and are not redistributed as a new committed dataset.
+
 ## Fonts and brand assets
 
 Bundled fonts retain their accompanying notices in `public/assets/fonts/OFL.txt`, `NotoKufiArabic-OFL.txt` and `README.md`. DEEDA marks and design assets are included for this application. Their inclusion does not grant a general right to reuse the brand.

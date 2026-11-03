@@ -4,6 +4,8 @@ import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const cases = [
+  { name: 'community-origin-check', file: 'server/community-route.js', from: 'request.headers.origin !==', to: 'false && request.headers.origin !==', test: 'test/community-route.test.js' },
+  { name: 'classification-quote-evidence', file: 'public/domain/community-evidence.js', from: ' || !input.text.includes(item.quote)', to: '', test: 'test/community-evidence.test.js' },
   { name: 'backup-byte-budget', file: 'public/domain/library.js', from: 'if (new TextEncoder()', to: 'if (false && new TextEncoder()', test: 'test/discovery-flow.test.js' },
   { name: 'strict-community-source', file: 'public/domain/community.js', from: "typeof collection.source !== 'string' || ", to: '', test: 'test/community.test.js' },
   { name: 'reject-foreign-host', file: 'server/http-app.js', from: "if (![`127.0.0.1:${port}`, `localhost:${port}`].includes(request.headers.host))", to: 'if (false)', test: 'test/http-app.test.js' },

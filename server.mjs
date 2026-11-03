@@ -2,13 +2,23 @@ import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { createHandler } from './server/http-app.js';
 import { createCatalogRepository } from './server/catalog-repository.js';
+import { randomUUID } from 'node:crypto';
+import { createCommunityRepository } from './server/community-repository.js';
+import { createCommunityCollector } from './server/community-collector.js';
+import { createCommunityController } from './server/community-controller.js';
+import { createCommunityAnalysis } from './server/community-analysis.js';
+import { createCodexClassifier } from './server/codex-classifier.js';
+import { boundedJSON } from './server/bounded-http.js';
+import { createCommunityMetadata } from './server/community-metadata.js';
 
 const root = new URL('./', import.meta.url);
 const log = event => console.error(JSON.stringify(event));
+const catalog = createCatalogRepository(root);
+const community = createCommunityController({ archive: createCommunityRepository({ root, catalog }), collect: createCommunityCollector({ request: boundedJSON, now: Date.now }), analyze: createCommunityAnalysis({ classify: createCodexClassifier() }), enrich: createCommunityMetadata({ request: boundedJSON, now: Date.now }), catalog, now: Date.now, id: randomUUID, schedule: (task, delay) => { const timer=setTimeout(task,delay); timer.unref(); return ()=>clearTimeout(timer); } });
 const server = createServer(createHandler({
   port: 4173,
   readAsset: file => readFile(new URL(`public/${file}`, root)),
-  catalog: createCatalogRepository(root),
+  catalog, community,
   log,
 }));
 server.requestTimeout = 15000;

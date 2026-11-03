@@ -1,11 +1,15 @@
-# Runtime catalog
+# HackerTube source and evidence
 
-These files are retained byte-for-byte from the supplied HackerTube export:
+`videos.jsonl`, `taxonomy.json` and `DATA.md` remain byte-for-byte unchanged from the supplied export. The catalog contains 6,454 videos, 16 areas and 150 categories (taxonomy version `405edcef`).
 
-- `videos.jsonl`: 6,454 video records, read by the local catalog repository.
-- `taxonomy.json`: 16 areas and 150 categories, taxonomy version `405edcef`.
-- `DATA.md`: upstream documentation; descriptions of additional export files do not imply they are bundled here.
+The owner copy also preserves all original comments, related-video data, embeddings, embedding IDs and prompt under ignored `original/`. These exact source bytes are checked against `source-integrity.json` before regeneration. They are retained, not replaced. Embeddings are not used by the current runtime.
 
-The full mention archive, related-video neighbors, embedding vectors and embedding ID index are not used by this application and are excluded. The application can run and pass its checks without them. Retained file hashes are recorded in `../integrity.json`.
+`evidence.json` is a version 1 derived display index: original comment stances and bounded excerpts, source links, month precision and co-recommended video IDs. It omits comment-author names and redacts email/common credential patterns. The source catalog's existing scores remain authoritative; scores are not recomputed from the capped comment sample. Attribution and comment permalinks remain visible.
 
-See [attribution and licensing](../../NOTICE.md).
+To regenerate when the complete original files are available locally:
+
+```sh
+node scripts/build-community-evidence.mjs
+```
+
+Fresh checkouts run from the included index without downloading original archives or calling a model. All runtime data and branding hashes are checked by `npm run check`. See [NOTICE](../../NOTICE.md) and [pipeline](../../docs/COMMUNITY_PIPELINE.md).

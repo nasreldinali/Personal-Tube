@@ -4,9 +4,11 @@ import { t, number } from '../locale.js';
 import { parseRecommendationSettings } from '../domain/recommendations.js';
 import { parseCommunityImport, mergeCollections, communitySources } from '../domain/community.js';
 import { AppError } from '../domain/errors.js';
+import { createCommunityFeed } from './community-feed.js';
 import { recommendVideos } from '../services/recommendations.js';
 
 export function createDiscoveryPanel({ context, saveDiscovery, setBusy, client, openSettings, onPlay, onToggle, onFollow, onError, confirm, changeMode }) {
+  const communityFeed = createCommunityFeed({ context, onPlay, onToggle, onError, setBusy });
   let results = [];
   let resultSummary = null;
   let status = '';
@@ -94,14 +96,14 @@ export function createDiscoveryPanel({ context, saveDiscovery, setBusy, client, 
       const source = $('community-source').value;
       $('community-source-link').href = communitySources[source].url;
       $('source-help').textContent = text(source === 'reddit' ? 'sourceReddit' : 'sourceGeneral');
-      renderCollections();
+      renderCollections(); communityFeed.render();
     }
     const videos = community ? communityVideos() : results;
     $('discovery-videos').replaceChildren(...videos.slice(0,community ? pageSize : 8).map(video => card(video, community)));
     $('community-more').hidden = !community || videos.length <= pageSize;
     let message = community ? videos.length ? text('communityCount', { count: number(c.language, videos.length) }) : text('communityEmpty') : resultSummary ? text('recommendationResults', { shown: number(c.language, results.length), inspected: number(c.language, resultSummary.inspected) }) : text('recommendationIdle');
     if (status && community) message = text(status, statusValues);
-    $('discovery-status').textContent = message; $('discovery-status').hidden = false;
+    $('discovery-status').textContent = message; $('discovery-status').hidden = community && !videos.length && !status;
   }
   bind('recommendation-form', 'submit', async event => {
     event.preventDefault(); if (context().busy) return;
@@ -141,8 +143,9 @@ export function createDiscoveryPanel({ context, saveDiscovery, setBusy, client, 
   });
   return {
     render, hydrate,
-    reset() { generation++; results = []; resultSummary = null; status = ''; hydrate(); render(); },
-    videos() { return [...results, ...communityVideos()]; },
+    clearCommunity:()=>communityFeed.clear(),
+    reset() { communityFeed.reset(); generation++; results = []; resultSummary = null; status = ''; hydrate(); render(); },
+    videos() { return [...results, ...communityVideos(), ...communityFeed.videos()]; },
     similar(video) {
       changeMode('recommendations');
       $('rec-query').value = (video.categories?.[0]?.name || video.tags?.[0] || video.title).slice(0,200);

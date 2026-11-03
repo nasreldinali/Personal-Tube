@@ -360,16 +360,17 @@ bind('import-data', 'change', async () => {
 }, 'settings-error');
 bind('clear-data', 'click', () => {
   if (busy) throw new AppError('busy');
-  askConfirmation('confirmClear', () => {
+  askConfirmation('confirmClear', async () => {
     if (busy) throw new AppError('busy');
     if (!store) throw new AppError('storageWrite');
+    await discoveryPanel.clearCommunity();
     stateRevision++;
     try { store.clearPersonalData(); } catch { throw new AppError('storageWrite'); }
     state = emptyState(); library = emptyLibrary(); metadata = {}; key = ''; preferences = parsePreferences(null); discovery = parseDiscovery(null); storageBlocked = false; staleTab = false; discoveryPanel.reset();
     $('api-key').value = ''; $('remember-key').checked = false; applyPreferences(); notify('cleared');
   });
 }, 'settings-error');
-bind('confirm-yes', 'click', () => { const action = confirmation?.action; $('confirm-dialog').close(); action?.(); }, 'settings-error');
+bind('confirm-yes', 'click', async () => { const action = confirmation?.action; $('confirm-dialog').close(); await action?.(); }, 'settings-error');
 bind('player-later', 'click', () => toggleSaved('later', activeVideo.id, activeVideo));
 bind('player-watched', 'click', () => toggleSaved('watched', activeVideo.id, activeVideo));
 document.querySelectorAll('[data-close]').forEach(button => button.addEventListener('click', () => $(button.dataset.close).close()));

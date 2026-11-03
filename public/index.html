@@ -61,6 +61,25 @@
           <p class="d-note" data-i18n="recommendationHelp"></p>
         </section>
         <section id="community-controls" hidden>
+          <section id="community-live" aria-labelledby="community-live-title">
+            <h3 id="community-live-title" data-i18n="communityLiveTitle"></h3>
+            <form id="community-collect-form" class="discovery-form">
+              <label class="d-field"><span data-i18n="communitySource"></span><select id="collect-source" class="d-select"><option value="archive" data-i18n="originalCollection"></option><option value="hn" data-i18n="hnLiveSource"></option><option value="stackexchange" data-i18n="stackLiveSource"></option><option value="reddit" data-i18n="redditLiveSource"></option></select></label>
+              <label class="d-field"><span data-i18n="recommendationTopic"></span><input id="collect-query" class="d-input" maxlength="120" data-i18n-placeholder="communityQueryPlaceholder"></label>
+              <label id="collect-scope-field" class="d-field" hidden><span id="collect-scope-label"></span><input id="collect-scope" class="d-input" maxlength="60" value="stackoverflow"></label>
+              <label id="collect-days-field" class="d-field" hidden><span data-i18n="commentWindow"></span><select id="collect-days" class="d-select"><option value="7" data-i18n="sevenDays"></option><option value="30" data-i18n="thirtyDays"></option><option value="365" data-i18n="yearWindow"></option></select></label>
+              <fieldset id="reddit-connection" class="wide-field" hidden><legend data-i18n="redditConnection"></legend><p class="help" data-i18n="redditConnectionHelp"></p><label class="d-field"><span data-i18n="redditUsername"></span><input id="reddit-username" class="d-input" maxlength="30" autocomplete="off"></label><label class="d-field"><span data-i18n="redditToken"></span><input id="reddit-token" class="d-input" type="password" maxlength="2000" autocomplete="off"></label><label class="check"><input id="reddit-approved" type="checkbox"><span data-i18n="redditApproved"></span></label></fieldset>
+              <label id="collect-analysis-field" class="check wide-field" hidden><input id="collect-analyze" type="checkbox"><span data-i18n="collectAnalyze"></span></label>
+              <p id="collect-source-help" class="help wide-field"></p>
+              <div class="button-row wide-field"><button id="collect-submit" class="d-btn d-btn-primary" data-i18n="collectComments"></button><button id="community-original" type="button" class="d-btn d-btn-secondary" data-i18n="originalCollection"></button></div>
+            </form>
+            <div class="community-live-filters"><label class="d-field"><span data-i18n="sort"></span><select id="collect-sort" class="d-select"><option value="top" data-i18n="top"></option><option value="newest" data-i18n="newestMentions"></option><option value="shared" data-i18n="mostShared"></option></select></label><button id="collect-analyze-next" class="d-btn d-btn-secondary" data-i18n="analyzeNext" hidden></button><button id="collect-clear" class="text-button" data-i18n="clearSessionResults" hidden></button></div>
+            <p id="collect-status" class="d-note" role="status"></p>
+            <p id="collect-analysis-help" class="help" data-i18n="codexAnalysisHelp"></p>
+            <div id="community-live-videos" class="video-grid"></div>
+            <button id="collect-more" class="d-btn d-btn-secondary" data-i18n="showMore" hidden></button>
+          </section>
+          <details class="community-import-details"><summary data-i18n="archiveImports"></summary>
           <p class="d-note" data-i18n="communityHelp"></p>
           <form id="community-form" class="discovery-form">
             <label class="d-field"><span data-i18n="communitySource"></span><select id="community-source" class="d-select"><option value="reddit">Reddit / Academic Torrents</option><option value="huggingface">Hugging Face</option><option value="kaggle">Kaggle</option><option value="stackexchange">Stack Exchange</option><option value="commoncrawl">Common Crawl</option><option value="wikipedia">Wikipedia</option></select></label>
@@ -70,6 +89,7 @@
           </form>
           <p id="source-help" class="help"></p><p class="help" data-i18n="ngramsHelp"></p>
           <div id="community-collections" class="collection-list"></div>
+          </details>
         </section>
         <p id="discovery-status" class="d-note" role="status" hidden></p>
         <div id="discovery-videos" class="video-grid"></div>
