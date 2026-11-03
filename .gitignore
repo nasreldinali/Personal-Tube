@@ -1,0 +1,8 @@
+.DS_Store
+node_modules/
+.env
+.env.*
+*.local
+personaltube-backup*.json
+records/baseline-source.tar
+records/screenshots/

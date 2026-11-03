@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="description" content="PersonalTube by DEEDA — your channels and the original HackerTube collection, in a personal bilingual dashboard.">
+  <title>PersonalTube · DEEDA IT-Solutions</title>
+  <link rel="icon" href="/assets/logo/favicon.ico">
+  <link rel="apple-touch-icon" href="/assets/logo/apple-touch-icon.png">
+  <link rel="stylesheet" href="/assets/tokens/deeda.css">
+  <link rel="stylesheet" href="/styles.css">
+  <script type="module" src="/app.js"></script>
+</head>
+<body>
+  <a class="skip" href="#feed" data-i18n="skip">Skip to videos</a>
+  <div class="d-shell">
+    <aside class="d-side">
+      <div class="d-brand" aria-label="PersonalTube · DEEDA IT-Solutions">
+        <img src="/assets/logo/deeda-mark-96.png" width="48" height="48" alt="">
+        <div><div class="d-wordmark"><b>DEEDA</b> <span>IT-Solutions</span></div><div class="d-appname">PersonalTube</div></div>
+      </div>
+      <button id="sidebar-toggle" class="sidebar-toggle" aria-expanded="true" aria-controls="sidebar-navigation" data-i18n-label="collapseSidebar"><span aria-hidden="true">☰</span><span data-i18n="collapseSidebar"></span></button>
+      <nav id="sidebar-navigation" class="d-nav" data-i18n-label="navigation" aria-label="Main navigation">
+        <p class="nav-label" data-i18n="workspace">YOUR VIEWING SPACE</p>
+        <button id="view-discover" data-view="discover" aria-current="page"><span aria-hidden="true">▦</span><span data-i18n="discover">Discover</span></button>
+        <button id="view-channels" data-view="channels"><span aria-hidden="true">▤</span><span data-i18n="channels">My channels</span><span id="nav-channels-count" class="nav-count">0</span></button>
+        <button id="view-recommendations" data-view="recommendations"><span aria-hidden="true">✧</span><span data-i18n="recommendations"></span></button>
+        <button id="view-community" data-view="community"><span aria-hidden="true">◎</span><span data-i18n="community"></span></button>
+        <p class="nav-label" data-i18n="library">YOUR LIBRARY</p>
+        <button id="view-later" data-view="later"><span aria-hidden="true">◷</span><span data-i18n="later">Watch later</span><span id="nav-later-count" class="nav-count">0</span></button>
+        <button id="view-watched" data-view="watched"><span aria-hidden="true">✓</span><span data-i18n="watched">Watched</span></button>
+        <div class="nav-divider"></div>
+        <button id="channels-open"><span aria-hidden="true">＋</span><span data-i18n="manage">Manage channels</span></button>
+        <button id="settings-open"><span aria-hidden="true">⚙</span><span data-i18n="settings">Settings &amp; data</span></button>
+      </nav>
+      <div class="d-side-foot">
+        <div class="d-ctls">
+          <label class="d-ctl"><span data-i18n="language">Language</span><select id="language"><option value="en">English</option><option value="ar">العربية</option></select></label>
+          <label class="d-ctl"><span data-i18n="theme">Appearance</span><select id="theme"><option value="auto" data-i18n="auto">Automatic</option><option value="light" data-i18n="light">Light</option><option value="dark" data-i18n="dark">Dark</option></select></label>
+        </div>
+        <p class="local-note"><span class="local-dot" aria-hidden="true"></span><span data-i18n="local">Stored on this browser</span><small data-i18n="localDetail">Your choices stay with you.</small></p>
+      </div>
+    </aside>
+    <main class="d-main">
+      <header class="topbar"><span class="page-brand" dir="ltr">PersonalTube<span class="brand-divider">/</span><span id="current-view">Discover</span></span><label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" data-i18n-label="search" data-i18n-placeholder="searchPlaceholder" aria-label="Search videos, channels or topics" placeholder="What would you like to learn?"></label></header>
+      <section class="d-hero" id="hero"><img class="d-watermark" src="/assets/logo/deeda-mark-256.png" alt=""><div class="hero-copy"><p class="d-eyebrow" data-i18n="heroEyebrow">PERSONALTUBE · BY DEEDA</p><h1 data-i18n="heroTitle">A little less noise. A lot more worth watching.</h1><p class="d-lead" data-i18n="heroDescription">Explore talks recommended by the Hacker News community, or follow the channels you choose. Your time, your feed.</p><div class="hero-actions"><button id="hero-explore" class="d-btn d-btn-primary" data-i18n="exploreToday">Explore today’s selection</button><button id="hero-add" class="d-btn d-btn-ghost"><span aria-hidden="true">＋</span><span data-i18n="addChannel">Add a channel</span></button></div></div></section>
+      <div class="stats" id="stats"><div><strong id="catalog-count">—</strong><span data-i18n="catalogCount">Videos in the collection</span></div><div><strong id="topic-count">—</strong><span data-i18n="topicCount">Topics to explore</span></div><div><strong id="channel-count">0</strong><span data-i18n="yourChannels">Channels you follow</span></div></div>
+      <p id="notice" class="d-note notice" role="status" hidden></p>
+      <section id="discovery-panel" hidden aria-labelledby="discovery-title">
+        <div class="feed-heading"><div><h2 id="discovery-title"></h2><p id="discovery-description" class="muted"></p></div></div>
+        <section id="recommendation-controls">
+          <form id="recommendation-form" class="discovery-form">
+            <label class="d-field wide-field"><span data-i18n="recommendationTopic"></span><input id="rec-query" class="d-input" maxlength="200" required data-i18n-placeholder="recommendationPlaceholder"></label>
+            <label class="d-field"><span data-i18n="audioLanguage"></span><select id="rec-language" class="d-select"><option value="any" data-i18n="anyLanguage"></option><option value="ar">العربية</option><option value="en">English</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option><option value="pt">Português</option><option value="it">Italiano</option><option value="tr">Türkçe</option><option value="hi">हिन्दी</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="zh">中文</option><option value="ru">Русский</option></select></label>
+            <label class="d-field"><span data-i18n="minViews"></span><input id="rec-min-views" class="d-input" type="number" min="0" max="1000000000000" step="1" required></label>
+            <label class="d-field"><span data-i18n="minLikes"></span><input id="rec-min-likes" class="d-input" type="number" min="0" max="1000000000000" step="1" required></label>
+            <label class="d-field"><span data-i18n="sort"></span><select id="rec-sort" class="d-select"><option value="views" data-i18n="mostViews"></option><option value="likes" data-i18n="mostLikes"></option></select></label>
+            <label class="check wide-field"><input id="rec-comments" type="checkbox"><span data-i18n="includeComments"></span></label>
+            <div class="button-row wide-field"><button id="recommendation-search" class="d-btn d-btn-primary" data-i18n="findRecommendations"></button></div>
+          </form>
+          <p class="d-note" data-i18n="recommendationHelp"></p>
+        </section>
+        <section id="community-controls" hidden>
+          <p class="d-note" data-i18n="communityHelp"></p>
+          <form id="community-form" class="discovery-form">
+            <label class="d-field"><span data-i18n="communitySource"></span><select id="community-source" class="d-select"><option value="reddit">Reddit / Academic Torrents</option><option value="huggingface">Hugging Face</option><option value="kaggle">Kaggle</option><option value="stackexchange">Stack Exchange</option><option value="commoncrawl">Common Crawl</option><option value="wikipedia">Wikipedia</option></select></label>
+            <label class="d-field"><span data-i18n="collectionName"></span><input id="community-name" class="d-input" maxlength="80" required></label>
+            <label class="d-field wide-field"><span data-i18n="communityFile"></span><input id="community-file" class="d-input" type="file" accept=".json,.jsonl,application/json" required></label>
+            <div class="button-row wide-field"><button id="community-import" class="d-btn d-btn-primary" data-i18n="importCollection"></button><button id="community-example" type="button" class="d-btn d-btn-secondary" data-i18n="downloadExample"></button><a id="community-source-link" class="text-button" target="_blank" rel="noopener noreferrer" data-i18n="browseSource"></a></div>
+          </form>
+          <p id="source-help" class="help"></p><p class="help" data-i18n="ngramsHelp"></p>
+          <div id="community-collections" class="collection-list"></div>
+        </section>
+        <p id="discovery-status" class="d-note" role="status" hidden></p>
+        <div id="discovery-videos" class="video-grid"></div>
+        <button id="community-more" class="d-btn d-btn-secondary" data-i18n="showMore" hidden></button>
+      </section>
+      <section id="feed" aria-labelledby="feed-title">
+        <div class="feed-heading"><div><h2 id="feed-title">Today’s discoveries</h2><p id="feed-description" class="muted"></p></div><button id="refresh" class="d-btn d-btn-secondary" data-i18n="refresh" hidden>Refresh channels</button></div>
+        <div class="filters">
+          <div id="catalog-filters" class="filter-group"><label class="d-field"><span data-i18n="topic">Topic</span><select id="area" class="d-select"></select></label><label class="d-field"><span data-i18n="category">Category</span><select id="category" class="d-select"></select></label><label class="d-field"><span data-i18n="length">Length</span><select id="duration" class="d-select"><option value="all" data-i18n="anyLength">Any length</option><option value="short" data-i18n="short">Under 20 minutes</option><option value="medium" data-i18n="medium">20–60 minutes</option><option value="long" data-i18n="long">Over an hour</option></select></label><label class="d-field"><span data-i18n="sort">Sort by</span><select id="sort" class="d-select"><option value="daily" data-i18n="daily">Daily mix</option><option value="top" data-i18n="top">Most recommended</option></select></label></div>
+          <div id="channel-filters" class="filter-group" hidden><label class="d-field"><span data-i18n="expiry">Published within</span><select id="expiry" class="d-select"><option value="1" data-i18n="oneDay">24 hours</option><option value="3" data-i18n="threeDays">3 days</option><option value="7" data-i18n="sevenDays">7 days</option></select></label><label class="d-field"><span data-i18n="category">Category</span><select id="channel-filter" class="d-select"></select></label><span id="update-time" class="muted"></span></div>
+        </div>
+        <div class="feed-meta"><span id="feed-count" role="status"></span><label class="check"><input id="hide-watched" type="checkbox"><span data-i18n="hideWatched">Hide watched</span></label></div>
+        <p id="metadata-help" class="d-note" hidden data-i18n="metadataHelp">Length filters use verified YouTube data only. Connect a key, then load lengths for the displayed videos.</p>
+        <div id="videos" class="video-grid" aria-live="polite"></div>
+        <div id="empty" class="empty" hidden><span class="empty-symbol" aria-hidden="true">▤</span><h3 id="empty-title"></h3><p id="empty-copy"></p><button id="reset-filters" class="d-btn d-btn-secondary" data-i18n="resetFilters">Reset filters</button><button id="empty-add" class="d-btn d-btn-primary" data-i18n="addChannel" hidden>Add a channel</button></div>
+        <div class="feed-actions"><button id="show-more" class="d-btn d-btn-secondary" data-i18n="showMore" hidden>Show more videos</button><button id="fetch-durations" class="text-button" data-i18n="fetchDurations">Load lengths for these videos</button></div>
+      </section>
+      <footer><p><b dir="ltr">PersonalTube</b> <span data-i18n="footer">Built for intentional viewing.</span></p><a href="https://hackertube.org/about" target="_blank" rel="noopener noreferrer" data-i18n="sourceCredit">Collection: HackerTube / open-index Hacker News · ODC-By 1.0</a><p><a href="https://huggingface.co/datasets/open-index/hacker-news" target="_blank" rel="noopener noreferrer">open-index/hacker-news</a> · <a href="https://opendatacommons.org/licenses/by/1-0/" target="_blank" rel="noopener noreferrer">ODC-By 1.0</a></p><small data-i18n="notAffiliated">Independent project. Not affiliated with YouTube or HackerTube.</small></footer>
+    </main>
+  </div>
+  <dialog id="settings-dialog" aria-labelledby="settings-title"><div class="dialog-header"><h2 id="settings-title" data-i18n="settings">Settings &amp; data</h2><button class="close" data-close="settings-dialog" data-i18n-label="close" aria-label="Close">×</button></div><h3 data-i18n="connection">Connect YouTube</h3><p class="muted" data-i18n="connectionDescription"></p>
+    <form id="settings-form"><label class="d-field"><span data-i18n="apiKey">YouTube API key</span><input class="d-input" id="api-key" type="password" dir="ltr" autocomplete="off" spellcheck="false" data-i18n-placeholder="keyPlaceholder" maxlength="250" required></label><label class="check"><input type="checkbox" id="remember-key"><span data-i18n="rememberKey">Remember the key in this browser</span></label><p class="help" data-i18n="keyHelp"></p><p id="settings-error" class="error" role="alert"></p><div class="button-row"><button class="d-btn d-btn-primary" data-i18n="saveConnection">Save connection</button><button id="forget-key" type="button" class="d-btn d-btn-secondary" data-i18n="forgetKey">Remove saved key</button></div></form>
+    <details><summary data-i18n="keyGuide">Get a YouTube API key</summary><ol><li><span data-i18n="guide1"></span> <a href="https://console.cloud.google.com/" target="_blank" rel="noopener noreferrer">Google Cloud Console ↗</a></li><li data-i18n="guide2"></li><li data-i18n="guide3"></li><li><span data-i18n="guide4"></span><code>http://127.0.0.1:4173/*</code></li><li data-i18n="guide5"></li></ol><p class="help" data-i18n="quotaHelp"></p></details>
+    <section class="settings-data"><h3 data-i18n="dataTitle"></h3><p class="muted" data-i18n="dataHelp"></p><div class="button-row"><button id="export-data" class="d-btn d-btn-secondary" data-i18n="exportData"></button><label class="d-btn d-btn-secondary file-label"><span data-i18n="importData"></span><input id="import-data" type="file" accept=".json,application/json" data-i18n-label="importData" aria-label="Import backup"></label><button id="clear-data" class="d-btn danger-button" data-i18n="clearData"></button></div></section><p class="d-note" data-i18n="privacy"></p>
+  </dialog>
+  <dialog id="channels-dialog" aria-labelledby="channels-title"><div class="dialog-header"><h2 id="channels-title" data-i18n="manage"></h2><button class="close" data-close="channels-dialog" data-i18n-label="close" aria-label="Close">×</button></div><form id="channel-form"><label class="d-field"><span data-i18n="channelInput"></span><input id="channel-input" class="d-input" dir="ltr" placeholder="@lexfridman · youtube.com/@…" maxlength="500" required></label><label class="d-field"><span data-i18n="categoryInput"></span><input id="channel-category" class="d-input" maxlength="60" list="categories-list" data-i18n-placeholder="categoryPlaceholder"></label><datalist id="categories-list"></datalist><p id="channel-error" class="error" role="alert"></p><button id="add-channel" class="d-btn d-btn-primary" data-i18n="addChannel"></button></form><h3 data-i18n="channelsList"></h3><div id="channel-list"></div></dialog>
+  <dialog id="player-dialog" aria-labelledby="player-title"><div class="dialog-header"><h2 id="player-title" dir="auto"></h2><button class="close" data-close="player-dialog" data-i18n-label="close" aria-label="Close">×</button></div><div id="player-container"></div><div class="player-toolbar"><a id="youtube-link" class="d-btn d-btn-primary" target="_blank" rel="noopener noreferrer" data-i18n="watchYouTube"></a><button id="player-later" class="d-btn d-btn-secondary"></button><button id="player-watched" class="d-btn d-btn-secondary"></button><button id="player-similar" class="d-btn d-btn-secondary" data-i18n="findSimilar"></button></div><p class="help" data-i18n="playbackHelp"></p><section id="recommendation"><h3 data-i18n="why"></h3><p id="video-summary" dir="auto"></p><p id="video-why" dir="auto"></p><blockquote id="video-quote" dir="auto"></blockquote><a id="hn-comment" target="_blank" rel="noopener noreferrer" data-i18n="originalComment"></a><p class="help" data-i18n="originalMetadata"></p></section></dialog>
+  <dialog id="confirm-dialog" aria-labelledby="confirm-text"><p id="confirm-text"></p><div class="button-row"><button id="confirm-yes" class="d-btn d-btn-primary" data-i18n="confirm"></button><button data-close="confirm-dialog" class="d-btn d-btn-secondary" data-i18n="cancel"></button></div></dialog>
+  <noscript>PersonalTube needs JavaScript to browse the local catalog. يتطلب PersonalTube تفعيل JavaScript.</noscript>
+</body>
+</html>

@@ -1,0 +1,30 @@
+import { mkdtemp, cp, readFile, writeFile, rm } from 'node:fs/promises';
+import { tmpdir } from 'node:os';
+import { join } from 'node:path';
+import { spawnSync } from 'node:child_process';
+
+const cases = [
+  { name: 'backup-byte-budget', file: 'public/domain/library.js', from: 'if (new TextEncoder()', to: 'if (false && new TextEncoder()', test: 'test/discovery-flow.test.js' },
+  { name: 'strict-community-source', file: 'public/domain/community.js', from: "typeof collection.source !== 'string' || ", to: '', test: 'test/community.test.js' },
+  { name: 'reject-foreign-host', file: 'server/http-app.js', from: "if (![`127.0.0.1:${port}`, `localhost:${port}`].includes(request.headers.host))", to: 'if (false)', test: 'test/http-app.test.js' },
+  { name: 'backup-excludes-key', file: 'public/data/browser-store.js', from: "discovery: this.readDiscovery(), format: 'personaltube-backup',", to: "discovery: this.readDiscovery(), key: this.readKey(), format: 'personaltube-backup',", test: 'test/browser-store.test.js' },
+  { name: 'refuse-stale-tab-write', file: 'public/data/browser-store.js', from: 'this.observed.has(key) &&', to: 'false &&', test: 'test/browser-store.test.js' },
+  { name: 'refuse-stale-refresh', file: 'public/services/refresh-result.js', from: 'startedRevision !== currentRevision', to: 'false', test: 'test/refresh-result.test.js' },
+];
+const results = [];
+for (const plant of cases) {
+  const scratch = await mkdtemp(join(tmpdir(), 'personaltube-plant-'));
+  try {
+    for (const name of ['public', 'server', 'test', 'package.json']) await cp(name, join(scratch, name), { recursive: true });
+    const file = join(scratch, plant.file);
+    const before = await readFile(file, 'utf8');
+    if (!before.includes(plant.from)) throw new Error(`Plant target changed: ${plant.name}`);
+    await writeFile(file, before.replace(plant.from, plant.to));
+    const result = spawnSync(process.execPath, ['--test', plant.test], { cwd: scratch, encoding: 'utf8', timeout: 10000, env: { PATH: process.env.PATH } });
+    const detected = result.status !== 0 && result.status !== null && /AssertionError|assertion|test failed|✖/.test(result.stdout + result.stderr);
+    results.push({ name: plant.name, detected, exitCode: result.status });
+    if (!detected) throw new Error(`Undetected defect: ${plant.name}`);
+    console.log(`Detected planted defect: ${plant.name}`);
+  } finally { await rm(scratch, { recursive: true, force: true }); }
+}
+await writeFile('records/defect-plants.json', JSON.stringify({ version: 1, results }, null, 2) + '\n');

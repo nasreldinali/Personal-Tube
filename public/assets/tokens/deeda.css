@@ -1,0 +1,226 @@
+/* =========================================================================
+   DEEDA brand stylesheet · v1.0 · October 2026
+   The look of the DEEDA app family (Idea Council, Posting Desk, Comply,
+   StartPage), built on DEEDA_GENERAL_DESIGN_SYSTEM.md v1.1.
+   Use it as is: link this file, then use the classes below. Keep ../fonts next to it.
+   Themes:  <html data-theme="light|dark">  (no attribute = follow the system)
+   Arabic:  <html lang="ar" dir="rtl">       (fonts and layout switch by themselves)
+   ========================================================================= */
+
+/* ---------- 0. Fonts: files in ../fonts (SIL OFL 1.1, see fonts/README.md) ---------- */
+@font-face{font-family:"Inter";font-weight:400;font-style:normal;font-display:swap;src:url("../fonts/Inter-Regular.ttf") format("truetype")}
+@font-face{font-family:"Inter";font-weight:600 800;font-style:normal;font-display:swap;src:url("../fonts/Inter-Bold.ttf") format("truetype")}
+@font-face{font-family:"Montserrat";font-weight:700;font-style:normal;font-display:swap;src:url("../fonts/Montserrat-Bold.ttf") format("truetype")}
+@font-face{font-family:"Montserrat";font-weight:800;font-style:normal;font-display:swap;src:url("../fonts/Montserrat-ExtraBold.ttf") format("truetype")}
+@font-face{font-family:"Noto Kufi Arabic";font-weight:100 900;font-style:normal;font-display:swap;src:url("../fonts/NotoKufiArabic-Variable.ttf") format("truetype")}
+
+/* ---------- 1. Tokens: brand primitives (never change per theme) ---------- */
+:root{
+  --deeda-blue:#3B5B8E;      /* DEEDA Blue: brand emphasis, links, selection */
+  --deeda-cyan:#4EA5D9;      /* DEEDA Cyan: primary action, accents, active states */
+  --deeda-navy:#071D3A;      /* DEEDA Navy: text on cyan, deepest surfaces */
+  --deeda-charcoal:#282D32;  /* Charcoal: main text in light theme */
+  --deeda-white:#FFFFFF;
+  --deeda-cyan-hover:#A8D7F0;
+
+  /* gradients */
+  --deeda-hero:linear-gradient(118deg,#1C3762 0%,#2A5A92 52%,#3873AA 100%);
+  --deeda-side:linear-gradient(180deg,#14263F,#0F1E33);
+
+  /* type */
+  --deeda-font-body:Inter,system-ui,-apple-system,"Segoe UI",Helvetica,Arial,sans-serif;
+  --deeda-font-heading:Montserrat,Inter,system-ui,-apple-system,"Segoe UI",sans-serif;
+  --deeda-font-ar:"Noto Kufi Arabic","SF Arabic","Geeza Pro","Noto Sans Arabic",sans-serif;
+
+  /* spacing (design system 7.1) and radii */
+  --deeda-space-2:8px;--deeda-space-3:12px;--deeda-space-4:16px;--deeda-space-6:24px;--deeda-space-8:32px;
+  --deeda-radius-input:7px;--deeda-radius-button:10px;--deeda-radius-card:14px;--deeda-radius-hero:16px;
+  --deeda-radius-pill:999px;
+
+  /* motion */
+  --deeda-motion:180ms;--deeda-ease:ease;--deeda-lift:-3px;--deeda-enter:500ms;
+  --deeda-enter-ease:cubic-bezier(.2,.7,.2,1);
+
+  /* sidebar (dark navy in both themes) */
+  --deeda-side-ink:#EAF1F8;--deeda-side-muted:#A9BCD3;--deeda-side-line:rgba(155,203,240,.14);
+}
+
+/* ---------- 2. Tokens: light theme (default) ---------- */
+:root{
+  --ink:#282D32;--secondary-ink:#58616D;--muted:#6B7280;--primary:#3B5B8E;--focus:#3B5B8E;
+  --line:#D9E3EF;--input-line:#A2AEBE;--info-line:#A9BFDA;--surface:#FFFFFF;
+  --blue-soft:#E7F0FA;--gray-soft:#EEF2F7;
+  --success-ink:#176A37;--success-soft:#EFF8F2;--success-line:#86B79A;
+  --warning-ink:#805010;--warning-soft:#FFF6E9;--warning-line:#CDA66C;
+  --danger-ink:#B42323;--danger-soft:#FFF0EE;--danger-line:#D89999;
+  --page:radial-gradient(1100px 620px at 88% -8%,rgba(78,165,217,.20),transparent 62%),
+         radial-gradient(900px 520px at -5% 105%,rgba(59,91,142,.12),transparent 60%),
+         linear-gradient(180deg,#F4F8FC,#EAF1F8);
+  --glass:rgba(255,255,255,.72);--glass-border:rgba(150,182,216,.75);--glass-hi:inset 0 1px 0 rgba(255,255,255,.9);
+  --card-shadow:0 1px 2px rgba(59,91,142,.10),0 8px 24px rgba(59,91,142,.16);
+  --card-hover:0 2px 4px rgba(59,91,142,.12),0 16px 36px rgba(59,91,142,.26);
+  color-scheme:light;
+}
+
+/* ---------- 3. Tokens: dark theme (navy, not black) ---------- */
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --ink:#EDF2F7;--secondary-ink:#CBD7E6;--muted:#B3C2D6;--primary:#9BCBF0;--focus:#9BCBF0;
+  --line:#2F4C72;--input-line:#6F8AB0;--info-line:#527493;--surface:#1A3152;
+  --blue-soft:#1C3D63;--gray-soft:#22406A;
+  --success-ink:#A2E6BE;--success-soft:#153328;--success-line:#4F966F;
+  --warning-ink:#FFD58F;--warning-soft:#3A2D16;--warning-line:#A58145;
+  --danger-ink:#FFBBBB;--danger-soft:#392329;--danger-line:#AE6A72;
+  --page:radial-gradient(1100px 650px at 88% -10%,rgba(78,165,217,.22),transparent 62%),
+         radial-gradient(900px 560px at -5% 105%,rgba(59,91,142,.30),transparent 60%),
+         linear-gradient(165deg,#13263F,#102038 55%,#15304C);
+  --glass:rgba(30,56,90,.55);--glass-border:rgba(155,203,240,.22);--glass-hi:inset 0 1px 0 rgba(255,255,255,.07);
+  --card-shadow:0 1px 2px rgba(0,0,0,.25),0 10px 28px rgba(4,14,30,.35);
+  --card-hover:0 2px 4px rgba(0,0,0,.3),0 16px 38px rgba(78,165,217,.22);
+  --deeda-side:linear-gradient(180deg,#0F2036,#0C1A2D);color-scheme:dark;
+}}
+:root[data-theme="dark"]{
+  --ink:#EDF2F7;--secondary-ink:#CBD7E6;--muted:#B3C2D6;--primary:#9BCBF0;--focus:#9BCBF0;
+  --line:#2F4C72;--input-line:#6F8AB0;--info-line:#527493;--surface:#1A3152;
+  --blue-soft:#1C3D63;--gray-soft:#22406A;
+  --success-ink:#A2E6BE;--success-soft:#153328;--success-line:#4F966F;
+  --warning-ink:#FFD58F;--warning-soft:#3A2D16;--warning-line:#A58145;
+  --danger-ink:#FFBBBB;--danger-soft:#392329;--danger-line:#AE6A72;
+  --page:radial-gradient(1100px 650px at 88% -10%,rgba(78,165,217,.22),transparent 62%),
+         radial-gradient(900px 560px at -5% 105%,rgba(59,91,142,.30),transparent 60%),
+         linear-gradient(165deg,#13263F,#102038 55%,#15304C);
+  --glass:rgba(30,56,90,.55);--glass-border:rgba(155,203,240,.22);--glass-hi:inset 0 1px 0 rgba(255,255,255,.07);
+  --card-shadow:0 1px 2px rgba(0,0,0,.25),0 10px 28px rgba(4,14,30,.35);
+  --card-hover:0 2px 4px rgba(0,0,0,.3),0 16px 38px rgba(78,165,217,.22);
+  --deeda-side:linear-gradient(180deg,#0F2036,#0C1A2D);color-scheme:dark;
+}
+
+/* ---------- 4. Base ---------- */
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;color:var(--ink);font:15px/1.6 var(--deeda-font-body);background:var(--page);
+  background-attachment:fixed;min-height:100vh}
+html[lang="ar"] body{font-family:var(--deeda-font-ar);font-size:16px;line-height:1.8}
+:focus-visible{outline:3px solid var(--focus);outline-offset:4px}
+a{color:var(--primary);text-underline-offset:3px}
+h1,h2,h3,h4{font-family:var(--deeda-font-heading);font-weight:800;letter-spacing:-.03em;line-height:1.3;
+  font-synthesis:none;text-wrap:balance}
+html[lang="ar"] :is(h1,h2,h3,h4){font-family:var(--deeda-font-ar);font-weight:700;letter-spacing:0;line-height:1.5}
+h1{font-size:clamp(28px,2.9vw,38px)}h2{font-size:22px;margin:44px 0 16px}h3{font-size:18px;margin:24px 0 8px}
+p{text-wrap:pretty}
+[id]{scroll-margin-top:24px}
+
+/* ---------- 5. App shell: navy sidebar + main ---------- */
+.d-shell{display:grid;grid-template-columns:292px minmax(0,1fr);min-height:100vh}
+.d-side{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;gap:14px;padding:22px 16px 16px;
+  background:var(--deeda-side);color:var(--deeda-side-ink);border-inline-end:1px solid var(--deeda-side-line);
+  color-scheme:dark}
+.d-brand{display:flex;align-items:center;gap:12px;padding:2px 8px 14px;border-bottom:1px solid var(--deeda-side-line);
+  direction:ltr;text-align:left}  /* the lockup keeps its English layout in every language */
+.d-brand img{width:48px;height:48px;flex:none;border-radius:11px;box-shadow:0 6px 18px rgba(0,0,0,.35)}
+.d-wordmark{font:800 19px/1.2 var(--deeda-font-heading);letter-spacing:-.03em;white-space:nowrap;direction:ltr}
+.d-wordmark b{color:#FFFFFF;font-weight:800}
+.d-wordmark span{color:var(--deeda-cyan);font-weight:700;letter-spacing:-.02em}
+.d-appname{margin-top:3px;font-size:14px;font-weight:600;color:var(--deeda-side-muted)}
+.d-nav{flex:1;overflow:auto}
+.d-group{display:flex;align-items:center;gap:10px;margin:14px 0 4px;padding:9px 12px;border-radius:10px;
+  font:800 15px/1.3 var(--deeda-font-heading);color:#FFFFFF;background:rgba(155,203,240,.10);
+  border:1px solid rgba(155,203,240,.16)}
+html[lang="ar"] .d-group{font-family:var(--deeda-font-ar);font-weight:700}
+.d-group svg{width:18px;height:18px;color:var(--deeda-cyan);flex:none}
+.d-nav a{display:block;color:var(--deeda-side-muted);text-decoration:none;font-size:14px;line-height:1.45;
+  padding:6px 12px;padding-inline-start:40px;border-radius:8px;border-inline-start:3px solid transparent;
+  transition:background-color var(--deeda-motion) ease,color var(--deeda-motion) ease}
+.d-nav a:hover{background:rgba(255,255,255,.06);color:var(--deeda-side-ink)}
+.d-nav a[aria-current]{color:#FFFFFF;font-weight:700;border-inline-start-color:var(--deeda-cyan);
+  background:linear-gradient(90deg,rgba(78,165,217,.30),rgba(78,165,217,.06))}
+html[dir="rtl"] .d-nav a[aria-current]{background:linear-gradient(270deg,rgba(78,165,217,.30),rgba(78,165,217,.06))}
+.d-side-foot{border-top:1px solid var(--deeda-side-line);padding:12px 6px 0;display:grid;gap:10px}
+.d-ctls{display:grid;grid-template-columns:1fr 1fr;gap:10px}
+.d-ctl{display:flex;flex-direction:column;gap:3px;font-size:12px;font-weight:700;color:var(--deeda-side-muted)}
+.d-ctl select{height:38px;padding:0 10px;border:1px solid rgba(155,203,240,.28);border-radius:8px;
+  background:rgba(255,255,255,.07);color:var(--deeda-side-ink);font:14px var(--deeda-font-body);width:100%}
+.d-main{padding:28px clamp(16px,3vw,40px) 64px;min-width:0;max-width:1240px;width:100%}
+.d-topbar{display:flex;justify-content:flex-end;margin:0 0 14px}
+
+/* ---------- 6. Hero banner ---------- */
+.d-hero{position:relative;overflow:hidden;overflow:clip;border-radius:var(--deeda-radius-hero);
+  padding:34px clamp(20px,3vw,40px) 30px;color:#fff;background:var(--deeda-hero);
+  border:1px solid rgba(155,203,240,.35);box-shadow:0 18px 44px rgba(28,55,98,.30)}
+.d-hero .d-watermark{position:absolute;inset-inline-end:-30px;bottom:-40px;width:260px;height:260px;opacity:.16;
+  pointer-events:none;border-radius:40px}
+.d-eyebrow{margin:0 0 6px;font-size:13px;font-weight:800;letter-spacing:.04em;text-transform:uppercase;color:#EEF5FD}
+html[lang="ar"] .d-eyebrow{letter-spacing:0;text-transform:none}
+.d-display{font:800 clamp(44px,5.4vw,66px)/1 var(--deeda-font-heading);letter-spacing:-.04em;margin:0 0 10px}
+html[lang="ar"] .d-display{font-family:var(--deeda-font-ar);letter-spacing:0;line-height:1.25}
+.d-lead{position:relative;max-width:860px;font-size:18px;line-height:1.55;margin:0 0 20px;color:#F4F9FE}
+
+/* ---------- 7. Buttons ---------- */
+.d-btn{display:inline-flex;align-items:center;gap:8px;min-height:46px;padding:11px 18px;
+  border-radius:var(--deeda-radius-button);font:700 15px/1.3 var(--deeda-font-body);text-decoration:none;
+  border:1px solid transparent;cursor:pointer;
+  transition:transform var(--deeda-motion) ease,box-shadow var(--deeda-motion) ease,background-color var(--deeda-motion) ease}
+html[lang="ar"] .d-btn{font-family:var(--deeda-font-ar)}
+.d-btn svg{width:18px;height:18px}
+.d-btn-primary{background:var(--deeda-cyan);color:var(--deeda-navy);box-shadow:0 8px 22px rgba(78,165,217,.45)}
+.d-btn-primary:hover{background:var(--deeda-cyan-hover)}
+.d-btn-ghost{color:#fff;border-color:rgba(255,255,255,.55);background:rgba(255,255,255,.06)}
+.d-btn-ghost:hover{background:rgba(255,255,255,.14)}
+.d-btn-secondary{color:var(--primary);background:var(--surface);border-color:var(--input-line)}
+.d-btn-secondary:hover{background:var(--blue-soft);border-color:var(--deeda-cyan)}
+
+/* ---------- 8. Glass surfaces: cards, tiles, tables ---------- */
+.d-glass,.d-card,.d-tile,.d-table{background:var(--glass);border:1px solid var(--glass-border);
+  box-shadow:var(--card-shadow),var(--glass-hi);-webkit-backdrop-filter:blur(14px) saturate(1.2);
+  backdrop-filter:blur(14px) saturate(1.2)}
+.d-card{border-radius:var(--deeda-radius-card);padding:20px 22px;
+  transition:transform var(--deeda-motion) ease,box-shadow var(--deeda-motion) ease,border-color var(--deeda-motion) ease}
+.d-card>:first-child{margin-top:0}.d-card>:last-child{margin-bottom:0}
+.d-tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:14px}
+.d-tile{border-radius:var(--deeda-radius-card);padding:16px 18px;
+  transition:transform var(--deeda-motion) ease,box-shadow var(--deeda-motion) ease}
+.d-tile .d-label{font-size:13px;font-weight:700;color:var(--secondary-ink)}
+.d-tile .d-number{font:800 34px/1.15 var(--deeda-font-heading);letter-spacing:-.03em;margin:6px 0 2px}
+.d-tile .d-hint{font-size:14px;color:var(--muted)}
+@media (hover:hover){.d-card:hover,.d-tile:hover{transform:translateY(var(--deeda-lift));
+  box-shadow:var(--card-hover),var(--glass-hi);border-color:rgba(78,165,217,.8)}.d-btn:hover{transform:translateY(-2px)}}
+.d-table{border-radius:var(--deeda-radius-card);overflow:auto}
+.d-table table{border-collapse:collapse;width:100%;font-size:14px}
+.d-table th,.d-table td{border-bottom:1px solid var(--line);padding:9px 12px;text-align:start;vertical-align:top}
+.d-table th{background:var(--blue-soft);font-weight:700}
+.d-table tr:last-child td{border-bottom:0}
+
+/* ---------- 9. Status: text + soft fill + line, never color alone ---------- */
+.d-success{--st-ink:var(--success-ink);--st-soft:var(--success-soft);--st-line:var(--success-line)}
+.d-warning{--st-ink:var(--warning-ink);--st-soft:var(--warning-soft);--st-line:var(--warning-line)}
+.d-danger{--st-ink:var(--danger-ink);--st-soft:var(--danger-soft);--st-line:var(--danger-line)}
+.d-neutral{--st-ink:var(--secondary-ink);--st-soft:var(--gray-soft);--st-line:var(--input-line)}
+.d-badge{display:inline-flex;align-items:center;gap:6px;border-radius:var(--deeda-radius-pill);padding:5px 11px;
+  font:700 13px/1.2 var(--deeda-font-body);color:var(--st-ink,var(--secondary-ink));
+  background:var(--st-soft,var(--gray-soft));border:1px solid var(--st-line,var(--input-line));white-space:nowrap}
+.d-chip{display:inline-flex;align-items:center;gap:8px;padding:7px 14px;border-radius:var(--deeda-radius-pill);
+  font-size:14px;font-weight:700;background:var(--glass);border:1px solid var(--glass-border);
+  box-shadow:var(--card-shadow),var(--glass-hi)}
+.d-chip svg{width:17px;height:17px;color:var(--deeda-cyan)}
+
+/* ---------- 10. Inputs ---------- */
+.d-field{display:grid;gap:4px}
+.d-field>span{font-size:13px;font-weight:700;color:var(--secondary-ink)}
+.d-input,.d-textarea,.d-select{width:100%;padding:10px 12px;border-radius:var(--deeda-radius-input);
+  border:1px solid var(--input-line);background:var(--surface);color:var(--ink);font:15px/1.5 inherit;
+  font-family:inherit}
+.d-select{height:42px;padding-block:0}
+.d-note{font-size:14px;color:var(--secondary-ink);background:var(--blue-soft);border:1px solid var(--info-line);
+  border-radius:10px;padding:10px 14px}
+
+/* ---------- 11. Motion: one entrance, a small lift on hover ---------- */
+@keyframes deeda-rise{from{opacity:0;transform:translateY(12px)}to{opacity:1;transform:none}}
+.d-enter{animation:deeda-rise var(--deeda-enter) var(--deeda-enter-ease) both}
+.d-enter:nth-child(2){animation-delay:60ms}.d-enter:nth-child(3){animation-delay:120ms}
+.d-enter:nth-child(n+4){animation-delay:180ms}
+@media (prefers-reduced-motion:reduce){html{scroll-behavior:auto}
+  *,*::before,*::after{animation:none!important;transition:none!important}}
+
+/* ---------- 12. Responsive ---------- */
+@media (max-width:900px){.d-shell{display:block}.d-side{position:static;height:auto}
+  .d-nav{max-height:300px;border:1px solid var(--deeda-side-line);border-radius:12px;padding:4px 8px}}
+@media (max-width:480px){.d-ctls{grid-template-columns:1fr}.d-hero .d-watermark{display:none}}
