@@ -36,7 +36,7 @@ INFERRED: a functional core with explicit adapters suits this local app without 
 | personaltube.metadata.v1 | version 1; videos dictionary; entries expire one day after fetchedAt. |
 | personaltube.key.v1 | 1-250 trimmed characters, raw string in sessionStorage by default, optional localStorage; never exported/logged. |
 | personaltube-backup.json | format personaltube-backup, writer version 2, readers 1/2 only; days, channels, required preferences/library, and v2 discovery. Filename .json, <=2,000,000 bytes before reading. No key or API caches/comment samples. Complete pretty-printed UTF-8 payload stays within the same byte limit. Invalid versions/schema refuse before writes. |
-| HackerTube source | taxonomy version 405edcef; unknown versions refused. Other original formats remain documented in DATA.md. |
+| HackerTube source | taxonomy version 405edcef; unknown versions refused. Original export formats remain documented in data/hackertube/DATA.md; only videos.jsonl and taxonomy.json are used. |
 
 Imports save prior entries and restore them if any write fails; rollback failure is reported. Export before deliberate clearing; clearing has no automatic undo. Compare-before-write plus storage-event invalidation reject ordinary stale-tab writes, but localStorage is not an atomic multi-tab database. Reload after a conflict.
 

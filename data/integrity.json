@@ -1,0 +1,22 @@
+{
+  "version": 1,
+  "files": {
+    "data/hackertube/videos.jsonl": "4a63125d00076015eb04edf0eb65f9524410bb60f88c3b67d61e767a19389b1e",
+    "data/hackertube/taxonomy.json": "40de4c333ced8ecbbf6067d97ce5f3aa111d22ab45d34a229cf85b28c476f00c",
+    "data/hackertube/DATA.md": "37d85dc79e5b393a3c743bb4c120dad49ebc61fbf04df8b5364b21e0ccd61f16",
+    "public/assets/tokens/deeda.css": "f44693a73465fdd77bcd605873d2586e43dc65b1b68377d205dd8e423fc01642",
+    "public/assets/tokens/deeda-tokens.json": "1d099fc4b1bc8ab3b6a2ceea9f6bb29ffd5674d116ebfe0781bdf953e625d727",
+    "public/assets/fonts/Inter-Regular.ttf": "1b08e7fc267a5c7e1d614100f604b83e7e8a0be241f0f288faa2b3ac93a683ba",
+    "public/assets/fonts/Inter-Bold.ttf": "b37284b5701b6b168dfc770aa1a4ac492106422fd3ba76bc7641e37434e8019c",
+    "public/assets/fonts/Montserrat-Bold.ttf": "247f052d2f5b84a5bbe7831c3b08a71ca391ff54f1dfb9be88a3d3da569e3a38",
+    "public/assets/fonts/Montserrat-ExtraBold.ttf": "f0123e28dc0c4cac86559d1ffe587dded6ec57a4819956f56fcf6ad31d696eed",
+    "public/assets/fonts/NotoKufiArabic-Variable.ttf": "494f6b61469d7a02a2d63f0fc4930bb007388d8cfe551de5eb98354e100889f3",
+    "public/assets/fonts/OFL.txt": "81a2e18f80cedd720cf76902d84ab8f4cb59c1ff58746ea5f878e55186604cfb",
+    "public/assets/fonts/NotoKufiArabic-OFL.txt": "07fc70bfeb985cc1a87a8587d0a0c80bab11c86c9dc3fd95b6f0cb332f983e96",
+    "public/assets/fonts/README.md": "bbc0136d9f5b72441c352ac91fb8a1a193a266a75d4cdb051f8ab849c4597757",
+    "public/assets/logo/deeda-mark-96.png": "1cf12734a5b2ea5fcf08abe6ec93f681b251d332e0dee65d42002968bd4524ed",
+    "public/assets/logo/deeda-mark-256.png": "425eca476370b717da3682a43a8a2a1f9096d5170b6f293b4cd669a366b5f2fe",
+    "public/assets/logo/favicon.ico": "bd8db7824ab0b6adae20a22eb1d1c7fecce403b1bbbf5e4186e938e32657cb2f",
+    "public/assets/logo/apple-touch-icon.png": "f32fb08a4e60ea8b7ecd06f8a2e907ce5c62a813ac9305d8a248205e304e5922"
+  }
+}

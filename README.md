@@ -12,7 +12,7 @@ Alternatively, with Node.js 20 or newer:
 npm run open
 ```
 
-Open [PersonalTube](http://127.0.0.1:4173). Port 4174 was a test preview, not the product. The address needs the local server running; do not open index.html directly. No package installation, database or hosting is required. The launcher reuses a verified PersonalTube server and refuses unrelated services on the port.
+Open [PersonalTube](http://127.0.0.1:4173). The address needs the local server running; do not open index.html directly. No package installation, database or hosting is required. The launcher reuses a verified PersonalTube server and refuses unrelated services on the port.
 
 ## Explore immediately
 
@@ -35,9 +35,9 @@ The client resolves uploads with channels.list, reads playlistItems.list and ver
 
 Use **Recommendations** to enter a topic, choose declared audio language, set minimum published views/likes and sort by either count. An existing YouTube API key is required. Search is explicit, not automatic. Language filtering excludes unknown audio-language metadata; a creator declaration is not independent speech recognition. Up to eight results show public comment excerpts for your own review. No automatic positive-comment or quality score is claimed. Follow a result through **Add this channel**, or save the video. **Find a similar topic** in the player prepares an editable search.
 
-Use **Communities** to import a small JSON/JSONL extract from Reddit, Hugging Face, Kaggle, Stack Exchange, Common Crawl or Wikipedia. [Format and source limitations](COMMUNITY_FORMAT.md) explain extraction, attribution and access. A source mention is not automatically an endorsement. No huge archive download runs inside the browser. Google Books Ngrams contains word frequencies, so use its topics in search rather than importing it as video data.
+Use **Communities** to import a small JSON/JSONL extract from Reddit, Hugging Face, Kaggle, Stack Exchange, Common Crawl or Wikipedia. [Format and source limitations](docs/COMMUNITY_FORMAT.md) explain extraction, attribution and access. A source mention is not automatically an endorsement. No huge archive download runs inside the browser. Google Books Ngrams contains word frequencies, so use its topics in search rather than importing it as video data.
 
-The sidebar can collapse to accessible icons, leaving four desktop cards per row from 1100px. Filters remain visible while scrolling. The logo is intentionally not clickable.
+From 1100px, the desktop grid shows exactly three cards per row with the sidebar expanded and four with it collapsed. Smaller screens use two columns, or one at 440px and below. Filters remain visible while scrolling. The logo is intentionally not clickable.
 
 ## Data and privacy
 
@@ -61,10 +61,26 @@ npm run check
 
 This runs Node tests, syntax checks, project-specific lint/format checks, dependency cycles, domain purity, original-data/brand integrity, and six deliberate defect plants in scratch copies. No dependencies are installed. This is not a full ESLint/Prettier or coverage report.
 
-See [enhancement delivery](records/ENHANCEMENTS_DELIVERY.md), [browser checks](records/BROWSER_CHECKS.md), [engineering checklist](records/ENGINEERING_CHECKLIST.md), [security review](records/SECURITY_REVIEW.md), [ASVS L1 scope](records/ASVS_L1.md) and [architecture](ARCHITECTURE.md). Real-key channel fetching and Premium remain unverified; automated API tests use synthetic responses.
+See [verification](docs/VERIFICATION.md), [security](SECURITY.md), [contributing](CONTRIBUTING.md) and [architecture](docs/ARCHITECTURE.md). Real-key channel fetching and Premium remain unverified; automated API tests use synthetic responses.
+
+## Repository layout
+
+| Path | Purpose |
+|---|---|
+| `public/` | Bilingual UI, domain rules, browser adapters and DEEDA assets |
+| `server/` | Loopback HTTP server and catalog reader |
+| `data/hackertube/` | Required original video catalog, taxonomy and upstream schema documentation |
+| `data/integrity.json` | SHA-256 integrity for retained source data and brand assets |
+| `test/`, `scripts/` | Automated tests, validation and local launcher |
+| `docs/` | Architecture, community import format and verification |
+
+Unused original embeddings, related-video data, full comment archive and internal development records are excluded from the current source tree. They are not needed to run or test the app. Local archives and generated reports belong in ignored `.local/`.
+
 
 ## Source and attribution
 
-Supplied export files remain byte-for-byte unchanged. The catalog is normalized from videos.jsonl and taxonomy.json; other raw files, test records and the private brand folder are not served. The supplied folder contains a data export, not HackerTube's application code. This app uses that export and reference card experience with DEEDA branding; it does not claim to run Karpathy's original server. [Karpathy's article](https://karpathy.bearblog.dev/hacker-tube/) describes personal versions built from the export.
+The retained export files in `data/hackertube/` remain byte-for-byte unchanged. The catalog is normalized from videos.jsonl and taxonomy.json; raw files and local archives are not served. The supplied folder contains a data export, not HackerTube's application code. This app uses that export and reference card experience with DEEDA branding; it does not claim to run Karpathy's original server. [Karpathy's article](https://karpathy.bearblog.dev/hacker-tube/) describes personal versions built from the export.
 
 Collection: [HackerTube](https://hackertube.org/about), [open-index/hacker-news](https://huggingface.co/datasets/open-index/hacker-news), [ODC-By 1.0](https://opendatacommons.org/licenses/by/1-0/). DEEDA assets and font licenses are preserved under public/assets. Independent project; unaffiliated with YouTube or HackerTube.
+
+See [NOTICE.md](NOTICE.md) for source and licensing boundaries.

@@ -1,4 +1,4 @@
-import { mkdtemp, cp, readFile, writeFile, rm } from 'node:fs/promises';
+import { mkdtemp, mkdir, cp, readFile, writeFile, rm } from 'node:fs/promises';
 import { tmpdir } from 'node:os';
 import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
@@ -27,4 +27,5 @@ for (const plant of cases) {
     console.log(`Detected planted defect: ${plant.name}`);
   } finally { await rm(scratch, { recursive: true, force: true }); }
 }
-await writeFile('records/defect-plants.json', JSON.stringify({ version: 1, results }, null, 2) + '\n');
+await mkdir('.local/reports', { recursive: true });
+await writeFile('.local/reports/defect-plants.json', JSON.stringify({ version: 1, results }, null, 2) + '\n');

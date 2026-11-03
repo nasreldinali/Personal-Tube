@@ -45,12 +45,10 @@ function checkCycle(file, trail = new Set(), done = new Set()) {
 }
 for (const file of graph.keys()) checkCycle(file);
 for (const [file] of assetManifest.values()) await readFile(`public/${file}`);
-const baseline = JSON.parse(await readFile('records/baseline-hashes.json', 'utf8'));
-for (const file of ['DATA.md', 'Prompt.md', 'videos.jsonl', 'taxonomy.json', 'mentions.jsonl', 'related.jsonl', 'embedding_ids.json', 'embeddings.npy']) {
-  if (createHash('sha256').update(await readFile(file)).digest('hex') !== baseline.files[file]) throw new Error(`Original export changed: ${file}`);
+const integrity = JSON.parse(await readFile('data/integrity.json', 'utf8'));
+for (const [file, expected] of Object.entries(integrity.files)) {
+  if (createHash('sha256').update(await readFile(file)).digest('hex') !== expected) throw new Error(`Source or brand asset changed: ${file}`);
 }
-const brand = JSON.parse(await readFile('records/brand-assets.json', 'utf8'));
-for (const [file, expected] of Object.entries(brand.files)) if (createHash('sha256').update(await readFile(file)).digest('hex') !== expected) throw new Error(`Brand asset changed: ${file}`);
 const tests = (await readdir('test')).filter(name => name.endsWith('.test.js')).map(name => `test/${name}`);
 run(['--test', ...tests]);
 run(['scripts/defect-plants.mjs']);

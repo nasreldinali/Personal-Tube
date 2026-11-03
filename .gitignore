@@ -6,3 +6,7 @@ node_modules/
 personaltube-backup*.json
 records/baseline-source.tar
 records/screenshots/
+.local/
+records/
+*.har
+*.log
