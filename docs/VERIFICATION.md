@@ -2,6 +2,14 @@
 
 Reviewed: 2026-11-04.
 
+## Channel panels and subscription setup (1.5.0)
+
+MEASURED: deterministic tests cover multi-page, multi-video channel refresh, all daily windows, sample ceilings, legacy-cache upgrade, filtering, hidden-ID backup roundtrip, category clearing, provider controls and authentication/process boundaries. Native CLI smoke checks on one synthetic public-style comment succeeded for both Codex and Claude with locally validated structured output; no personal comment or credential content was copied. The live sign-in flow itself was not exercised because both installed subscriptions were already connected.
+
+Browser checks verified page retention after reload, original/frame choice, confirmed 18-card removal and restoration (4,654 → 4,636 → 4,654 eligible catalog videos), and clear initial account/usage status. A separate origin with 30 synthetic channels verified category deletion retains all channels and independently scrolling to the last channel leaves the add form at the same vertical position (111.39px). New filters showed no horizontal overflow at 390px or 820px; these are simulated sizes, not physical-device tests. Browser error/warning logs were empty during the checked flows. Multi-video YouTube retrieval was tested with injected API responses, not a fresh real-key channel request in this delivery.
+
+The independent reviewer closed two findings after corrections: rejected output accounting and explicit Codex credential-store consistency. Eighteen focused re-review tests passed with no remaining blocker. Full checks and 17 deliberate defects pass. See [delivery contract](CHANNEL_ENHANCEMENTS.md).
+
 ## Automatic community discovery
 
 The 1.4.0 flow was verified with one live Hacker News submission: 257 comments scanned, 123 containing video links, 66 selected and analyzed automatically, and 14 recommended videos returned. Progress advanced through 23, 44 and 66 without manual batch clicks. The bounded sample was disclosed. Original-library browsing returned 275 matching recommended videos and evidence from 39,834 original comments without new model analysis.
@@ -10,7 +18,7 @@ Arabic/dark and English/light were visually inspected; viewport checks at 390, 8
 
 ## Automated checks
 
-`npm run check` passes 104 Node tests and detects thirteen deliberate defects in isolated scratch copies: automatic community call budget, cancellation before another model call, positive-evidence threshold, unknown analysis input, malformed-key rejection, community Origin enforcement, exact classification quote evidence, backup byte budget, strict community source validation, foreign Host refusal, key exclusion from backups, stale-tab refusal and stale-refresh refusal. It also checks JavaScript syntax, project-specific formatting, import cycles, domain boundaries, asset presence and source/brand SHA-256 integrity. This is not a general linter, coverage report or formal security certification.
+`npm run check` passes 127 Node tests and detects seventeen deliberate defects in isolated scratch copies: subscription refusal, provider output validation, hidden-ID budget, disabled Claude tools, automatic community call budget, cancellation before another model call, positive-evidence threshold, unknown analysis input, malformed-key rejection, community Origin enforcement, exact classification quote evidence, backup byte budget, strict community source validation, foreign Host refusal, key exclusion from backups, stale-tab refusal and stale-refresh refusal. It also checks JavaScript syntax, project-specific formatting, import cycles, domain boundaries, asset presence and source/brand SHA-256 integrity. This is not a general linter, coverage report or formal security certification.
 
 The earlier 82-test/nine-defect check also passed in a clean temporary copy without `.git`, `.local`, historical records or ignored original community source files.
 

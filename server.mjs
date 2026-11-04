@@ -1,3 +1,5 @@
+import { createProviderManager } from './server/provider-manager.js';
+import { createProviderProcesses } from './server/provider-process.js';
 import { createServer } from 'node:http';
 import { readFile } from 'node:fs/promises';
 import { createHandler } from './server/http-app.js';
@@ -15,13 +17,15 @@ import { createYouTubeAnalysis } from './server/youtube-analysis.js';
 const root = new URL('./', import.meta.url);
 const log = event => console.error(JSON.stringify(event));
 const catalog = createCatalogRepository(root);
-const classify = createCodexClassifier();
+const processes = createProviderProcesses();
+const providers = createProviderManager({ ...processes, classifiers: { codex:createCodexClassifier(), claude:createCodexClassifier({executable:'claude',provider:'claude'}) }, now:Date.now });
+const classify = providers.classify;
 const youtubeAnalysis = createYouTubeAnalysis({ classify, now: Date.now });
 const community = createCommunityController({ archive: createCommunityRepository({ root, catalog }), collect: createCommunityCollector({ request: boundedJSON, now: Date.now }), analyze: createCommunityAnalysis({ classify }), enrich: createCommunityMetadata({ request: boundedJSON, now: Date.now }), catalog, now: Date.now, id: randomUUID, schedule: (task, delay) => { const timer=setTimeout(task,delay); timer.unref(); return ()=>clearTimeout(timer); } });
 const server = createServer(createHandler({
   port: 4173,
   readAsset: file => readFile(new URL(`public/${file}`, root)),
-  catalog, community, youtubeAnalysis,
+  catalog, community, youtubeAnalysis, setup:providers.control,
   log,
 }));
 server.requestTimeout = 15000;

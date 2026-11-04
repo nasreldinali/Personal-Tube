@@ -14,6 +14,10 @@ export function parseLibrary(value) {
     if (!Array.isArray(value[field]) || value[field].length > 20000 || value[field].some(id => typeof id !== 'string' || !videoPattern.test(id))) throw new AppError('invalidLibrary');
     result[field] = [...new Set(value[field])];
   }
+  if (value.hidden !== undefined) {
+    if (!Array.isArray(value.hidden) || value.hidden.length > 20000 || value.hidden.some(id => typeof id !== 'string' || !videoPattern.test(id))) throw new AppError('invalidLibrary');
+    result.hidden = [...new Set(value.hidden)];
+  }
   return result;
 }
 
@@ -35,7 +39,7 @@ export function validateChannels(channels) {
 }
 
 export function parseBackup(value) {
-  if (![1, 2].includes(value?.version) || (value.version === 2 && !value.discovery) || value.format !== 'personaltube-backup' || ![1, 3, 7].includes(value.days) || !value.preferences || !value.library) throw new AppError('invalidBackup');
+  if (![1, 2].includes(value?.version) || (value.version === 2 && !value.discovery) || value.format !== 'personaltube-backup' || !(Number.isInteger(value.days) && value.days >= 1 && value.days <= 7) || !value.preferences || !value.library) throw new AppError('invalidBackup');
   return { version: value.version, discovery: parseDiscovery(value.version === 2 ? value.discovery : null), format: 'personaltube-backup', days: value.days, channels: validateChannels(value.channels), preferences: parsePreferences(value.preferences), library: parseLibrary(value.library) };
 }
 

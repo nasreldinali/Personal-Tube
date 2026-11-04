@@ -10,6 +10,8 @@ test('classifier invocation cannot select tools, hooks, execution or a user supp
   for (const tool of ['shell_tool','apps','plugins','computer_use','multi_agent','hooks','code_mode_host','view_image']) assert.ok(args.some((arg,i) => arg === '--disable' && args[i+1] === tool));
   assert.ok(args.includes('web_search="disabled"'));
   assert.ok(args.includes('mcp_servers={}'));
+  assert.ok(args.includes('forced_login_method="chatgpt"'));
+  assert.ok(args.includes('cli_auth_credentials_store="file"'));
   assert.equal(args.includes('--dangerously-bypass-approvals-and-sandbox'),false);
 });
 test('classifier accepts final structured text only, rejects tool events and missing completion', () => {

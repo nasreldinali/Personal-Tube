@@ -1,0 +1,32 @@
+# Channel feed and first-run setup — version 1
+
+Plan recorded 2026-11-04 before implementation.
+
+## Acceptance and decisions
+
+- MEASURED: `public/data/youtube.js` latest() returns one video; `public/domain/feed.js` visibleVideos() consumes one cache entry. Replace the production refresh path with a bounded seven-day uploads collection, retaining legacy latest() compatibility. Retrieve up to five pages (250 uploads), batch metadata and disclose incomplete samples. Filter all days 1–7, channel name, category and content kind locally. Old single-video caches must refresh rather than masquerade as complete.
+- Public video metadata has duration, but no reliable Shorts flag. INFERRED: a <=180-second filter is a useful estimate, explicitly labeled as such, never claimed as confirmed Shorts. All includes unavailable-duration items. No additional scraper or account permissions.
+- Thumbnail/frame preference applies to all cards. Both use YouTube images; original uses the API thumbnail where supplied, otherwise hqdefault; frame uses the existing hq2 image.
+- Single-card remove and selected-card remove require confirmation. They hide IDs from this browser's panels, never delete YouTube videos. Hidden IDs are bounded, included in backups and restorable in settings. Channel-category deletion clears that label from all affected channels and retains the channels; requires confirmation.
+- Followed channels scroll independently beneath the add form. Refresh restores the current navigation page through an allowlisted URL fragment. Preserve Arabic/English, responsive layout, accessibility and all existing data.
+- First-run setup checks the local server/runtime, browser storage and configured YouTube key presence (presence is not validity). Show which features need a key or analysis account. Allow Codex or Claude Code as the local analysis provider. Connect launches the provider's official login, with user finishing authentication; no credentials are exposed or stored by PersonalTube. No installation or logout occurs automatically.
+- Provider setup API version 1 uses the existing Host, Origin, JSON body and byte-limit guards. Only fixed provider/action enums may spawn fixed executable/arguments. Bound process time/output/concurrency and redact diagnostics. Selection is local to the running server, refuses changes while classification runs and resets on restart. Count attempted/completed/failed analysis calls and inputs since server start, not invented tokens, dollars or subscription balances.
+- Claude Code must be present at a reviewed version, with tools/MCP/hooks/skills/customizations disabled and untrusted output validated under the existing evidence rules. Existing Codex limits remain. Never silently switch providers or billing modes.
+
+## Delivery gates
+
+Write deterministic RED tests before changes, including multi-video windows, migration, filtering, hiding/restoring, category deletion, provider selection/status/login boundaries and classifier refusals. Run full checks and added defect plants, independent security review, then browser verification. Authentication and provider absence must be honestly reported. Record measured results here before delivery.
+
+References checked: [YouTube video resource](https://developers.google.com/youtube/v3/docs/videos), [Codex authentication](https://learn.chatgpt.com/docs/auth), [Claude authentication](https://code.claude.com/docs/en/authentication), [Claude CLI reference](https://code.claude.com/docs/en/cli-reference). Local CLI help confirmed Claude Code 2.1.281 and Codex login commands. No new dependency, public release, upstream data deletion or history rewrite is in scope.
+
+## Measured delivery
+
+- RED evidence: `.local/channel-enhancements-red.txt`, `.local/panel-actions-red.txt`, `.local/provider-manager-red.txt`, `.local/setup-ui-red.txt`, `.local/provider-validation-red.txt`, `.local/setup-selection-red.txt` (ignored). MEASURED from test runner: 127 deterministic tests, 17 detected defect plants. One new plant initially exposed a hanging negative-test fake; the fake now returns a valid result when authentication is bypassed so the missing refusal is caught as an assertion failure.
+- Independent review corrected invalid-output completion accounting and aligned Codex login/status/execution to `cli_auth_credentials_store="file"`; execution additionally enforces `forced_login_method="chatgpt"`. Eighteen follow-up tests closed both findings with no remaining blocker. References: [official config](https://learn.chatgpt.com/docs/config-file/config-reference).
+- Both installed providers returned valid classifications for one synthetic comment through the final restricted adapter. No new login was necessary or attempted; browser-launch login behavior is covered with a process fake rather than a completed OAuth ceremony.
+- Browser checks: Arabic/dark production setup, reload stays on Channels, original-image selection, confirmed selection/removal of 18 catalog cards and full restoration. English/light isolated 30-channel fixture: independent list scroll 2850.5px with add-form top unchanged at 111.39px; category removal retained 30 channels. 390px and 820px filter widths match document widths with no overflow; logs contain no errors/warnings in these flows.
+- Limits remain explicit: seven-day sample up to 250 uploads/channel, estimated Shorts, one-hour community sessions, bounded model work, current-page persistence without persistence of transient search results. Physical-device use, fresh real-key multi-video fetching and completing a new OAuth sign-in were not claimed as tested.
+
+ASVS L1 delta: A01/API5 same-origin setup controls; A05/CWE-78 fixed processes without shell; API4/LLM10/CWE-770 process and input budgets; LLM01/LLM05/ASI02 no-tool policies and exact output validation; Privacy P5/P9 transparent account usage and reversible local removal. Payment processing, hosted accounts, container/mobile/native packaging and trained-model distribution remain not applicable to this local browser/server change. Original source integrity and the existing broader security applicability record remain in force.
+
+Browser testing also caught a provider-select redraw reverting the outgoing value. The handler now captures the selected value before rendering progress; a deterministic UI interaction regression fails on the original behavior and passes on the fix.

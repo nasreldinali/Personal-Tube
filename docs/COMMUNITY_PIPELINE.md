@@ -21,9 +21,9 @@ The new sample score is distinct recommendation months plus 0.5 times distinct s
 
 Public YouTube oEmbed supplies available titles/channel names for up to 24 visible unknown videos, with four bounded workers, three-second individual deadlines and a one-hour memory cache. Missing/unavailable metadata retains an explicit YouTube ID fallback. It never changes community scores or invents publication dates.
 
-## Codex integration
+## Analysis subscription integration
 
-The owner selected Codex. The adapter invokes the locally installed CLI **0.155.1**, using its existing login; other versions fail closed pending review. No Claude/API key is required by this integration. It sends at most 24 comment/video pairs and 40,000 serialized characters per process call, with a 120-second process deadline and 1 MB combined output limit. Automatic searches permit at most three process attempts, including failures. This consumes the account's allowance and requires working Codex authentication. It is not an offline model or an unlimited free service.
+Choose Codex CLI **0.155.1** or Claude Code **2.1.281** in Setup & connections. The adapter uses the selected local subscription login; other versions fail closed pending review. No provider API key is used. It sends at most 24 comment/video pairs and 40,000 serialized characters per process call, with a 120-second deadline and 1 MB combined output limit. Automatic searches permit at most three attempts, including failures. This consumes the selected account's allowance; it is not offline or unlimited. See [setup and channel changes](CHANNEL_ENHANCEMENTS.md) for login and accounting boundaries.
 
 Execution uses a fresh scratch directory, read-only mode, no inherited user/project instructions, disabled command/app/browser/plugin/agent/hook/skill tool features, disabled web search, no approval escalation, a minimal environment and no shell interpolation. Output must be a completed structured response. Unexpected tool events and malformed responses are rejected. These controls and observed no-tool runs do not constitute a formal proof that every native CLI capability is unavailable. See [security scope](COMMUNITY_SECURITY.md).
 

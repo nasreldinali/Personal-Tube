@@ -1,0 +1,21 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { YouTubeClient } from '../public/data/youtube.js';
+import { refreshChannels } from '../public/services/refresh.js';
+import { visibleVideos } from '../public/domain/feed.js';
+import { BrowserStore } from '../public/data/browser-store.js';
+import { hideVideos, removeCategory } from '../public/domain/panel-actions.js';
+import { CHANNEL, VIDEO, NOW, memoryStorage, apiResponse } from './fixtures.js';
+test('legacy single-video cache refreshes into a multi-video feed and removal survives reload and backup',async()=>{
+ const store=new BrowserStore(memoryStorage(),memoryStorage());
+ store.writeState({version:1,days:7,channels:[CHANNEL],cache:{[CHANNEL.id]:{video:VIDEO,fetchedAt:NOW}}});
+ const state=store.readState(NOW);let requests=0;
+ const ids=[VIDEO.id,'lmnopqrstuv'];
+ const client=new YouTubeClient('fixture',async url=>{requests++;return apiResponse(url.pathname.endsWith('playlistItems')?{items:ids.map(videoId=>({contentDetails:{videoId}}))}:{items:ids.map((id,i)=>({id,snippet:{channelId:CHANNEL.id,title:'Fixture',publishedAt:new Date(NOW-(i?4:1)*86400000).toISOString()},status:{privacyStatus:'public'},contentDetails:{duration:i?'PT30S':'PT10M'}}))});});
+ await refreshChannels(state,client,{now:NOW});assert.equal(requests,2);assert.equal(visibleVideos(state,{now:NOW}).length,2);
+ store.writeState(state);const reloaded=store.readState(NOW);reloaded.days=2;assert.equal(visibleVideos(reloaded,{now:NOW}).length,1);
+ store.writeLibrary(hideVideos(store.readLibrary(),[VIDEO.id]));store.writeState(removeCategory(reloaded,'Technology'));
+ const restored=new BrowserStore(memoryStorage(),memoryStorage());restored.importData(JSON.stringify(store.exportData(NOW)),NOW);
+ assert.deepEqual(restored.readLibrary().hidden,[VIDEO.id]);assert.equal(restored.readState(NOW).channels[0].category,'');
+ await refreshChannels(state,client,{now:NOW});assert.equal(requests,2);
+});

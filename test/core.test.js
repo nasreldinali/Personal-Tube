@@ -75,7 +75,7 @@ test('refresh caches successes and preserves failed channels with explicit error
   const second = { ...channel, id: 'UC' + 'b'.repeat(22), title: 'Other' };
   const state = { ...emptyState(), channels: [channel, second], cache: { [second.id]: { video, fetchedAt: now - DAY } } };
   let calls = 0;
-  const client = { latest: async c => { calls++; if (c.id === second.id) throw new Error('Offline'); return video; } };
+  const client = { recent: async c => { calls++; if (c.id === second.id) throw new Error('Offline'); return { videos: [video], limited: false }; } };
   assert.equal((await refreshChannels(state, client, { now })).length, 1);
   assert.equal(state.cache[id].fetchedAt, now);
   assert.equal(state.cache[second.id].fetchedAt, now - DAY);
@@ -89,9 +89,9 @@ test('refresh caches successes and preserves failed channels with explicit error
 });
 test('successful empty result clears old video; deletion during request stays deleted', async () => {
   const state = { ...emptyState(), channels: [channel], cache: { [id]: { video, fetchedAt: now - DAY } } };
-  await refreshChannels(state, { latest: async () => null }, { now });
-  assert.equal(state.cache[id].video, null);
-  await refreshChannels(state, { latest: async () => { state.channels = []; delete state.cache[id]; return video; } }, { now, force: true });
+  await refreshChannels(state, { recent: async () => ({ videos: [], limited: false }) }, { now });
+  assert.deepEqual(state.cache[id].videos, []);
+  await refreshChannels(state, { recent: async () => { state.channels = []; delete state.cache[id]; return { videos: [video], limited: false }; } }, { now, force: true });
   assert.equal(state.cache[id], undefined);
 });
 test('API failures produce safe quota, key and network messages without response secrets', async () => {

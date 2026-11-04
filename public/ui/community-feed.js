@@ -29,7 +29,7 @@ export function createCommunityFeed({ context, onPlay, onToggle, onError, setBus
   }
   function card(video) {
     const c=context();
-    const node=createVideoCard(response?.source==='archive'?video:{...video,recommenders:0,channelCategory:text("communityLiveTitle")},{language:c.language,library:c.library,metadata:c.metadata,areas:c.areas,onPlay,onToggle:(field,id)=>onToggle(field,id,video)});
+    const node=createVideoCard(response?.source==='archive'?video:{...video,recommenders:0,channelCategory:text("communityLiveTitle")},{language:c.language,library:c.library,metadata:c.metadata,areas:c.areas,thumbnailStyle:c.thumbnailStyle,onHide:c.onHide,onSelect:c.onSelect,selected:c.selectedVideos.has(video.id),onPlay,onToggle:(field,id)=>onToggle(field,id,video)});
     const box=element('div','discovery-evidence');
     box.append(element('p','evidence-label',text(response?.source==='archive'?'communityOriginalBadge':'communityAnalyzedBadge')));
     const endorsement=video.evidence.find(proof=>['rec','strong_rec'].includes(proof.stance));
@@ -79,7 +79,7 @@ export function createCommunityFeed({ context, onPlay, onToggle, onError, setBus
     if(running)message=text(stopRequested?'communityStopping':progress?'communityAnalyzing':searching?'communityCollecting':'communitySearching',values);
     if(error)message=`${text(error)} ${response&&response.source!=='archive'?text('communityPartial',{done:number(context().language,response.analyzed),total:number(context().language,response.totalComments)}):''}`;
     $('collect-status').textContent=message;
-    $('community-live-videos').replaceChildren(...(response?.videos||[]).slice(0,shown).map(card));
+    $('community-live-videos').replaceChildren(...(response?.videos||[]).filter(v=>!(context().library.hidden||[]).includes(v.id)).slice(0,shown).map(card));
     $('collect-more').hidden=!response||(response.source==='archive'?response.videos.length>=response.total:shown>=response.videos.length);
   }
   async function perform(action){

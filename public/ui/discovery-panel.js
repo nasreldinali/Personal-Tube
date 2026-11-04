@@ -58,7 +58,7 @@ export function createDiscoveryPanel({ context, saveDiscovery, setBusy, client, 
   }
   function card(video, community) {
     const c = context();
-    const node = createVideoCard(video, { language: c.language, library: c.library, metadata: c.metadata, areas: c.areas, onPlay, onToggle: (field, id) => onToggle(field, id, video) });
+    const node = createVideoCard(video, { language: c.language, library: c.library, metadata: c.metadata, areas: c.areas, thumbnailStyle:c.thumbnailStyle, onHide:c.onHide, onSelect:c.onSelect, selected:c.selectedVideos.has(video.id), onPlay, onToggle: (field, id) => onToggle(field, id, video) });
     const evidence = element('div', 'discovery-evidence');
     if (community) {
       evidence.append(element('p', '', text('communityReference', { source: communitySources[video.source].name })));
@@ -103,7 +103,7 @@ export function createDiscoveryPanel({ context, saveDiscovery, setBusy, client, 
       renderCollections(); communityFeed.render();
     }
     const videos = community ? communityVideos() : results;
-    $('discovery-videos').replaceChildren(...videos.slice(0,community ? pageSize : 8).map(video => card(video, community)));
+    $('discovery-videos').replaceChildren(...videos.filter(v=>!(c.library.hidden||[]).includes(v.id)).slice(0,community ? pageSize : 8).map(video => card(video, community)));
     $('community-more').hidden = !community || videos.length <= pageSize;
     let message = community ? videos.length ? text('communityCount', { count: number(c.language, videos.length) }) : text('communityEmpty') : resultSummary ? text('recommendationResults', { shown: number(c.language, results.length), inspected: number(c.language, resultSummary.inspected), analyzed: number(c.language, resultSummary.analyzedComments), reviewed: number(c.language, resultSummary.reviewed), unavailable: number(c.language, resultSummary.commentsUnavailable) }) : text(recommendationStage || 'recommendationIdle');
     if (status && community) message = text(status, statusValues);
@@ -149,6 +149,7 @@ export function createDiscoveryPanel({ context, saveDiscovery, setBusy, client, 
     render, hydrate,
     clearCommunity:()=>communityFeed.clear(),
     reset() { communityFeed.reset(); generation++; results = []; resultSummary = null; status = ''; hydrate(); render(); },
+    visibleVideos() { return context().mode==='community' ? [...communityFeed.videos(),...communityVideos()] : results; },
     videos() { return [...results, ...communityVideos(), ...communityFeed.videos()]; },
     similar(video) {
       changeMode('recommendations');

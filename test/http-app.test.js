@@ -31,3 +31,15 @@ test('HEAD has no body and catalog is an explicit public route', async () => {
   assert.equal((await request('/', { method: 'HEAD' })).body, undefined);
   assert.equal(JSON.parse((await request('/catalog.json')).body).version, 1);
 });
+
+test('setup mutation route inherits same-origin and body limits before invoking provider controls',async()=>{
+ let calls=0;
+ const handler=createHandler({setup:async()=>{calls++;return {version:1};}});
+ async function post(origin,body) {
+  let status;const req={url:'/api/setup',method:'POST',headers:{host:'127.0.0.1:4173',origin,'content-type':'application/json'},async *[Symbol.asyncIterator](){yield Buffer.from(body);}};
+  await handler(req,{writeHead:value=>{status=value;},end:()=>{}});return status;
+ }
+ assert.equal(await post('https://outside.example','{"version":1,"action":"connect","provider":"codex"}'),403);
+ assert.equal(await post('http://127.0.0.1:4173','x'.repeat(1001)),413);assert.equal(calls,0);
+ assert.equal(await post('http://127.0.0.1:4173','{"version":1,"action":"status"}'),200);assert.equal(calls,1);
+});

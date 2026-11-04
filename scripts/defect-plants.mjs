@@ -4,6 +4,11 @@ import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const cases = [
+  { name: 'provider-subscription-gate', file: 'server/provider-manager.js', from: "if(!state.connected || state.method!=='subscription')", to: 'if(false)', test: 'test/provider-manager.test.js' },
+  { name: 'provider-output-validation', file: 'server/provider-manager.js', from: 'applyClassifications(rows,result);', to: '', test: 'test/provider-manager.test.js' },
+  { name: 'hidden-video-budget', file: 'public/domain/library.js', from: 'value.hidden.length > 20000', to: 'false', test: 'test/panel-actions.test.js' },
+  { name: 'claude-tools-disabled', file: 'server/claude-policy.js', from: "'--tools',''", to: "'--tools','default'", test: 'test/claude-policy.test.js' },
+
   { name: 'community-automatic-call-budget', file: 'server/community-controller.js', from: 'session.automatic && session.analysisSteps >= COMMUNITY_AUTO_CALLS', to: 'false', test: 'test/community-flow.test.js' },
   { name: 'community-cancel-stops-next-call', file: 'public/services/community-discovery.js', from: 'if (isCancelled()) return', to: 'if (false) return', test: 'test/community-discovery.test.js' },
   { name: 'youtube-positive-threshold', file: 'public/domain/youtube-evidence.js', from: 'video.evidence.positive >= 2', to: 'video.evidence.positive >= 0', test: 'test/youtube-evidence.test.js' },

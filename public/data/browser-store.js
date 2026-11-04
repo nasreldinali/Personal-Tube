@@ -34,7 +34,7 @@ export class BrowserStore {
     return state;
   }
   writeState(state) {
-    if (state.version !== 1 || ![1, 3, 7].includes(state.days)) throw new AppError('invalidBackup');
+    if (state.version !== 1 || !(Number.isInteger(state.days) && state.days >= 1 && state.days <= 7)) throw new AppError('invalidBackup');
     validateChannels(state.channels);
     this.writeJSON(STORAGE_KEY, state);
   }

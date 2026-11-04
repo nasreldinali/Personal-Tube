@@ -61,6 +61,30 @@ export class YouTubeClient {
     throw new AppError('pageLimit');
   }
 
+  async recent(channel, now = Date.now()) {
+    const found = new Map();
+    const seen = new Set();
+    let pageToken = '';
+    for (let pageNumber = 0; pageNumber < 5; pageNumber++) {
+      const page = await this.request('playlistItems', { part: 'contentDetails', playlistId: channel.uploads, maxResults: '50', ...(pageToken ? { pageToken } : {}) });
+      const ids = [...new Set(page.items.map(item => item?.contentDetails?.videoId).filter(id => videoPattern.test(id)))];
+      if (ids.length) {
+        const data = await this.request('videos', { part: 'snippet,contentDetails,status', id: ids.join(',') });
+        for (const v of data.items) {
+          const published = Date.parse(v?.snippet?.publishedAt);
+          if (!ids.includes(v?.id) || v.status?.privacyStatus !== 'public' || v.snippet?.channelId !== channel.id || typeof v.snippet.title !== 'string' || v.snippet.title.length > 500 || v.snippet.liveBroadcastContent === 'upcoming' || !Number.isFinite(published) || published > now || now - published > 7 * 86400000) continue;
+          found.set(v.id, { id: v.id, title: v.snippet.title, publishedAt: v.snippet.publishedAt, duration: v.contentDetails?.duration || '', thumbnail: safeImage(v.snippet.thumbnails?.high?.url), embeddable: v.status.embeddable !== false });
+        }
+      }
+      pageToken = page.nextPageToken || '';
+      // Upload order is not guaranteed to equal publication order; scan the bounded sample.
+      if (!pageToken) return { videos: [...found.values()], limited: false };
+      if (seen.has(pageToken)) throw new AppError('pageLimit');
+      seen.add(pageToken);
+    }
+    return { videos: [...found.values()], limited: true };
+  }
+
   async metadata(ids, now) {
     if (!Array.isArray(ids) || ids.length > 200 || !Number.isFinite(now) || ids.some(id => typeof id !== 'string' || !videoPattern.test(id))) throw new AppError('invalidVideo');
     const unique = [...new Set(ids)];

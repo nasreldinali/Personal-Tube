@@ -8,5 +8,5 @@ export const classificationSchema = {
   },
 };
 export function classifierArguments(scratch, schema) {
-  return ['exec', '--ignore-user-config', '--ignore-rules', '--ephemeral', '--skip-git-repo-check', '--sandbox', 'read-only', '--json', '--color', 'never', '--cd', scratch, '--output-schema', schema, ...disabledClassifierFeatures.flatMap(name => ['--disable',name]), '--enable', 'skip_host_skill_discovery', '-c', 'suppress_unstable_features_warning=true', '-c', 'web_search="disabled"', '-c', 'approval_policy="never"', '-c', 'project_doc_max_bytes=0', '-c', 'mcp_servers={}', '-c', 'model_reasoning_effort="low"', '-'];
+  return ['exec', '--ignore-user-config', '--ignore-rules', '--ephemeral', '--skip-git-repo-check', '--sandbox', 'read-only', '--json', '--color', 'never', '--cd', scratch, '--output-schema', schema, ...disabledClassifierFeatures.flatMap(name => ['--disable',name]), '--enable', 'skip_host_skill_discovery', '-c', 'suppress_unstable_features_warning=true', '-c', 'web_search="disabled"', '-c', 'approval_policy="never"', '-c', 'forced_login_method="chatgpt"', '-c', 'cli_auth_credentials_store="file"', '-c', 'project_doc_max_bytes=0', '-c', 'mcp_servers={}', '-c', 'model_reasoning_effort="low"', '-'];
 }

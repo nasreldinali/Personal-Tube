@@ -1,5 +1,5 @@
 import { CACHE_TTL, videoPattern } from './config.js';
-import { emptyState, visibleVideos, safeImage } from './domain/feed.js';
+import { emptyState, visibleVideos, safeImage, channelVideos } from './domain/feed.js';
 import { emptyLibrary, toggleLibrary, parseBackup, validateBackupFile } from './domain/library.js';
 import { parsePreferences, preferenceAttributes } from './domain/preferences.js';
 import { selectCatalog } from './domain/catalog.js';
@@ -13,11 +13,14 @@ import { t, number, areaName, dateLabel, messages } from './locale.js';
 import { byId as $, element, translatePage, selectOptions } from './ui/dom.js';
 import { parseDiscovery } from './domain/discovery.js';
 import { createDiscoveryPanel } from './ui/discovery-panel.js';
+import { hideVideos, removeCategory, viewFromHash } from './domain/panel-actions.js';
+import { createSetupPanel } from './ui/setup-panel.js';
 import { createVideoCard } from './ui/feed-view.js';
 
 let store;
 let discovery = parseDiscovery(null);
 let discoveryPanel = null;
+let setupPanel = null;
 let state = emptyState();
 let stateRevision = 0;
 let preferences = parsePreferences(null);
@@ -30,7 +33,8 @@ let busy = false;
 let storageBlocked = false;
 let staleTab = false;
 let lastRefreshAttempt = 0;
-let mode = 'discover';
+let mode = viewFromHash(location.hash);
+const selectedVideos = new Set();
 let pageSize = 18;
 let activeVideo = null;
 let confirmation = null;
@@ -111,18 +115,18 @@ function renderFilters() {
   selectOptions($('area'), [['', text('allTopics')], ...catalog.areas.map(a => [a.id, areaName(lang, a.id, a.name)])], $('area').value);
   const areas = catalog.areas.filter(a => !$('area').value || a.id === $('area').value);
   selectOptions($('category'), [['', text('allCategories')], ...areas.flatMap(a => a.categories.map(c => [c.id, lang === 'ar' ? categoryLabels[c.id] || c.name : c.name]))], $('category').value);
-  const categories = [...new Set(state.channels.map(c => c.category))];
+  const categories = [...new Set(state.channels.map(c => c.category).filter(Boolean))];
+  selectOptions($('channel-name-filter'), [['',text('allChannels')],...state.channels.map(c=>[c.id,c.title])], $('channel-name-filter').value);
   selectOptions($('channel-filter'), [['', text('allCategories')], ...categories.map(c => [c, c])], $('channel-filter').value);
   $('categories-list').replaceChildren(...categories.map(c => { const option = element('option'); option.value = c; return option; }));
 }
 function latestVideos() {
-  return visibleVideos(state, { now: now(), category: $('channel-filter').value, query: $('search').value.trim() }).map(v => ({ ...v, channelTitle: v.channel.title, channelCategory: v.channel.category, categories: [], tags: [] }));
+  return visibleVideos(state, { now: now(), category: $('channel-filter').value, channelId: $('channel-name-filter').value, kind: $('channel-kind').value, query: $('search').value.trim() }).map(v => ({ ...v, channelTitle: v.channel.title, channelCategory: v.channel.category, categories: [], tags: [] }));
 }
 function allLibraryVideos() {
   const byId = new Map(catalog.videos.map(video => [video.id, video]));
   for (const channel of state.channels) {
-    const video = state.cache[channel.id]?.video;
-    if (video && !byId.has(video.id)) byId.set(video.id, { ...video, channelTitle: channel.title, channelCategory: channel.category, categories: [], tags: [] });
+    for (const video of channelVideos(state.cache[channel.id])) if (!byId.has(video.id)) byId.set(video.id, { ...video, channelTitle: channel.title, channelCategory: channel.category, categories: [], tags: [] });
   }
   for (const video of discoveryPanel?.videos() || []) if (!byId.has(video.id)) byId.set(video.id, video);
   for (const id of [...library.later, ...library.watched]) {
@@ -156,6 +160,8 @@ function render() {
   const discoveryMode = ['recommendations', 'community'].includes(mode);
   $('feed').hidden = discoveryMode;
   discoveryPanel?.render();
+  renderPanelTools();
+  setupPanel?.render();
   if (discoveryMode) { renderNotice(); return; }
   $('feed-title').textContent = text(titles[mode][0]);
   $('feed-description').textContent = text(titles[mode][1]);
@@ -168,10 +174,10 @@ function render() {
   $('add-channel').textContent = text(busy ? 'adding' : 'addChannel');
   const times = Object.values(state.cache).map(item => item.fetchedAt);
   $('update-time').textContent = times.length ? text('lastRefresh', { date: dateLabel(lang, Math.min(...times)) }) : text('neverRefreshed');
-  const videos = filteredVideos();
+  const videos = filteredVideos().filter(v => !(library.hidden || []).includes(v.id));
   const shown = videos.slice(0, pageSize);
   $('feed-count').textContent = text('results', { shown: number(lang, shown.length), total: number(lang, videos.length) });
-  $('videos').replaceChildren(...shown.map(video => createVideoCard(video, { language: lang, library, metadata, areas: catalog.areas, onPlay: play, onToggle: toggleSaved })));
+  $('videos').replaceChildren(...shown.map(video => createVideoCard(video, { language: lang, library, metadata, areas: catalog.areas, onPlay: play, onToggle: toggleSaved, thumbnailStyle: preferences.thumbnail, onHide: confirmHide, onSelect: selectVideo, selected: selectedVideos.has(video.id) })));
   $('empty').hidden = shown.length > 0;
   $('empty-title').textContent = text(loading && !channelMode ? 'loading' : 'empty');
   $('empty-copy').textContent = text(channelMode ? 'emptyChannels' : mode === 'discover' ? 'emptyDiscover' : 'emptyLibrary');
@@ -182,15 +188,35 @@ function render() {
   $('fetch-durations').disabled = busy || storageBlocked;
   $('fetch-durations').textContent = text(busy ? 'loadingDurations' : 'fetchDurations');
   $('metadata-help').hidden = channelMode || $('duration').value === 'all';
+  renderPanelTools();
   renderNotice();
 }
+function panelVideos() {
+  return (['recommendations','community'].includes(mode) ? discoveryPanel.visibleVideos() : filteredVideos()).filter(v=>!(library.hidden||[]).includes(v.id));
+}
+function displayedVideoIds() { return [...new Set([...document.querySelectorAll('.video-card[data-video-id]')].filter(node=>node.getClientRects().length).map(node=>node.dataset.videoId))]; }
+function renderPanelTools() {
+  const lang=preferences.language;
+  const channelMode=mode==='channels';
+  const videos=panelVideos();
+  const available = new Set(videos.map(v=>v.id));
+  for(const id of selectedVideos) if(!available.has(id)) selectedVideos.delete(id);
+  $('delete-selected').disabled = !selectedVideos.size || busy || staleTab;
+  $('delete-selected').textContent = text('deleteSelected',{count:number(lang,selectedVideos.size)});
+  const displayed=displayedVideoIds();
+  $('select-visible').checked = displayed.length > 0 && displayed.every(id=>selectedVideos.has(id));
+  $('thumbnail-style').value = preferences.thumbnail || 'frame';
+  $('channel-sample-help').hidden = !channelMode || !Object.values(state.cache).some(entry=>entry.limited);
+  $('shorts-help').hidden = !channelMode || $('channel-kind').value === 'all';
+  }
 function changeMode(value) {
-  mode = value; pageSize = 18;
+  mode = value; history.replaceState(null,'',`#${value}`); pageSize = 18; selectedVideos.clear();
   $('search').value = ''; $('area').value = ''; $('category').value = ''; $('duration').value = 'all'; $('hide-watched').checked = false;
   renderFilters(); render();
 }
 function renderChannels() {
   $('channel-list').replaceChildren();
+  renderCategoryManager();
   if (!state.channels.length) $('channel-list').append(element('p', 'muted', text('noChannels')));
   for (const channel of state.channels) {
     const row = element('div', 'channel-row');
@@ -203,23 +229,45 @@ function renderChannels() {
     input.setAttribute('aria-label', text('channelCategory', { title: channel.title })); input.setAttribute('list', 'categories-list');
     input.addEventListener('change', () => {
       try {
-        const next = { ...state, channels: state.channels.map(c => c.id === channel.id ? { ...c, category: input.value.trim() || text('general') } : c) };
+        const next = { ...state, channels: state.channels.map(c => c.id === channel.id ? { ...c, category: input.value.trim() } : c) };
         commitState(next); renderFilters(); render();
       } catch (error) { input.value = channel.category; showError(error, 'channel-error'); }
     });
     const remove = element('button', 'text-button', text('delete')); remove.disabled = busy || storageBlocked;
     remove.setAttribute('aria-label', text('removeChannel', { title: channel.title }));
-    remove.addEventListener('click', () => {
+    remove.addEventListener('click', () => askConfirmation('confirmRemoveChannel', () => {
       try {
+        if (busy) throw new AppError('busy');
         const cache = { ...state.cache }; delete cache[channel.id];
         const next = { ...state, channels: state.channels.filter(c => c.id !== channel.id), cache };
         commitState(next); renderFilters(); renderChannels(); render(); notify('channelRemoved');
       } catch (error) { showError(error, 'channel-error'); }
-    });
+    }));
     details.append(title, input); row.append(avatar, details, remove); $('channel-list').append(row);
   }
 }
+function selectVideo(id, selected) {
+  if (selected) selectedVideos.add(id); else selectedVideos.delete(id);
+  render();
+}
+function confirmHide(ids) {
+  askConfirmation('confirmHideVideos', () => {
+    if (busy) throw new AppError('busy');
+    const next = hideVideos(library, ids); persist(()=>store.writeLibrary(next));library=next;selectedVideos.clear();render();notify('videosHidden');
+  });
+}
+function renderCategoryManager() {
+  const categories = [...new Set(state.channels.map(c=>c.category).filter(Boolean))];
+  $('category-manager').replaceChildren(...categories.map(category=>{
+    const row=element('div','category-row'); const title=element('span','',category);title.dir='auto';
+    const remove=element('button','text-button',text('delete'));remove.disabled=busy||storageBlocked;remove.setAttribute('aria-label',text('removeCategory',{category}));
+    remove.addEventListener('click',()=>askConfirmation('confirmRemoveCategory',()=>{
+      if(busy)throw new AppError('busy');commitState(removeCategory(state,category));renderFilters();renderChannels();render();
+    }));row.append(title,remove);return row;
+  }));
+}
 function openSettings() {
+  $('restore-hidden').disabled = !(library.hidden || []).length;
   $('api-key').value = key; $('settings-error').textContent = '';
   try { $('remember-key').checked = store?.remembersKey() || false; } catch { $('remember-key').checked = false; }
   $('settings-dialog').showModal();
@@ -294,10 +342,17 @@ bind('player-similar', 'click', () => { const video = activeVideo; $('player-dia
 bind('hero-explore', 'click', () => { changeMode('discover'); $('feed').scrollIntoView(); });
 bind('language', 'change', () => { const next = { ...preferences, language: $('language').value }; persist(() => store.writePreferences(next)); preferences = next; applyPreferences(); });
 bind('theme', 'change', () => { const next = { ...preferences, theme: $('theme').value }; persist(() => store.writePreferences(next)); preferences = next; applyPreferences(); });
-for (const id of ['area', 'category', 'duration', 'sort', 'hide-watched', 'channel-filter']) bind(id, 'change', () => { pageSize = 18; if (id === 'area') { $('category').value = ''; renderFilters(); } render(); });
+for (const id of ['area', 'category', 'duration', 'sort', 'hide-watched', 'channel-filter', 'channel-name-filter', 'channel-kind']) bind(id, 'change', () => { pageSize = 18; if (id === 'area') { $('category').value = ''; renderFilters(); } render(); });
 bind('search', 'input', () => { pageSize = 18; render(); });
 bind('reset-filters', 'click', resetFilters);
 bind('show-more', 'click', () => { pageSize += 18; render(); });
+bind('thumbnail-style','change',()=>{
+  const next={...preferences,thumbnail:$('thumbnail-style').value};persist(()=>store.writePreferences(next));preferences=next;render();
+});
+bind('delete-selected','click',()=>confirmHide([...selectedVideos]));
+bind('select-visible','change',()=>{for(const id of displayedVideoIds()) {if($('select-visible').checked)selectedVideos.add(id);else selectedVideos.delete(id);}render();});
+bind('restore-hidden','click',()=>{const next={...library,hidden:[]};persist(()=>store.writeLibrary(next));library=next;render();notify('videosRestored');$('restore-hidden').disabled=true;});
+window.addEventListener('hashchange',()=>{if(location.hash!=='#feed')changeMode(viewFromHash(location.hash));});
 bind('expiry', 'change', () => { const next = { ...state, days: Number($('expiry').value) }; commitState(next); render(); });
 bind('refresh', 'click', () => refresh(true));
 bind('settings-form', 'submit', event => {
@@ -319,7 +374,7 @@ bind('channel-form', 'submit', async event => {
   try {
     const channel = await new YouTubeClient(key).resolve($('channel-input').value);
     if (state.channels.some(c => c.id === channel.id)) throw new AppError('duplicateChannel');
-    channel.category = $('channel-category').value.trim() || text('general');
+    channel.category = $('channel-category').value.trim();
     const next = { ...state, channels: [...state.channels, channel] };
     commitState(next); added = true; $('channel-form').reset(); renderFilters();
   } finally { busy = false; render(); renderChannels(); }
@@ -391,12 +446,13 @@ document.addEventListener('visibilitychange', () => { if (!document.hidden) { re
 setInterval(() => { if (!document.hidden) { render(); void refresh(); } }, 60000);
 
 discoveryPanel = createDiscoveryPanel({
-  context: () => ({ language: preferences.language, mode, discovery, library, metadata, areas: catalog.areas, query: $('search').value, busy, hasKey: Boolean(key), stale: staleTab || storageBlocked }),
+  context: () => ({ language: preferences.language, mode, discovery, library, metadata, areas: catalog.areas, thumbnailStyle: preferences.thumbnail, onHide: confirmHide, onSelect: selectVideo, selectedVideos, query: $('search').value, busy, hasKey: Boolean(key), stale: staleTab || storageBlocked }),
   saveDiscovery, setBusy: value => { busy = value; render(); renderChannels(); },
   client: () => new YouTubeClient(key), openSettings, onPlay: play, onToggle: toggleSaved,
   onFollow: video => { openChannels(); $('channel-input').value = video.channelId; $('channel-category').value = discovery.recommendations.query.slice(0,60); },
   onError: showError, confirm: askConfirmation, changeMode,
 });
+setupPanel = createSetupPanel({context:()=>({language:preferences.language,hasKey:Boolean(key),storageReady:!storageBlocked&&!staleTab,busy}),openYouTube:openSettings,onError:showError,finish:()=>{const next={...preferences,setupDone:true};persist(()=>store.writePreferences(next));preferences=next;}});
 discoveryPanel.hydrate();
 applyPreferences();
 try {
@@ -407,3 +463,4 @@ try {
   catalog = data;
 } catch { notify('invalidCatalog', {}, true); }
 loading = false; renderFilters(); render(); void refresh();
+if(!preferences.setupDone)setupPanel.open();

@@ -1192,3 +1192,19 @@ html[data-collapsed=true] .d-nav button {
 #collect-clear { margin-bottom:16px; }
 .sr-only { position:absolute; width:1px; height:1px; padding:0; margin:-1px; overflow:hidden; clip:rect(0,0,0,0); white-space:nowrap; border:0; }
 @media(max-width:600px) { .community-inputs>.discovery-form { grid-template-columns:1fr; } }
+
+.panel-tools { display:flex; flex-wrap:wrap; align-items:center; gap:1rem; margin-block:1rem; }
+.video-card { position:relative; }
+.card-remove { position:absolute; z-index:2; inset-block-start:.45rem; inset-inline-end:.45rem; width:2.2rem; height:2.2rem; border-radius:50%; background:var(--d-bg,#10233b); color:var(--d-text,#fff); border:1px solid currentColor; font-size:1.5rem; cursor:pointer; }
+.card-select { display:flex; align-items:center; gap:.4rem; padding:.5rem .75rem; }
+.channel-scroll { max-height:34vh; overflow-y:auto; overscroll-behavior:contain; padding-inline-end:.5rem; }
+#channels-dialog { max-height:92dvh; }
+.category-row { display:flex; justify-content:space-between; gap:1rem; padding:.5rem; }
+.category-management { margin-block-start:1rem; }
+#category-manager { max-height:16vh; overflow-y:auto; }
+#channels-dialog[open] { display:flex; flex-direction:column; height:min(850px,92dvh); overflow:hidden; }
+#channels-dialog .dialog-header, #channel-form, #channels-dialog > h3, .category-management { flex-shrink:0; }
+#channels-dialog .channel-scroll { flex:1; min-height:60px; max-height:none; }
+#channels-dialog .d-field { margin-block-end:10px; }
+#channels-dialog .error:empty { display:none; }
+@media(max-height:600px) { #channels-dialog[open] { overflow-y:auto; } #channels-dialog .channel-scroll { flex:none; height:180px; } }

@@ -1,13 +1,14 @@
 import { element } from './dom.js';
 import { t, number, dateLabel, areaName } from '../locale.js';
+import { thumbnailURL } from '../domain/panel-actions.js';
 import { durationLabel } from '../domain/feed.js';
 
-export function createVideoCard(video, { language, library, metadata, areas, onPlay, onToggle }) {
-  const card = element('article', 'video-card');
+export function createVideoCard(video, { language, library, metadata, areas, onPlay, onToggle, thumbnailStyle = 'frame', onHide, onSelect, selected = false }) {
+  const card = element('article', 'video-card'); card.dataset.videoId=video.id;
   const thumbnail = element('button', 'thumbnail');
   thumbnail.setAttribute('aria-label', t(language, 'play', { title: video.title }));
   const image = element('img');
-  image.src = `https://i.ytimg.com/vi/${video.id}/hq2.jpg`;
+  image.src = thumbnailURL(video, thumbnailStyle);
   image.alt = ''; image.loading = 'lazy'; image.decoding = 'async';
   image.width = 320; image.height = 180;
   thumbnail.append(image, element('span', 'play-icon', '▶'));
@@ -32,6 +33,15 @@ export function createVideoCard(video, { language, library, metadata, areas, onP
     button.dataset.videoId = video.id; button.dataset.action = field;
     button.addEventListener('click', () => onToggle(field, video.id));
     actions.append(button);
+  }
+  if (onHide) {
+    const remove = element('button', 'card-remove', '×'); remove.setAttribute('aria-label', t(language,'hideVideo',{title:video.title}));
+    remove.addEventListener('click', () => onHide([video.id])); card.append(remove);
+  }
+  if (onSelect) {
+    const label = element('label','card-select'); const select = element('input'); select.type='checkbox';select.checked=selected;
+    select.setAttribute('aria-label',t(language,'selectVideo',{title:video.title}));select.addEventListener('change',()=>onSelect(video.id,select.checked));
+    label.append(select,element('span','',t(language,'select')));card.append(label);
   }
   card.append(thumbnail, body, actions);
   return card;

@@ -10,7 +10,7 @@ test('add, refresh, save, reload, export, import and delete form one complete lo
   const storage = memoryStorage();
   const store = new BrowserStore(storage, memoryStorage());
   const state = { ...emptyState(), channels: [CHANNEL] };
-  await refreshChannels(state, { latest: async () => VIDEO }, { now: NOW });
+  await refreshChannels(state, { recent: async () => ({ videos: [VIDEO], limited: false }) }, { now: NOW });
   store.writeState(state);
   assert.equal(visibleVideos(store.readState(NOW), { now: NOW }).length, 1);
   store.writeLibrary(toggleLibrary(emptyLibrary(), 'watched', VIDEO.id));

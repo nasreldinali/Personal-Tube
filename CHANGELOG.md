@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.5.0 — 2026-11-04
+
+- Fetch multiple recent uploads per followed channel, with every daily window from 1–7 days, channel-name filtering and clearly labeled estimated Shorts filtering.
+- Add original-thumbnail/frame choice, confirmed single/bulk panel removal and restore, confirmed custom-category deletion and an independently scrolling channel list.
+- Keep the current navigation page after reload.
+- Add first-run setup, official Codex/Claude subscription connection controls and bounded, validated analysis usage counters.
+- Preserve existing channels, legacy caches, backups, original data and brand assets.
+
 ## 1.4.0 — 2026-11-04
 
 - Simplify Communities to a topic, source and one search that collects and analyzes comments automatically.

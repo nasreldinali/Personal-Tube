@@ -28,16 +28,22 @@ export function parseChannel(input) {
 
 export function withinWindow(publishedAt, days, now) {
   const age = now - Date.parse(publishedAt);
-  return [1, 3, 7].includes(days) && Number.isFinite(age) && age >= 0 && age <= days * DAY;
+  return Number.isInteger(days) && days >= 1 && days <= 7 && Number.isFinite(age) && age >= 0 && age <= days * DAY;
 }
 
-export function visibleVideos(state, { category = '', query = '', now } = {}) {
+export function channelVideos(entry) { return Array.isArray(entry?.videos) ? entry.videos : entry?.video ? [entry.video] : []; }
+
+export function videoKind(video) {
+  const m = /^PT(?:(\d+)H)?(?:(\d+)M)?(?:(\d+)S)?$/.exec(video.duration || '');
+  if (!m || !m.slice(1).some(Boolean)) return 'unknown';
+  const seconds = Number(m[1] || 0) * 3600 + Number(m[2] || 0) * 60 + Number(m[3] || 0);
+  return seconds > 0 && seconds <= 180 ? 'shorts' : seconds > 180 ? 'videos' : 'unknown';
+}
+
+export function visibleVideos(state, { category = '', channelId = '', kind = 'all', query = '', now } = {}) {
   return state.channels.flatMap(channel => {
-    const video = state.cache[channel.id]?.video;
-    if (!video || !withinWindow(video.publishedAt, state.days, now)) return [];
-    if (category && channel.category !== category) return [];
-    if (query && !`${video.title} ${channel.title}`.toLocaleLowerCase().includes(query.toLocaleLowerCase())) return [];
-    return [{ ...video, channel }];
+    if ((category && channel.category !== category) || (channelId && channel.id !== channelId)) return [];
+    return channelVideos(state.cache[channel.id]).filter(video => withinWindow(video.publishedAt, state.days, now) && (kind === 'all' || videoKind(video) === kind) && (!query || `${video.title} ${channel.title}`.toLocaleLowerCase().includes(query.toLocaleLowerCase()))).map(video => ({ ...video, channel }));
   }).sort((a, b) => Date.parse(b.publishedAt) - Date.parse(a.publishedAt));
 }
 

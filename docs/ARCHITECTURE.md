@@ -1,6 +1,6 @@
 # Architecture and formats
 
-Version: 1. Reviewed: 2026-11-03.
+Version: 1. Reviewed: 2026-11-04.
 
 ## Responsibilities
 
@@ -12,7 +12,7 @@ INFERRED: a functional core with explicit adapters suits this local app without 
 
 - User input, imported JSON, stored data and API responses are untrusted. Schema versions, types, bounds, IDs and enums are checked. Text is rendered through safe DOM properties, never HTML interpolation.
 - Browser validation protects local data integrity; it is not a server authorization boundary. Personal data relies on browser-profile/origin isolation. The app has no roles, accounts, shared private server records or privileged remote operations.
-- The server enforces exact loopback Host values, GET/HEAD for public assets and an explicit asset allowlist; `/api/community` and `/api/youtube-analysis` additionally accept bounded same-origin JSON POST. Public assets and the normalized catalog require no authentication. YouTube keys and personal preferences are not sent to this server. Optional Reddit tokens are transiently proxied only to the fixed Reddit OAuth host.
+- The server enforces exact loopback Host values, GET/HEAD for public assets and an explicit asset allowlist; `/api/community`, `/api/youtube-analysis` and `/api/setup` additionally accept bounded same-origin JSON POST. Public assets and the normalized catalog require no authentication. YouTube keys and personal preferences are not sent to this server. Optional Reddit tokens are transiently proxied only to the fixed Reddit OAuth host.
 - Fixed HTTPS YouTube endpoints, 15-second timeouts, bounded pages/batches and safe errors constrain external requests.
 - The process retains the owner's filesystem permissions. HTTP route restrictions do not isolate it from local files or hostile local processes.
 - Catalog source files are data, never executed. Only the normalized public subset is served.
@@ -23,16 +23,16 @@ INFERRED: a functional core with explicit adapters suits this local app without 
 |---|---|
 | GET/HEAD /health | JSON version 1, app=PersonalTube, status=ready; launcher rejects unknown service/version. |
 | GET/HEAD /catalog.json | JSON version 1, videos and areas arrays; frontend refuses unknown versions. Video IDs are 11-character identifiers. Dates/durations absent from the source are not fabricated. |
-| Asset manifest | Static same-origin modules/styles/fonts/images, package release 1.4.0; not an extension API. |
+| Asset manifest | Static same-origin modules/styles/fonts/images, package release 1.5.0; not an extension API. |
 | YouTube | External Data API v3; channels, playlistItems, videos, search and commentThreads only. X-Goog-Api-Key header, never URL. |
 
 ## Storage and input rules
 
 | Format | Validation |
 |---|---|
-| personaltube.state.v1 | version 1; days 1/3/7; channels <=200; cache keyed by channel ID. Channel IDs are UC plus 22 allowed characters, title <=250, category <=60, uploads ID 2-100 allowed characters; images use an HTTPS host allowlist. |
-| personaltube.preferences.v1 | version 1; language en/ar; theme auto/light/dark; other versions/enums refused. |
-| personaltube.library.v1 | version 1; later/watched each <=20,000 strict string video IDs, deduplicated. |
+| personaltube.state.v1 | version 1; integer days 1–7; channels <=200; cache keyed by channel ID, with at most 250 videos plus fetchedAt/limited. Legacy single-video entries remain readable but do not satisfy the new refresh cache. Channel IDs are UC plus 22 allowed characters, title <=250, category <=60, uploads ID 2-100 allowed characters; images use an HTTPS host allowlist. |
+| personaltube.preferences.v1 | version 1; language en/ar; theme auto/light/dark; optional thumbnail original/frame and boolean setupDone; other versions/enums refused. |
+| personaltube.library.v1 | version 1; later/watched and optional hidden each <=20,000 strict string video IDs, deduplicated. |
 | personaltube.metadata.v1 | version 1; videos dictionary; entries expire one day after fetchedAt. |
 | personaltube.key.v1 | 1-250 trimmed characters, raw string in sessionStorage by default, optional localStorage; never exported/logged. |
 | personaltube-backup.json | format personaltube-backup, writer version 2, readers 1/2 only; days, channels, required preferences/library, and v2 discovery. Filename .json, <=2,000,000 bytes before reading. No key or API caches/comment samples. Complete pretty-printed UTF-8 payload stays within the same byte limit. Invalid versions/schema refuse before writes. |
@@ -65,3 +65,11 @@ MEASURED: `public/domain/youtube-evidence.js` validates the version-1 public-com
 ## Automatic community discovery
 
 MEASURED: `public/domain/community-batches.js` budgets server-held samples by pair count and serialized input size. `public/services/community-discovery.js` coordinates injected requests with cancellation, validated progress and a three-call ceiling. The community controller counts attempts server-side and returns positive-only automatic sessions. The UI exposes topic/source search, progress, stop and optional advanced inputs; it does not expose manual batch or raw-share controls. See [contract and verification](COMMUNITY_AUTOMATION.md).
+
+## Channel panels and setup (1.5.0)
+
+`public/domain/panel-actions.js` validates hidden-video actions, category clearing, thumbnail URLs and navigation fragments. Hidden IDs are reversible library preferences, not remote deletions. `YouTubeClient.recent()` provides a bounded seven-day sample through the existing refresh port; `latest()` remains a compatibility API. Duration-based content filters are explicitly estimates.
+
+`public/ui/setup-panel.js` owns first-run requirement/account/usage presentation. `server/provider-manager.js` owns explicit selection, attempt counts and mutual exclusion; `provider-process.js` owns fixed CLI status/login processes. The existing classifier adapter now dispatches fixed Codex or Claude policies. The manager validates classifications before counting completion. Codex login/status/execution use explicit file credential storage, execution requires ChatGPT; Claude login selects Claude.ai, with minimal environment and no API-key fallback. PersonalTube does not read credential files or return account identifiers.
+
+`POST /api/setup`, JSON version 1, accepts `action: status | select | connect` and an allowlisted `provider: codex | claude` for mutations. Body <=1000 bytes; existing Host/Origin/JSON checks apply. Response includes selected provider, boolean availability/support/connection state, subscription/other/none method, connection lifecycle, busy/runtime flags and nonnegative per-provider usage counts. Unknown versions/actions/providers refuse. Login is explicit, single-process, at most 180 seconds, with a 60-second retry interval; its output is discarded. Status probes have five-second and 16 KB limits. Selection and counters are server-memory only and reset on restart. The auth files belong to the official CLIs and are excluded from the repository.

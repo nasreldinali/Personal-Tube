@@ -15,3 +15,8 @@ export const CATALOG_ROWS = [
   { vid: '12345678901', title: 'Old breaking news', channel: 'Fixture news', summary: '', score: 99, hn: { recommenders: 4 }, categories: [], shelf_life: 'news' },
   { vid: '12345678902', title: 'Only referenced', channel: 'Fixture references', summary: '', score: 1, hn: { recommenders: 0 }, categories: [], shelf_life: 'evergreen' },
 ];
+export function setupDocumentFixture() {
+  const nodes=new Map();
+  const node=()=>({value:'codex',children:[],listeners:{},addEventListener(event,handler){this.listeners[event]=handler;},replaceChildren(...children){this.children=children;},append(...children){this.children.push(...children);},showModal(){this.open=true;},close(){this.open=false;}});
+  return {nodes,document:{getElementById(id){if(!nodes.has(id))nodes.set(id,node());return nodes.get(id);},createElement:node}};
+}
