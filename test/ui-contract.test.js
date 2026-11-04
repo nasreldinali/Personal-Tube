@@ -27,3 +27,10 @@ test('compact layout exposes an accessible sidebar toggle, sticky filters and di
   assert.match(css, /data-collapsed/);
   assert.match(css, /repeat\(4,minmax\(0,1fr\)\)/);
 });
+test('community discovery exposes one automatic search with progress and optional settings', async () => {
+  const html=await readFile(new URL('../public/index.html',import.meta.url),'utf8');
+  for(const id of ['collect-submit','collect-stop','collect-progress','community-options','community-inputs'])assert.ok(html.includes(`id="${id}"`),id);
+  for(const id of ['collect-analyze','collect-analyze-next','community-original','collect-sort'])assert.equal(html.includes(`id="${id}"`),false,id);
+  assert.match(html,/<progress[^>]*id="collect-progress"/);
+  assert.match(html,/<details[^>]*id="community-options"/);
+});

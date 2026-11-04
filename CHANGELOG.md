@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.4.0 — 2026-11-04
+
+- Simplify Communities to a topic, source and one search that collects and analyzes comments automatically.
+- Show live progress, stop-after-current-step control, positive-only results and clear empty/partial outcomes in Arabic and English.
+- Move period/site settings and prepared-file imports behind optional controls; retain original-library browsing.
+- Bound each automatic search to three classifier attempts with server-side sample limits and tested cancellation.
+
 ## 1.3.0 — 2026-11-03
 
 - Automatically classify YouTube comment samples during recommendation search using the existing restricted Codex integration.

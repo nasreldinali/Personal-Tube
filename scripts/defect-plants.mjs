@@ -4,6 +4,8 @@ import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const cases = [
+  { name: 'community-automatic-call-budget', file: 'server/community-controller.js', from: 'session.automatic && session.analysisSteps >= COMMUNITY_AUTO_CALLS', to: 'false', test: 'test/community-flow.test.js' },
+  { name: 'community-cancel-stops-next-call', file: 'public/services/community-discovery.js', from: 'if (isCancelled()) return', to: 'if (false) return', test: 'test/community-discovery.test.js' },
   { name: 'youtube-positive-threshold', file: 'public/domain/youtube-evidence.js', from: 'video.evidence.positive >= 2', to: 'video.evidence.positive >= 0', test: 'test/youtube-evidence.test.js' },
   { name: 'youtube-unknown-input', file: 'public/domain/youtube-evidence.js', from: "!exact(input,'version,videos') || ", to: '', test: 'test/youtube-analysis.test.js' },
   { name: 'reject-malformed-youtube-key', file: 'public/data/browser-store.js', from: 'const key = validateYouTubeKey(value);', to: 'const key = value;', test: 'test/browser-store.test.js' },

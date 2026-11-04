@@ -1,5 +1,7 @@
 import { rankEvidence } from '../public/domain/community-evidence.js';
 import { AppError } from '../public/domain/errors.js';
+import { communityBatches } from '../public/domain/community-batches.js';
+import { COMMUNITY_AUTO_CALLS } from '../public/config.js';
 
 export function createCommunityController({ archive, collect, analyze, catalog, enrich = async videos => videos, now, id, schedule = () => () => {} }) {
   const sessions = new Map();
@@ -14,14 +16,15 @@ export function createCommunityController({ archive, collect, analyze, catalog, 
     try {
       const source = await catalog();
       const metadata = Object.fromEntries(source.videos.map(video => [video.id,video]));
-      const videos = await enrich(rankEvidence(session.comments, metadata,sort));
+      const ranked = rankEvidence(session.comments, metadata,sort);
+      const videos = await enrich(session.automatic ? ranked.filter(video => video.score > 0) : ranked);
       if (sessions.get(key) !== session) throw new AppError('communitySessionExpired');
-      return { version: 1, session: key, source: session.source, fetchedAt: session.fetchedAt, scanned: session.scanned, limited: session.limited, pending: pendingRows(session).length, analyzed: session.comments.length - pendingRows(session).length, videos, totalComments: session.comments.length };
+      return { version: 1, session: key, source: session.source, fetchedAt: session.fetchedAt, scanned: session.scanned, limited: session.limited, pending: pendingRows(session).length, analyzed: session.comments.length - pendingRows(session).length, videos, totalComments: session.comments.length, ...(session.automatic ? { foundComments: session.foundComments, analysisLimit: COMMUNITY_AUTO_CALLS } : {}) };
     } finally { activeResults--; }
   }
   return async input => {
     if (input?.version !== 1) throw new AppError('invalidCommunityEvidence');
-    if (!['archive','collect','analyze','results','clear','clearAll'].includes(input.action) || (input.sort !== undefined && !['top','newest','shared'].includes(input.sort))) throw new AppError('invalidCommunityEvidence');
+    if (!['archive','collect','discover','analyze','results','clear','clearAll'].includes(input.action) || (input.sort !== undefined && !['top','newest','shared'].includes(input.sort))) throw new AppError('invalidCommunityEvidence');
     for (const [key,session] of sessions) if (now() - session.created >= 3600000) drop(key);
     if(input.action==='clearAll') {
       if(collecting || activeJobs || activeResults)throw new AppError('busy');
@@ -29,17 +32,19 @@ export function createCommunityController({ archive, collect, analyze, catalog, 
       return {version:1,videos:[]};
     }
     if (input.action === 'archive') return archive(input);
-    if (input.action === 'collect') {
+    if (['collect','discover'].includes(input.action)) {
       if (collecting) throw new AppError('busy');
       collecting = true;
       try {
         const found = await collect(input);
+        const automatic = input.action === 'discover';
+        const sample = automatic ? communityBatches(found.comments) : null;
         const key = id();
         if (sessions.size >= 4) drop(sessions.keys().next().value);
-        const session = { ...found, created: now(), analyzing: false };
+        const session = { ...found, ...(sample ? { comments: sample.comments, foundComments: found.comments.length, limited: found.limited || sample.omitted > 0 } : {}), automatic, analysisSteps: 0, created: now(), analyzing: false };
         sessions.set(key,session);
         session.cancelExpiry=schedule(()=>drop(key),3600000);
-        return await result(key,session);
+        return await result(key,session,automatic ? 'top' : 'shared');
       } finally { collecting = false; }
     }
     const session = sessions.get(input.session);
@@ -47,10 +52,10 @@ export function createCommunityController({ archive, collect, analyze, catalog, 
     if (input.action === 'clear') { if (session.analyzing) throw new AppError('busy'); drop(input.session); return { version:1, videos:[] }; }
     if (input.action === 'analyze') {
       if (session.analyzing) throw new AppError('busy');
-      const rows = [];
-      let pairs = 0;
-      for (const row of pendingRows(session)) { if (pairs + row.videoIds.length > 24) break; rows.push(row); pairs += row.videoIds.length; }
+      const rows = communityBatches(pendingRows(session),1).comments;
       if (rows.length) {
+        if (session.automatic && session.analysisSteps >= COMMUNITY_AUTO_CALLS) throw new AppError('communityAnalysisStopped');
+        session.analysisSteps++;
         session.analyzing = true;
         activeJobs++;
         try {

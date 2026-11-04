@@ -23,7 +23,7 @@ INFERRED: a functional core with explicit adapters suits this local app without 
 |---|---|
 | GET/HEAD /health | JSON version 1, app=PersonalTube, status=ready; launcher rejects unknown service/version. |
 | GET/HEAD /catalog.json | JSON version 1, videos and areas arrays; frontend refuses unknown versions. Video IDs are 11-character identifiers. Dates/durations absent from the source are not fabricated. |
-| Asset manifest | Static same-origin modules/styles/fonts/images, package release 1.3.0; not an extension API. |
+| Asset manifest | Static same-origin modules/styles/fonts/images, package release 1.4.0; not an extension API. |
 | YouTube | External Data API v3; channels, playlistItems, videos, search and commentThreads only. X-Goog-Api-Key header, never URL. |
 
 ## Storage and input rules
@@ -61,3 +61,7 @@ MEASURED: `public/domain/community-evidence.js` owns pure extraction, stance val
 ## YouTube comment analysis extension
 
 MEASURED: `public/domain/youtube-evidence.js` validates the version-1 public-comment payload and filters exact-quote classifications; `server/youtube-analysis.js` controls cooldown and server-side validation through the shared classifier. `public/data/youtube-analysis.js` sends same-origin requests; the recommendation service coordinates the injected analysis adapter. `POST /api/youtube-analysis` accepts at most eight videos with twenty comments each, under 600,000 bytes. Its versioned request/response and selection rules are documented in [automatic analysis](YOUTUBE_ANALYSIS.md). No analysis result is persisted in application storage. Old version-1 `includeComments` settings remain readable for backup compatibility; new searches always analyze comments.
+
+## Automatic community discovery
+
+MEASURED: `public/domain/community-batches.js` budgets server-held samples by pair count and serialized input size. `public/services/community-discovery.js` coordinates injected requests with cancellation, validated progress and a three-call ceiling. The community controller counts attempts server-side and returns positive-only automatic sessions. The UI exposes topic/source search, progress, stop and optional advanced inputs; it does not expose manual batch or raw-share controls. See [contract and verification](COMMUNITY_AUTOMATION.md).

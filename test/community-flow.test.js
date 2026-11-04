@@ -53,3 +53,18 @@ test('expired metadata lookup cannot return deleted collection results', async (
   const pending=controller({version:1,action:'collect'});
   await ready;expire();finish();await assert.rejects(pending);
 });
+test('automatic discovery caps server-held evidence before any model call', async () => {
+  const comments=Array.from({length:100},(_,i)=>normalizeComment({id:String(i),source:'hn',date:'2026-11-04T00:00:00Z',text:'https://youtu.be/abcdefghijk',sourceUrl:`https://news.ycombinator.com/item?id=${i}`}));
+  const controller=createCommunityController({now:()=>0,id:()=> 'fixture',archive:async()=>({}),catalog:async()=>({videos:[]}),collect:async()=>({comments,scanned:100,limited:false}),analyze:async()=>{throw new Error('not during collection');}});
+  const result=await controller({version:1,action:'discover'});
+  assert.equal(result.totalComments,72);assert.equal(result.foundComments,100);assert.equal(result.analysisLimit,3);assert.deepEqual(result.videos,[]);
+});
+test('automatic session refuses model attempts beyond its server budget, including failed attempts',async()=>{
+  let calls=0;
+  const row=normalizeComment({id:'1',source:'hn',date:'2026-11-04T00:00:00Z',text:'https://youtu.be/abcdefghijk',sourceUrl:'https://news.ycombinator.com/item?id=1'});
+  const controller=createCommunityController({now:()=>0,id:()=> 'fixture',archive:async()=>({}),catalog:async()=>({videos:[]}),collect:async()=>({comments:[row]}),analyze:async()=>{calls++;throw new Error('offline');}});
+  await controller({version:1,action:'discover'});
+  for(let i=0;i<3;i++)await assert.rejects(controller({version:1,action:'analyze',session:'fixture'}));
+  await assert.rejects(controller({version:1,action:'analyze',session:'fixture'}),{code:'communityAnalysisStopped'});
+  assert.equal(calls,3);
+});

@@ -1,10 +1,16 @@
 # Verification
 
-Reviewed: 2026-11-03.
+Reviewed: 2026-11-04.
+
+## Automatic community discovery
+
+The 1.4.0 flow was verified with one live Hacker News submission: 257 comments scanned, 123 containing video links, 66 selected and analyzed automatically, and 14 recommended videos returned. Progress advanced through 23, 44 and 66 without manual batch clicks. The bounded sample was disclosed. Original-library browsing returned 275 matching recommended videos and evidence from 39,834 original comments without new model analysis.
+
+Arabic/dark and English/light were visually inspected; viewport checks at 390, 820 and 1200 pixels showed no horizontal overflow. No browser errors or warnings were captured during these checks. Deterministic tests cover cancellation before the next request, provider failure, stale results, no-progress responses, server-side attempt limits and positive-only output. An independent security review ran 22 focused tests and additional boundary probes with no blocking finding. See [the delivery contract](COMMUNITY_AUTOMATION.md).
 
 ## Automated checks
 
-`npm run check` passes 92 Node tests and detects eleven deliberate defects in isolated scratch copies: positive-evidence threshold, unknown analysis input, malformed-key rejection, community Origin enforcement, exact classification quote evidence, backup byte budget, strict community source validation, foreign Host refusal, key exclusion from backups, stale-tab refusal and stale-refresh refusal. It also checks JavaScript syntax, project-specific formatting, import cycles, domain boundaries, asset presence and source/brand SHA-256 integrity. This is not a general linter, coverage report or formal security certification.
+`npm run check` passes 104 Node tests and detects thirteen deliberate defects in isolated scratch copies: automatic community call budget, cancellation before another model call, positive-evidence threshold, unknown analysis input, malformed-key rejection, community Origin enforcement, exact classification quote evidence, backup byte budget, strict community source validation, foreign Host refusal, key exclusion from backups, stale-tab refusal and stale-refresh refusal. It also checks JavaScript syntax, project-specific formatting, import cycles, domain boundaries, asset presence and source/brand SHA-256 integrity. This is not a general linter, coverage report or formal security certification.
 
 The earlier 82-test/nine-defect check also passed in a clean temporary copy without `.git`, `.local`, historical records or ignored original community source files.
 
