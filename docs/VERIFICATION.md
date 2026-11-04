@@ -2,6 +2,14 @@
 
 Reviewed: 2026-11-04.
 
+## Connection and card refinement (1.5.1)
+
+Measured: 133 deterministic tests and 19 deliberate defects pass. Real local account selection switched from Codex to Claude and back through the new provider buttons. Both subscriptions were already authenticated; a fresh browser sign-in was not exercised. Pending sign-in, timeout, close cancellation, missing-install help and inline failure feedback are covered by injected responses and fake timers. No analysis call was initiated.
+
+Visual checks covered Arabic/dark and English/light connection dialogs, 390px mobile layout, the fixed Done footer, and missing-install help. Regular cards retained title, channel, recommendation/date, topic, duration when available and library controls; removal opens confirmation and cancel retains the card. Isolated real-component Shorts fixtures verified portrait 9:16 media and 5/3/2 columns at 1280/820/390px without overflow. The actual channel Shorts filter activates the five-column grid. These are simulated viewports, not physical-device tests. Browser warning/error logs were empty.
+
+Independent review found one bounded polling deadline defect; its correction passed re-review and the added regression/mutation check. No remaining security blocker was identified. See [refinement evidence](UX_REFINEMENT.md).
+
 ## Channel panels and subscription setup (1.5.0)
 
 MEASURED: deterministic tests cover multi-page, multi-video channel refresh, all daily windows, sample ceilings, legacy-cache upgrade, filtering, hidden-ID backup roundtrip, category clearing, provider controls and authentication/process boundaries. Native CLI smoke checks on one synthetic public-style comment succeeded for both Codex and Claude with locally validated structured output; no personal comment or credential content was copied. The live sign-in flow itself was not exercised because both installed subscriptions were already connected.
@@ -18,7 +26,7 @@ Arabic/dark and English/light were visually inspected; viewport checks at 390, 8
 
 ## Automated checks
 
-`npm run check` passes 127 Node tests and detects seventeen deliberate defects in isolated scratch copies: subscription refusal, provider output validation, hidden-ID budget, disabled Claude tools, automatic community call budget, cancellation before another model call, positive-evidence threshold, unknown analysis input, malformed-key rejection, community Origin enforcement, exact classification quote evidence, backup byte budget, strict community source validation, foreign Host refusal, key exclusion from backups, stale-tab refusal and stale-refresh refusal. It also checks JavaScript syntax, project-specific formatting, import cycles, domain boundaries, asset presence and source/brand SHA-256 integrity. This is not a general linter, coverage report or formal security certification.
+`npm run check` passes 133 Node tests and detects nineteen deliberate defects in isolated scratch copies: explicit connection selection, queued-poll deadline, subscription refusal, provider output validation, hidden-ID budget, disabled Claude tools, automatic community call budget, cancellation before another model call, positive-evidence threshold, unknown analysis input, malformed-key rejection, community Origin enforcement, exact classification quote evidence, backup byte budget, strict community source validation, foreign Host refusal, key exclusion from backups, stale-tab refusal and stale-refresh refusal. It also checks JavaScript syntax, project-specific formatting, import cycles, domain boundaries, asset presence and source/brand SHA-256 integrity. This is not a general linter, coverage report or formal security certification.
 
 The earlier 82-test/nine-defect check also passed in a clean temporary copy without `.git`, `.local`, historical records or ignored original community source files.
 

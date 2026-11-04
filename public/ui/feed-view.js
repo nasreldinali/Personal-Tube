@@ -3,8 +3,8 @@ import { t, number, dateLabel, areaName } from '../locale.js';
 import { thumbnailURL } from '../domain/panel-actions.js';
 import { durationLabel } from '../domain/feed.js';
 
-export function createVideoCard(video, { language, library, metadata, areas, onPlay, onToggle, thumbnailStyle = 'frame', onHide, onSelect, selected = false }) {
-  const card = element('article', 'video-card'); card.dataset.videoId=video.id;
+export function createVideoCard(video, { language, library, metadata, areas, onPlay, onToggle, thumbnailStyle = 'frame', onHide, onSelect, selected = false, portrait = false }) {
+  const card = element('article', portrait ? 'video-card short-card' : 'video-card'); card.dataset.videoId=video.id;
   const thumbnail = element('button', 'thumbnail');
   thumbnail.setAttribute('aria-label', t(language, 'play', { title: video.title }));
   const image = element('img');
@@ -35,13 +35,13 @@ export function createVideoCard(video, { language, library, metadata, areas, onP
     actions.append(button);
   }
   if (onHide) {
-    const remove = element('button', 'card-remove', '×'); remove.setAttribute('aria-label', t(language,'hideVideo',{title:video.title}));
-    remove.addEventListener('click', () => onHide([video.id])); card.append(remove);
+    const remove = element('button', 'card-remove', t(language,'removeVideoAction')); remove.setAttribute('aria-label', t(language,'hideVideo',{title:video.title}));
+    remove.addEventListener('click', () => onHide([video.id])); actions.append(remove);
   }
   if (onSelect) {
     const label = element('label','card-select'); const select = element('input'); select.type='checkbox';select.checked=selected;
     select.setAttribute('aria-label',t(language,'selectVideo',{title:video.title}));select.addEventListener('change',()=>onSelect(video.id,select.checked));
-    label.append(select,element('span','',t(language,'select')));card.append(label);
+    label.title=t(language,'selectVideo',{title:video.title});label.append(select);if(portrait)label.append(element('span','',t(language,'select')));actions.append(label);
   }
   card.append(thumbnail, body, actions);
   return card;

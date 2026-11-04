@@ -32,3 +32,9 @@ test('malformed classification is counted as failed, never completed',async()=>{
  await assert.rejects(manager.classify([row]));
  const result=await manager.control({version:1,action:'status'});assert.equal(result.usage.codex.completed,0);assert.equal(result.usage.codex.failed,1);
 });
+test('connecting an already authenticated provider makes it active without launching login',async()=>{
+ let calls=0;
+ const manager=createProviderManager({inspect:async()=>ready,login:async()=>{calls++;},classifiers:{},now:()=>100000});
+ const result=await manager.control({version:1,action:'connect',provider:'claude'});
+ assert.equal(result.selected,'claude');assert.equal(calls,0);
+});

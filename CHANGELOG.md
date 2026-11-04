@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.5.1 — 2026-11-04
+
+- Replace the crowded setup dialog with separate YouTube and analysis provider cards, clear active-account feedback and expandable requirements/usage details.
+- Make connecting an authenticated provider activate it; follow pending sign-in automatically with bounded polling and inline errors.
+- Move video removal and selection into a compact footer, retaining confirmation and recovery.
+- Shorten regular video cards while retaining metadata; show portrait Shorts in five desktop, three tablet and two phone columns.
+
 ## 1.5.0 — 2026-11-04
 
 - Fetch multiple recent uploads per followed channel, with every daily window from 1–7 days, channel-name filtering and clearly labeled estimated Shorts filtering.

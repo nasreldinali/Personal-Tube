@@ -31,6 +31,7 @@ export function createProviderManager({ inspect, login, classifiers, now }) {
             lastLogin[provider] = now();connections[provider] = 'pending';
             Promise.resolve().then(()=>login(provider)).then(()=>{connections[provider]='finished';},()=>{connections[provider]='failed';});
           }
+          selected = provider;
         }
         return await status();
       } finally { checking = false; }

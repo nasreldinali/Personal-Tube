@@ -4,6 +4,8 @@ import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const cases = [
+  { name: 'connect-activates-provider', file: 'server/provider-manager.js', from: 'selected = provider;', to: '', test: 'test/provider-manager.test.js' },
+  { name: 'connection-poll-deadline', file: 'public/ui/setup-panel.js', from: "if (now() >= pollUntil) { message = 'connectionFailed'; render(); return; }\n      void request", to: "void request", test: 'test/setup-interaction.test.js' },
   { name: 'provider-subscription-gate', file: 'server/provider-manager.js', from: "if(!state.connected || state.method!=='subscription')", to: 'if(false)', test: 'test/provider-manager.test.js' },
   { name: 'provider-output-validation', file: 'server/provider-manager.js', from: 'applyClassifications(rows,result);', to: '', test: 'test/provider-manager.test.js' },
   { name: 'hidden-video-budget', file: 'public/domain/library.js', from: 'value.hidden.length > 20000', to: 'false', test: 'test/panel-actions.test.js' },

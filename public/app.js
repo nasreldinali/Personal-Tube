@@ -177,7 +177,9 @@ function render() {
   const videos = filteredVideos().filter(v => !(library.hidden || []).includes(v.id));
   const shown = videos.slice(0, pageSize);
   $('feed-count').textContent = text('results', { shown: number(lang, shown.length), total: number(lang, videos.length) });
-  $('videos').replaceChildren(...shown.map(video => createVideoCard(video, { language: lang, library, metadata, areas: catalog.areas, onPlay: play, onToggle: toggleSaved, thumbnailStyle: preferences.thumbnail, onHide: confirmHide, onSelect: selectVideo, selected: selectedVideos.has(video.id) })));
+  const portrait = channelMode && $('channel-kind').value === 'shorts';
+  $('videos').classList.toggle('shorts-grid', portrait);
+  $('videos').replaceChildren(...shown.map(video => createVideoCard(video, { portrait, language: lang, library, metadata, areas: catalog.areas, onPlay: play, onToggle: toggleSaved, thumbnailStyle: preferences.thumbnail, onHide: confirmHide, onSelect: selectVideo, selected: selectedVideos.has(video.id) })));
   $('empty').hidden = shown.length > 0;
   $('empty-title').textContent = text(loading && !channelMode ? 'loading' : 'empty');
   $('empty-copy').textContent = text(channelMode ? 'emptyChannels' : mode === 'discover' ? 'emptyDiscover' : 'emptyLibrary');
