@@ -5,6 +5,7 @@ import { parsePreferences, preferenceAttributes, refreshSettings, automaticRefre
 import { selectCatalog } from './domain/catalog.js';
 import { AppError } from './domain/errors.js';
 import { BrowserStore } from './data/browser-store.js';
+import { YouTubeUsage, USAGE_KEY, USAGE_FAILURE_KEY } from './data/youtube-usage.js';
 import { YouTubeClient } from './data/youtube.js';
 import { refreshChannels } from './services/refresh.js';
 import { applyRefreshResult } from './services/refresh-result.js';
@@ -30,6 +31,8 @@ let key = '';
 let catalog = { version: 1, videos: [], areas: [] };
 let loading = true;
 let busy = false;
+let addingChannel = false;
+let usage;
 let storageBlocked = false;
 let staleTab = false;
 let lastRefreshAttempt = null;
@@ -47,6 +50,7 @@ const now = () => Date.now();
 
 try {
   store = new BrowserStore(localStorage, sessionStorage);
+  usage = new YouTubeUsage(localStorage, now, navigator.locks);
   state = store.readState(now());
   preferences = store.readPreferences();
   library = store.readLibrary();
@@ -55,6 +59,20 @@ try {
   key = store.readKey();
 } catch { storageBlocked = true; noticeKey = 'storageRead'; noticeError = true; }
 
+function youtubeClient() {
+  return new YouTubeClient(key, undefined, { onRequest: async resource => { await usage?.record(resource); renderUsage(); } });
+}
+function renderUsage() {
+  const value = usage?.snapshot();
+  $('usage-unavailable').hidden = Boolean(value);
+  $('usage-totals').hidden = !value;
+  if (!value) return;
+  for (const [bucket, limit] of [['units', 10000], ['search', 100]]) {
+    $(`usage-${bucket}`).textContent = text('usageNumbers', { used: number(preferences.language, value[bucket]), remaining: number(preferences.language, Math.max(0, limit - value[bucket])), limit: number(preferences.language, limit) });
+    $(`usage-${bucket}-bar`).value = Math.min(limit, value[bucket]);
+  }
+  $('usage-day').textContent = text('usageDay', { day: value.day });
+}
 function notify(name = '', values = {}, error = false) {
   noticeKey = name; noticeValues = values; noticeError = error;
   renderNotice();
@@ -163,6 +181,10 @@ function render() {
   discoveryPanel?.render();
   renderPanelTools();
   setupPanel?.render();
+  $('add-channel').disabled = addingChannel || storageBlocked || staleTab;
+  $('add-channel').textContent = text(addingChannel ? 'adding' : 'addChannel');
+  $('channel-form').setAttribute('aria-busy', String(addingChannel));
+  renderUsage();
   if (discoveryMode) { renderNotice(); return; }
   $('feed-title').textContent = text(titles[mode][0]);
   $('feed-description').textContent = text(titles[mode][1]);
@@ -171,8 +193,6 @@ function render() {
   $('refresh').hidden = !channelMode;
   $('refresh').disabled = busy || storageBlocked || !key || !state.channels.length;
   $('refresh').textContent = text(busy ? 'refreshing' : 'refresh');
-  $('add-channel').disabled = busy || storageBlocked;
-  $('add-channel').textContent = text(busy ? 'adding' : 'addChannel');
   const times = Object.values(state.cache).map(item => item.fetchedAt);
   $('update-time').textContent = times.length ? text('lastRefresh', { date: dateLabel(lang, Math.min(...times)) }) : text('neverRefreshed');
   const videos = filteredVideos().filter(v => !(library.hidden || []).includes(v.id));
@@ -292,7 +312,7 @@ function renderRefreshSettings() {
   renderRefreshDraft();
 }
 function openSettings() {
-  renderRefreshSettings();
+  renderUsage(); renderRefreshSettings();
   $('restore-hidden').disabled = !(library.hidden || []).length;
   $('api-key').value = key; $('settings-error').textContent = '';
   try { $('remember-key').checked = store?.remembersKey() || false; } catch { $('remember-key').checked = false; }
@@ -336,7 +356,7 @@ function play(video) {
   if (video.quote) $('hn-comment').href = `https://news.ycombinator.com/item?id=${video.quote.commentId}`;
   renderPlayerButtons(); $('player-dialog').showModal();
 }
-async function refresh(force = false) {
+async function refresh(force = false, channelId = null) {
   if (busy || staleTab || storageBlocked || !key || !state.channels.length) return;
   if (!force && !automaticRefreshDue(preferences, lastRefreshAttempt, now(), !document.hidden)) return;
   const policy = refreshSettings(preferences);
@@ -345,7 +365,7 @@ async function refresh(force = false) {
   try {
     const revision = stateRevision;
     const next = structuredClone(state);
-    const errors = await refreshChannels(next, new YouTubeClient(key), { force, now: now(), preferences: refreshPreferences, shouldContinue: () => !staleTab && !storageBlocked && (force || (!document.hidden && refreshSettings(preferences).mode === 'auto' && refreshSettings(preferences).minutes === policy.minutes)) });
+    const errors = await refreshChannels(next, youtubeClient(), { force, channelId, now: now(), preferences: refreshPreferences, shouldContinue: () => revision === stateRevision && !staleTab && !storageBlocked && (force || (!document.hidden && refreshSettings(preferences).mode === 'auto' && refreshSettings(preferences).minutes === policy.minutes)) });
     const result = applyRefreshResult(state, next, revision, stateRevision);
     if (!result.applied) return;
     commitState(result.state);
@@ -403,20 +423,25 @@ bind('forget-key', 'click', () => {
   if (busy) throw new AppError('busy'); persist(() => store.forgetKey()); key = ''; $('api-key').value = ''; $('remember-key').checked = false; notify('keyRemoved'); render();
 }, 'settings-error');
 bind('channel-form', 'submit', async event => {
-  event.preventDefault(); if (busy) return;
+  event.preventDefault(); if (addingChannel) return;
   if (storageBlocked) throw new AppError('storageRead');
+  if (staleTab) throw new AppError('storageConflict');
   if (!key) throw new AppError('keyRequired');
   if (state.channels.length >= 200) throw new AppError('channelLimit');
-  busy = true; $('channel-error').textContent = ''; render(); renderChannels();
-  let added = false;
+  const channels = state.channels, requestKey = key;
+  const input = $('channel-input').value, category = $('channel-category').value.trim();
+  addingChannel = true; $('channel-error').textContent = ''; $('channel-status').textContent = ''; render();
+  let added;
   try {
-    const channel = await new YouTubeClient(key).resolve($('channel-input').value);
+    const channel = await youtubeClient().resolve(input);
+    if (channels !== state.channels || requestKey !== key) throw new AppError('channelChanged');
     if (state.channels.some(c => c.id === channel.id)) throw new AppError('duplicateChannel');
-    channel.category = $('channel-category').value.trim();
-    const next = { ...state, channels: [...state.channels, channel] };
-    commitState(next); added = true; $('channel-form').reset(); renderFilters();
-  } finally { busy = false; render(); renderChannels(); }
-  if (added) { lastRefreshAttempt = null; await refresh(); }
+    channel.category = category;
+    commitState({ ...state, channels: [...state.channels, channel] });
+    added = channel; $('channel-form').reset(); renderFilters();
+    $('channel-status').textContent = text('channelAdded', { title: channel.title });
+  } finally { addingChannel = false; render(); renderChannels(); }
+  if (added) { lastRefreshAttempt = null; void refresh(false, added.id); }
 }, 'channel-error');
 bind('fetch-durations', 'click', async () => {
   if (!key) { openSettings(); return; }
@@ -426,7 +451,7 @@ bind('fetch-durations', 'click', async () => {
   if (!ids.length) { notify('metadataLoaded'); return; }
   busy = true; render();
   try {
-    const fetched = await new YouTubeClient(key).metadata(ids, now());
+    const fetched = await youtubeClient().metadata(ids, now());
     const next = { ...metadata, ...fetched }; persist(() => store.writeMetadata(next)); metadata = next; notify('metadataLoaded');
   } finally { busy = false; render(); }
 });
@@ -458,7 +483,7 @@ bind('clear-data', 'click', () => {
     if (!store) throw new AppError('storageWrite');
     await discoveryPanel.clearCommunity();
     stateRevision++;
-    try { store.clearPersonalData(); } catch { throw new AppError('storageWrite'); }
+    try { store.clearPersonalData(); usage = new YouTubeUsage(localStorage, now, navigator.locks); } catch { throw new AppError('storageWrite'); }
     state = emptyState(); library = emptyLibrary(); metadata = {}; key = ''; preferences = parsePreferences(null); discovery = parseDiscovery(null); storageBlocked = false; staleTab = false; discoveryPanel.reset();
     $('api-key').value = ''; $('remember-key').checked = false; applyPreferences(); notify('cleared');
   });
@@ -475,6 +500,7 @@ document.addEventListener('keydown', event => {
 });
 window.addEventListener('offline', () => notify('offline'));
 window.addEventListener('storage', event => {
+  if (event.key === USAGE_KEY || event.key === USAGE_FAILURE_KEY) { renderUsage(); return; }
   if (event.key === null || event.key.startsWith('personaltube.')) {
     staleTab = true; stateRevision++; notify('storageConflict', {}, true);
   }
@@ -486,7 +512,7 @@ setInterval(() => { if (!document.hidden) { render(); void refresh(); } }, 60000
 discoveryPanel = createDiscoveryPanel({
   context: () => ({ language: preferences.language, mode, discovery, library, metadata, areas: catalog.areas, thumbnailStyle: preferences.thumbnail, onHide: confirmHide, onSelect: selectVideo, selectedVideos, query: $('search').value, busy, hasKey: Boolean(key), stale: staleTab || storageBlocked }),
   saveDiscovery, setBusy: value => { busy = value; render(); renderChannels(); },
-  client: () => new YouTubeClient(key), openSettings, onPlay: play, onToggle: toggleSaved,
+  client: () => youtubeClient(), openSettings, onPlay: play, onToggle: toggleSaved,
   onFollow: video => { openChannels(); $('channel-input').value = video.channelId; $('channel-category').value = discovery.recommendations.query.slice(0,60); },
   onError: showError, confirm: askConfirmation, changeMode,
 });

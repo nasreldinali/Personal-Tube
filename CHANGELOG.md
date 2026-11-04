@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.7.0 — 2026-11-04
+
+- Settings shows estimated daily YouTube data units and search calls, remaining against default limits, Pacific-midnight reset and a link to actual Google Cloud usage. Local counts include attempts, omit secrets and stay out of backups.
+- Channel addition stays available during background work, reports its own progress/success, and only targets the new channel for an immediate automatic fetch. Manual mode is preserved.
+- A hard 15-second request deadline covers stalled transport and response bodies. Concurrent channel/key changes cannot restore stale additions; concurrent meter failures remain visibly unavailable across tabs and reloads.
+
 ## 1.6.0 — 2026-11-04
 
 - Add saved automatic/manual video refresh controls, with 15/30-minute and 1/3/6/12/24-hour intervals.

@@ -1,12 +1,13 @@
 import { refreshSettings } from '../domain/preferences.js';
 
-export async function refreshChannels(state, client, { force = false, now, preferences = {}, shouldContinue = () => true, onProgress = () => {} } = {}) {
+export async function refreshChannels(state, client, { force = false, channelId = null, now, preferences = {}, shouldContinue = () => true, onProgress = () => {} } = {}) {
   const errors = [];
   const { mode, intervalMs } = refreshSettings(preferences);
   if (!force && mode === 'manual') return errors;
   // Serial calls bound quota use and keep partial successes if one channel fails.
   for (const channel of [...state.channels]) {
     if (!shouldContinue()) break;
+    if (channelId && channel.id !== channelId) continue;
     const previous = state.cache[channel.id];
     if (!force && previous && now - previous.fetchedAt >= 0 && now - previous.fetchedAt < intervalMs && Array.isArray(previous.videos)) continue;
     try {

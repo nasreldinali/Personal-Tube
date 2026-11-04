@@ -2,6 +2,12 @@
 
 Reviewed: 2026-11-04.
 
+## API usage and channel loading (1.7.0)
+
+158 deterministic tests and 26 deliberate defects pass. Pacific reset (winter/summer), persistence, invalid storage, cross-tab incomplete counts, backup omission/deletion, all request-attempt paths, transport/body stalls and pending-add mutation checks are covered. Independent review found two concurrency issues; corrected regressions and re-review found no remaining blocker.
+
+Local browser fixtures verified successful channel addition (3 units), deliberate timeout with an enabled retry button (4 units), and persisted counts after reload. No actual key or model calls were used. English/light and Arabic/dark settings fit 390/820/1280px checks; production warning/error logs were empty. See [contract and review](API_USAGE_PLAN.md).
+
 ## Refresh controls (1.6.0)
 
 145 deterministic tests and 22 deliberate defects pass. Tests use injected clients and explicit clocks to verify manual refusal, explicit forced refresh, selected cache/attempt boundaries, legacy defaults, interval validation, between-channel cancellation, hidden-page refusal and preference backup roundtrip. Only the explicit Refresh channels action bypasses the policy. No live YouTube or model call was used for these tests.

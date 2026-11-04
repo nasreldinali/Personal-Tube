@@ -28,3 +28,9 @@ test('refresh choices survive storage reload and backup import',()=>{
  const other=new BrowserStore(memoryStorage(),memoryStorage());other.importData(JSON.stringify(store.exportData(NOW)),NOW);
  assert.equal(other.readPreferences().refreshMode,'manual');assert.equal(other.readPreferences().refreshMinutes,720);
 });
+test('post-add automatic fetch can target just the new channel without scanning others',async()=>{
+ const data=state();const added={...CHANNEL,id:'UC'+'b'.repeat(22)};data.channels.push(added);
+ const requested=[];const client={recent:async channel=>{requested.push(channel.id);return {videos:[],limited:false};}};
+ await refreshChannels(data,client,{now:NOW,channelId:added.id});assert.deepEqual(requested,[added.id]);
+ await refreshChannels(data,client,{now:NOW,channelId:CHANNEL.id,preferences:{refreshMode:'manual'}});assert.deepEqual(requested,[added.id]);
+});

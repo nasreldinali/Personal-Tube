@@ -60,3 +60,16 @@ test('metadata batches are limited to 50 IDs and malformed IDs never reach the n
   await assert.rejects(client.metadata(['../bad'], NOW));
   assert.equal(requests, 2);
 });
+
+test('hard request deadline releases stalled transport and stalled response bodies', {timeout:1000}, async context => {
+  context.mock.timers.enable({apis:['setTimeout']});
+  for (const fetcher of [()=>new Promise(()=>{}),async()=>({ok:true,json:()=>new Promise(()=>{})})]) {
+    let signal;
+    const client=new YouTubeClient('fixture',(url,options)=>{signal=options.signal;return fetcher();});
+    const pending=client.resolve('@fixture');
+    const refusal=assert.rejects(pending,error=>error.code==='youtubeTimeout');
+    await Promise.resolve(); await Promise.resolve();
+    context.mock.timers.tick(15000);
+    await refusal; assert.equal(signal.aborted,true);
+  }
+});

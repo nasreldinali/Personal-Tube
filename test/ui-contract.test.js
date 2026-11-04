@@ -54,3 +54,13 @@ test('refresh settings are independent of key entry and only explicit refresh by
  assert.match(source,/automaticRefreshDue\(preferences, lastRefreshAttempt, now\(\), !document.hidden\)/);
  assert.match(source,/preferences: refreshPreferences, shouldContinue:/);
 });
+
+test('channel loading is independent from background operations on every view',async()=>{
+ const source=await readFile(new URL('../public/app.js',import.meta.url),'utf8');
+ assert.match(source,/text\(addingChannel \? 'adding' : 'addChannel'\)/);
+ assert.ok(source.indexOf("text(addingChannel ? 'adding' : 'addChannel')")<source.indexOf('if (discoveryMode)'));
+ const action=source.slice(source.indexOf("bind('channel-form'"),source.indexOf("bind('fetch-durations'"));
+ assert.doesNotMatch(action,/if \(busy\)|busy = true|await refresh\(\)/);
+ assert.match(action,/channels !== state.channels/);
+ assert.match(action,/refresh\(false, added.id\)/);
+});

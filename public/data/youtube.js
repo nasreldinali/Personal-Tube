@@ -4,19 +4,33 @@ import { AppError } from '../domain/errors.js';
 import { validateYouTubeKey } from '../domain/youtube-key.js';
 
 export class YouTubeClient {
-  constructor(key, fetcher = (url, options) => fetch(url, options)) { this.key = key; this.fetcher = fetcher; }
+  constructor(key, fetcher = (url, options) => fetch(url, options), { onRequest = () => {} } = {}) { this.key = key; this.fetcher = fetcher; this.onRequest = onRequest; }
 
   async request(resource, params) {
     if (!['channels', 'playlistItems', 'videos', 'search', 'commentThreads'].includes(resource)) throw new AppError('invalidResource');
     const url = new URL(`https://www.googleapis.com/youtube/v3/${resource}`);
     url.search = new URLSearchParams(params);
     const key = validateYouTubeKey(this.key);
-    let response;
-    try {
-      response = await this.fetcher(url, { headers: { 'X-Goog-Api-Key': key }, signal: AbortSignal.timeout(15000) });
-    } catch (error) { throw new AppError(error?.name === 'TimeoutError' ? 'youtubeTimeout' : 'network'); }
-    let data;
-    try { data = await response.json(); } catch (error) { throw new AppError(error?.name === 'TimeoutError' ? 'youtubeTimeout' : 'invalidResponse'); }
+    const controller = new AbortController();
+    let timer;
+    const deadline = new Promise((resolve, reject) => {
+      timer = setTimeout(() => { controller.abort(); reject(new AppError('youtubeTimeout')); }, 15000);
+    });
+    const perform = async () => {
+      // Meter failures must not block an otherwise usable connection.
+      try { await this.onRequest(resource); } catch { /* The meter exposes its unavailable state. */ }
+      if (controller.signal.aborted) throw new AppError('youtubeTimeout');
+      let response;
+      try { response = await this.fetcher(url, { headers: { 'X-Goog-Api-Key': key }, signal: controller.signal }); }
+      catch (error) { throw new AppError(controller.signal.aborted || error?.name === 'TimeoutError' ? 'youtubeTimeout' : 'network'); }
+      let data;
+      try { data = await response.json(); }
+      catch (error) { throw new AppError(controller.signal.aborted || error?.name === 'TimeoutError' ? 'youtubeTimeout' : 'invalidResponse'); }
+      return { response, data };
+    };
+    let response, data;
+    try { ({ response, data } = await Promise.race([perform(), deadline])); }
+    finally { clearTimeout(timer); }
     if (!response.ok) {
       const reason = data?.error?.errors?.[0]?.reason;
       if (['commentsDisabled', 'videoNotFound'].includes(reason) && resource === 'commentThreads') throw new AppError('commentsUnavailable');

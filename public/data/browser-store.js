@@ -1,3 +1,4 @@
+import { USAGE_KEY, USAGE_FAILURE_KEY } from './youtube-usage.js';
 import { STORAGE_KEY, KEY_STORAGE, videoPattern, DAY } from '../config.js';
 import { readState } from './browser-state.js';
 import { emptyState } from '../domain/feed.js';
@@ -82,7 +83,7 @@ export class BrowserStore {
     }
   }
   clearPersonalData() {
-    for (const key of [STORAGE_KEY, PREFERENCE_KEY, LIBRARY_KEY, METADATA_KEY, KEY_STORAGE, DISCOVERY_KEY]) { this.local.removeItem(key); this.observed.set(key, null); }
+    for (const key of [STORAGE_KEY, PREFERENCE_KEY, LIBRARY_KEY, METADATA_KEY, KEY_STORAGE, DISCOVERY_KEY, USAGE_KEY, USAGE_FAILURE_KEY]) { this.local.removeItem(key); this.observed.set(key, null); }
     this.session.removeItem(KEY_STORAGE);
   }
 }

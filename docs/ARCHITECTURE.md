@@ -23,13 +23,15 @@ INFERRED: a functional core with explicit adapters suits this local app without 
 |---|---|
 | GET/HEAD /health | JSON version 1, app=PersonalTube, status=ready; launcher rejects unknown service/version. |
 | GET/HEAD /catalog.json | JSON version 1, videos and areas arrays; frontend refuses unknown versions. Video IDs are 11-character identifiers. Dates/durations absent from the source are not fabricated. |
-| Asset manifest | Static same-origin modules/styles/fonts/images, package release 1.5.0; not an extension API. |
+| Asset manifest | Static same-origin modules/styles/fonts/images, package release 1.7.0; not an extension API. |
 | YouTube | External Data API v3; channels, playlistItems, videos, search and commentThreads only. X-Goog-Api-Key header, never URL. |
 
 ## Storage and input rules
 
 | Format | Validation |
 |---|---|
+| personaltube.youtube-usage.v1 | version 1; Pacific YYYY-MM-DD day, nonnegative safe integer units/search. Daily aggregate only, no request identities or keys. Unknown/corrupt records show unavailable. |
+| personaltube.youtube-usage-incomplete.v1 | Versioned-key format: Pacific YYYY-MM-DD string marking a lost increment. Shared across tabs, excludes that day from numeric display; next day can recover. |
 | personaltube.state.v1 | version 1; integer days 1–7; channels <=200; cache keyed by channel ID, with at most 250 videos plus fetchedAt/limited. Legacy single-video entries remain readable but do not satisfy the new refresh cache. Channel IDs are UC plus 22 allowed characters, title <=250, category <=60, uploads ID 2-100 allowed characters; images use an HTTPS host allowlist. |
 | personaltube.preferences.v1 | version 1; language en/ar; theme auto/light/dark; optional thumbnail original/frame, boolean setupDone, refreshMode auto/manual and refreshMinutes 15/30/60/180/360/720/1440; other versions/enums refused. |
 | personaltube.library.v1 | version 1; later/watched and optional hidden each <=20,000 strict string video IDs, deduplicated. |
