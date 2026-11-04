@@ -34,3 +34,13 @@ test('community discovery exposes one automatic search with progress and optiona
   assert.match(html,/<progress[^>]*id="collect-progress"/);
   assert.match(html,/<details[^>]*id="community-options"/);
 });
+test('main header owns preferences and selection is an explicit accessible mode',async()=>{
+ const html=await readFile(new URL('../public/index.html',import.meta.url),'utf8');
+ const sidebar=html.slice(html.indexOf('<aside'),html.indexOf('</aside>'));
+ const header=html.slice(html.indexOf('<header'),html.indexOf('</header>'));
+ for(const id of ['language','theme']){assert.ok(header.includes(`id="${id}"`));assert.ok(!sidebar.includes(`id="${id}"`));}
+ assert.match(html,/<button id="select-toggle"[^>]*aria-controls="selection-actions"/);
+ assert.match(html,/<div id="selection-actions"[^>]*hidden/);
+ assert.match(html,/<button class="close" data-close="setup-dialog"/);
+ assert.match(html,/<button id="settings-back"[^>]*hidden/);
+});

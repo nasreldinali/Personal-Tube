@@ -11,7 +11,7 @@ test('compact card retains metadata and keeps removal and selection off the imag
   assert.equal(card.className,'video-card short-card');assert.equal(card.children.length,3);
   const [thumbnail,body,actions]=card.children;
   assert.equal(thumbnail.className,'thumbnail');assert.equal(thumbnail.children[2].textContent,'12:34');
-  assert.equal(body.children[0].textContent,video.title);assert.equal(body.children[1].textContent,'Fixture channel');assert.ok(body.children[2].textContent);assert.equal(body.children[3].textContent,'Science');
+  assert.equal(body.children[0].textContent,video.title);assert.equal(body.children[1].children[0].textContent,'Fixture channel');assert.ok(body.children[1].children[1].textContent);assert.equal(body.children[2].textContent,'Science');
   assert.equal(actions.children[2].textContent,'Remove');actions.children[2].listeners.click();assert.deepEqual(removed,[video.id]);
   const checkbox=actions.children[3].children[0];checkbox.checked=true;checkbox.listeners.change();assert.deepEqual(selected,[video.id,true]);
   thumbnail.listeners.click();assert.equal(played,video);

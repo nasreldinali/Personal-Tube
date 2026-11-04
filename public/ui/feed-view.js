@@ -23,7 +23,9 @@ export function createVideoCard(video, { language, library, metadata, areas, onP
   const topic = video.categories?.[0];
   const area = areas.find(value => value.id === topic?.area);
   const topicLabel = area ? areaName(language, area.id, area.name) : video.channelCategory || t(language, 'channelSource');
-  body.append(title, channel, element('div', 'video-info', source), element('div', 'video-topic', topicLabel));
+  const meta = element('div', 'card-meta');
+  meta.append(channel, element('div', 'video-info', source));
+  body.append(title, meta, element('div', 'video-topic', topicLabel));
   const actions = element('div', 'card-actions');
   for (const field of ['later', 'watched']) {
     const selected = library[field].includes(video.id);

@@ -2,6 +2,12 @@
 
 Reviewed: 2026-11-04.
 
+## Setup navigation and viewing controls (1.5.2)
+
+137 deterministic tests and20 deliberate defects pass. A fresh localhost browser origin showed setup once; reloading while it was still open, without pressing Done, showed no dialog. Nested YouTube settings returned to setup via both Back and close; closing standalone Settings returned to the feed. Independent review found a preference-reset lifecycle edge case, fixed with idempotent visit persistence and a RED/GREEN regression; seven focused tests passed on re-review with no remaining blocker.
+
+Selection mode was verified with18 selected cards,17 after deselecting one, then0 and no visible checkboxes after Cancel. No videos were removed. Normal collapsed desktop card widths remained277px (four columns), expanded widths324px (three columns); height at277px width decreased from338.6px to311.9px. English/light and Arabic/dark were inspected. Main-header preferences and the floating selection bar fit390px and820px viewports without horizontal overflow. Browser error/warning logs were empty. These are simulated viewports, not physical-device tests. The30-minute cached/manual channel refresh and on-request comment analysis behavior were not changed.
+
 ## Connection and card refinement (1.5.1)
 
 Measured: 133 deterministic tests and 19 deliberate defects pass. Real local account selection switched from Codex to Claude and back through the new provider buttons. Both subscriptions were already authenticated; a fresh browser sign-in was not exercised. Pending sign-in, timeout, close cancellation, missing-install help and inline failure feedback are covered by injected responses and fake timers. No analysis call was initiated.
@@ -26,7 +32,7 @@ Arabic/dark and English/light were visually inspected; viewport checks at 390, 8
 
 ## Automated checks
 
-`npm run check` passes 133 Node tests and detects nineteen deliberate defects in isolated scratch copies: explicit connection selection, queued-poll deadline, subscription refusal, provider output validation, hidden-ID budget, disabled Claude tools, automatic community call budget, cancellation before another model call, positive-evidence threshold, unknown analysis input, malformed-key rejection, community Origin enforcement, exact classification quote evidence, backup byte budget, strict community source validation, foreign Host refusal, key exclusion from backups, stale-tab refusal and stale-refresh refusal. It also checks JavaScript syntax, project-specific formatting, import cycles, domain boundaries, asset presence and source/brand SHA-256 integrity. This is not a general linter, coverage report or formal security certification.
+`npm run check` passes 137 Node tests and detects twenty deliberate defects in isolated scratch copies: setup visit persistence, explicit connection selection, queued-poll deadline, subscription refusal, provider output validation, hidden-ID budget, disabled Claude tools, automatic community call budget, cancellation before another model call, positive-evidence threshold, unknown analysis input, malformed-key rejection, community Origin enforcement, exact classification quote evidence, backup byte budget, strict community source validation, foreign Host refusal, key exclusion from backups, stale-tab refusal and stale-refresh refusal. It also checks JavaScript syntax, project-specific formatting, import cycles, domain boundaries, asset presence and source/brand SHA-256 integrity. This is not a general linter, coverage report or formal security certification.
 
 The earlier 82-test/nine-defect check also passed in a clean temporary copy without `.git`, `.local`, historical records or ignored original community source files.
 

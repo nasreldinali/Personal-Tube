@@ -10,6 +10,7 @@ export function createSetupPanel({ context, finish, openYouTube, onError, schedu
   let timer = null;
   let pollUntil = 0;
   let opened = false;
+  let returningFromYouTube = false;
   const providers = ['codex', 'claude'];
   const name = provider => provider === 'codex' ? 'Codex' : 'Claude';
   const text = (key, values) => t(context().language, key, values);
@@ -78,8 +79,16 @@ export function createSetupPanel({ context, finish, openYouTube, onError, schedu
   $('setup-open').addEventListener('click', open);
   $('setup-check').addEventListener('click', () => { pollUntil = 0; void request('status'); });
   $('setup-dialog').addEventListener('close', () => { opened = false; stopPolling(); });
-  $('setup-youtube').addEventListener('click', () => { opened = false; stopPolling(); $('setup-dialog').close(); openYouTube(); });
-  $('setup-finish').addEventListener('click', () => { try { finish(); opened = false; stopPolling(); $('setup-dialog').close(); } catch (error) { onError(error); } });
-  function open() { opened = true; pollUntil = 0; render(); $('setup-dialog').showModal(); void request('status'); }
+  $('setup-youtube').addEventListener('click', () => { returningFromYouTube = true; $('settings-back').hidden = false; opened = false; stopPolling(); $('setup-dialog').close(); openYouTube(); });
+  $('settings-back').addEventListener('click', () => $('settings-dialog').close());
+  $('settings-dialog').addEventListener('close', () => {
+    if (!returningFromYouTube) return;
+    returningFromYouTube = false; $('settings-back').hidden = true; open();
+  });
+  $('setup-finish').addEventListener('click', () => { opened = false; stopPolling(); $('setup-dialog').close(); });
+  function open() {
+    try { finish(); } catch (error) { onError(error); }
+    opened = true; pollUntil = 0; render(); $('setup-dialog').showModal(); void request('status');
+  }
   return { open, render };
 }

@@ -4,12 +4,12 @@ import { createSetupPanel } from '../public/ui/setup-panel.js';
 import { setupDocumentFixture } from './fixtures.js';
 const tick=()=>new Promise(resolve=>setImmediate(resolve));
 function setup(overrides={}) {
- const before={document:globalThis.document,fetch:globalThis.fetch};const fixture=setupDocumentFixture();const requests=[];const timers=new Map();let next=0;let clock=0;
+ const before={document:globalThis.document,fetch:globalThis.fetch};const fixture=setupDocumentFixture();const requests=[];let visits=0;let remembered=false;const timers=new Map();let next=0;let clock=0;
  globalThis.document=fixture.document;
  const state={version:1,selected:'codex',providers:{codex:{installed:true,supported:true,connected:true},claude:{installed:true,supported:true,connected:true}},usage:{codex:{attempted:0,completed:0,failed:0,inputs:0},claude:{attempted:0,completed:0,failed:0,inputs:0}},...overrides};
  globalThis.fetch=async(_,options)=>{const body=JSON.parse(options.body);requests.push(body);if(body.action==='connect')state.selected=body.provider;return {ok:true,json:async()=>structuredClone(state)};};
- const panel=createSetupPanel({context:()=>({language:'en',storageReady:true}),finish:()=>{},openYouTube:()=>{},onError:error=>{throw error;},now:()=>clock,schedule:callback=>{timers.set(++next,callback);return next;},cancel:id=>timers.delete(id)});
- return {fixture,requests,timers,state,panel,setTime:value=>{clock=value;},restore(){globalThis.document=before.document;globalThis.fetch=before.fetch;},click(id){fixture.nodes.get(id).listeners.click();}};
+ const panel=createSetupPanel({context:()=>({language:'en',storageReady:true}),finish:()=>{if(!remembered){visits++;remembered=true;}},openYouTube:()=>{},onError:error=>{throw error;},now:()=>clock,schedule:callback=>{timers.set(++next,callback);return next;},cancel:id=>timers.delete(id)});
+ return {fixture,requests,timers,state,panel,visits:()=>visits,clearVisit:()=>{remembered=false;},setTime:value=>{clock=value;},restore(){globalThis.document=before.document;globalThis.fetch=before.fetch;},click(id){fixture.nodes.get(id).listeners.click();}};
 }
 test('connected account buttons explicitly activate the chosen provider and remain usable',async()=>{
  const f=setup();try{
@@ -36,4 +36,19 @@ test('polling has a deadline and errors are shown inside the dialog',async()=>{
 });
 test('missing provider opens installation help instead of a disabled dead end',async()=>{
  const f=setup();try{f.state.providers.claude.installed=false;f.panel.open();await tick();f.click('setup-claude');assert.equal(f.fixture.nodes.get('setup-help').open,true);assert.equal(f.requests.length,1);}finally{f.restore();}
+});
+
+test('first setup visit is saved before a reload or any dismissal path',async()=>{
+ const f=setup();try{f.panel.open();assert.equal(f.visits(),1);await tick();f.fixture.nodes.get('setup-dialog').listeners.close();f.panel.open();await tick();assert.equal(f.visits(),1);}finally{f.restore();}
+});
+test('YouTube settings has a return path while ordinary settings close does not open setup',async()=>{
+ const f=setup();try{
+  f.fixture.document.getElementById('settings-dialog').listeners.close();assert.notEqual(f.fixture.nodes.get('setup-dialog').open,true);
+  f.panel.open();await tick();f.click('setup-youtube');assert.equal(f.fixture.nodes.get('settings-back').hidden,false);
+  f.fixture.nodes.get('settings-dialog').listeners.close();await tick();assert.equal(f.fixture.nodes.get('setup-dialog').open,true);assert.equal(f.fixture.nodes.get('settings-back').hidden,true);
+ }finally{f.restore();}
+});
+
+test('revisiting setup after preferences reset records the visit again',async()=>{
+ const f=setup();try{f.panel.open();await tick();f.clearVisit();f.fixture.nodes.get('setup-dialog').listeners.close();f.panel.open();await tick();assert.equal(f.visits(),2);}finally{f.restore();}
 });

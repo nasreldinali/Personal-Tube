@@ -1,4 +1,11 @@
 const pairs = {
+  backToSetup: ['Back to Setup & connections', 'الرجوع للإعداد والاتصالات'],
+  selectVideos: ['Select videos', 'تحديد فيديوهات'],
+  selectAllShown: ['Select all shown', 'تحديد كل المعروض'],
+  clearShownSelection: ['Deselect shown', 'إلغاء تحديد المعروض'],
+  selectionCount: ['{count} selected', 'تم تحديد {count}'],
+  channelRefreshHelp: ['Updates automatically about every 30 minutes while the app is open. Refresh channels checks now. Comment analysis only starts when you request it.', 'الفيديوهات بتتحدّث تلقائياً تقريباً كل ٣٠ دقيقة والتطبيق مفتوح. زر تحديث القنوات بيجلب الجديد فوراً. تحليل التعليقات بيبدأ بطلبك فقط.'],
+
   removeVideoAction: ['Remove', 'إزالة'],
   done: ['Done', 'تم'],
   youtubeConnectionBrief: ['Follow channels and get their latest videos.', 'تابع قنواتك واجلب أحدث فيديوهاتها.'],

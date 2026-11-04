@@ -1,5 +1,13 @@
 # Changelog
 
+## 1.5.2 — 2026-11-04
+
+- Remember the first setup visit immediately, including after preferences are reset; reload no longer requires pressing Done first.
+- Add a return path from YouTube settings to setup and match the close buttons.
+- Move language and appearance controls into the main header.
+- Replace the persistent bulk checkbox with an explicit selection mode and a floating action bar; preserve keyboard focus after selecting a card.
+- Retain regular card widths and reduce vertical space by grouping metadata; explain the existing automatic channel refresh policy.
+
 ## 1.5.1 — 2026-11-04
 
 - Replace the crowded setup dialog with separate YouTube and analysis provider cards, clear active-account feedback and expandable requirements/usage details.

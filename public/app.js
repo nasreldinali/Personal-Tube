@@ -35,6 +35,7 @@ let staleTab = false;
 let lastRefreshAttempt = 0;
 let mode = viewFromHash(location.hash);
 const selectedVideos = new Set();
+let selectionMode = false;
 let pageSize = 18;
 let activeVideo = null;
 let confirmation = null;
@@ -206,13 +207,20 @@ function renderPanelTools() {
   $('delete-selected').disabled = !selectedVideos.size || busy || staleTab;
   $('delete-selected').textContent = text('deleteSelected',{count:number(lang,selectedVideos.size)});
   const displayed=displayedVideoIds();
-  $('select-visible').checked = displayed.length > 0 && displayed.every(id=>selectedVideos.has(id));
+  document.documentElement.dataset.selecting = String(selectionMode);
+  $('select-toggle').hidden = selectionMode;
+  $('select-toggle').disabled = !displayed.length;
+  $('selection-actions').hidden = !selectionMode;
+  $('selection-count').textContent = text('selectionCount',{count:number(lang,selectedVideos.size)});
+  $('select-visible').textContent = text(displayed.length > 0 && displayed.every(id=>selectedVideos.has(id)) ? 'clearShownSelection' : 'selectAllShown');
+  $('select-visible').disabled = !displayed.length;
+  $('channel-refresh-help').hidden = !channelMode;
   $('thumbnail-style').value = preferences.thumbnail || 'frame';
   $('channel-sample-help').hidden = !channelMode || !Object.values(state.cache).some(entry=>entry.limited);
   $('shorts-help').hidden = !channelMode || $('channel-kind').value === 'all';
   }
 function changeMode(value) {
-  mode = value; history.replaceState(null,'',`#${value}`); pageSize = 18; selectedVideos.clear();
+  mode = value; history.replaceState(null,'',`#${value}`); pageSize = 18; selectedVideos.clear(); selectionMode = false;
   $('search').value = ''; $('area').value = ''; $('category').value = ''; $('duration').value = 'all'; $('hide-watched').checked = false;
   renderFilters(); render();
 }
@@ -251,6 +259,7 @@ function renderChannels() {
 function selectVideo(id, selected) {
   if (selected) selectedVideos.add(id); else selectedVideos.delete(id);
   render();
+  [...document.querySelectorAll('.video-card[data-video-id]')].find(node=>node.dataset.videoId===id && node.getClientRects().length)?.querySelector('.card-select input')?.focus();
 }
 function confirmHide(ids) {
   askConfirmation('confirmHideVideos', () => {
@@ -352,7 +361,9 @@ bind('thumbnail-style','change',()=>{
   const next={...preferences,thumbnail:$('thumbnail-style').value};persist(()=>store.writePreferences(next));preferences=next;render();
 });
 bind('delete-selected','click',()=>confirmHide([...selectedVideos]));
-bind('select-visible','change',()=>{for(const id of displayedVideoIds()) {if($('select-visible').checked)selectedVideos.add(id);else selectedVideos.delete(id);}render();});
+bind('select-toggle','click',()=>{selectionMode=true;renderPanelTools();$('select-visible').focus();});
+bind('selection-cancel','click',()=>{selectionMode=false;selectedVideos.clear();render();$('select-toggle').focus();});
+bind('select-visible','click',()=>{const ids=displayedVideoIds();const clear=ids.every(id=>selectedVideos.has(id));for(const id of ids) {if(clear)selectedVideos.delete(id);else selectedVideos.add(id);}render();$('select-visible').focus();});
 bind('restore-hidden','click',()=>{const next={...library,hidden:[]};persist(()=>store.writeLibrary(next));library=next;render();notify('videosRestored');$('restore-hidden').disabled=true;});
 window.addEventListener('hashchange',()=>{if(location.hash!=='#feed')changeMode(viewFromHash(location.hash));});
 bind('expiry', 'change', () => { const next = { ...state, days: Number($('expiry').value) }; commitState(next); render(); });
@@ -454,7 +465,7 @@ discoveryPanel = createDiscoveryPanel({
   onFollow: video => { openChannels(); $('channel-input').value = video.channelId; $('channel-category').value = discovery.recommendations.query.slice(0,60); },
   onError: showError, confirm: askConfirmation, changeMode,
 });
-setupPanel = createSetupPanel({context:()=>({language:preferences.language,hasKey:Boolean(key),storageReady:!storageBlocked&&!staleTab,busy}),openYouTube:openSettings,onError:showError,finish:()=>{const next={...preferences,setupDone:true};persist(()=>store.writePreferences(next));preferences=next;}});
+setupPanel = createSetupPanel({context:()=>({language:preferences.language,hasKey:Boolean(key),storageReady:!storageBlocked&&!staleTab,busy}),openYouTube:openSettings,onError:showError,finish:()=>{if(preferences.setupDone)return;const next={...preferences,setupDone:true};persist(()=>store.writePreferences(next));preferences=next;}});
 discoveryPanel.hydrate();
 applyPreferences();
 try {
