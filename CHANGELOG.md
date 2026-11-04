@@ -1,5 +1,12 @@
 # Changelog
 
+## 1.6.0 — 2026-11-04
+
+- Add saved automatic/manual video refresh controls, with 15/30-minute and 1/3/6/12/24-hour intervals.
+- Apply the interval to both attempt scheduling and cached channel freshness; manual mode blocks startup, reconnect, return-to-page, key-save and channel-add refresh.
+- Keep explicit Refresh channels available; changing policy or hiding the page stops automatic work between channels.
+- Include refresh choices in backups and show the active policy in My channels.
+
 ## 1.5.2 — 2026-11-04
 
 - Remember the first setup visit immediately, including after preferences are reset; reload no longer requires pressing Done first.

@@ -1,7 +1,7 @@
-import { CACHE_TTL, videoPattern } from './config.js';
+import { videoPattern } from './config.js';
 import { emptyState, visibleVideos, safeImage, channelVideos } from './domain/feed.js';
 import { emptyLibrary, toggleLibrary, parseBackup, validateBackupFile } from './domain/library.js';
-import { parsePreferences, preferenceAttributes } from './domain/preferences.js';
+import { parsePreferences, preferenceAttributes, refreshSettings, automaticRefreshDue, REFRESH_INTERVALS } from './domain/preferences.js';
 import { selectCatalog } from './domain/catalog.js';
 import { AppError } from './domain/errors.js';
 import { BrowserStore } from './data/browser-store.js';
@@ -32,7 +32,7 @@ let loading = true;
 let busy = false;
 let storageBlocked = false;
 let staleTab = false;
-let lastRefreshAttempt = 0;
+let lastRefreshAttempt = null;
 let mode = viewFromHash(location.hash);
 const selectedVideos = new Set();
 let selectionMode = false;
@@ -215,6 +215,8 @@ function renderPanelTools() {
   $('select-visible').textContent = text(displayed.length > 0 && displayed.every(id=>selectedVideos.has(id)) ? 'clearShownSelection' : 'selectAllShown');
   $('select-visible').disabled = !displayed.length;
   $('channel-refresh-help').hidden = !channelMode;
+  const refreshPolicy = refreshSettings(preferences);
+  $('channel-refresh-help').textContent = text(refreshPolicy.mode === 'manual' ? 'refreshManualHelp' : 'refreshAutoHelp', {interval:text(`refreshInterval${refreshPolicy.minutes}`)});
   $('thumbnail-style').value = preferences.thumbnail || 'frame';
   $('channel-sample-help').hidden = !channelMode || !Object.values(state.cache).some(entry=>entry.limited);
   $('shorts-help').hidden = !channelMode || $('channel-kind').value === 'all';
@@ -277,7 +279,20 @@ function renderCategoryManager() {
     }));row.append(title,remove);return row;
   }));
 }
+function renderRefreshDraft() {
+  const manual = $('refresh-mode').value === 'manual';
+  $('refresh-interval').disabled = manual;
+  $('refresh-settings-help').textContent = text(manual ? 'refreshManualHelp' : 'refreshAutoHelp', {interval:text(`refreshInterval${$('refresh-interval').value}`)});
+}
+function renderRefreshSettings() {
+  const settings = refreshSettings(preferences);
+  $('refresh-mode').value = settings.mode;
+  selectOptions($('refresh-interval'), REFRESH_INTERVALS.map(minutes=>[String(minutes),text(`refreshInterval${minutes}`)]), String(settings.minutes));
+  $('refresh-settings-status').textContent = ''; $('refresh-settings-error').textContent = '';
+  renderRefreshDraft();
+}
 function openSettings() {
+  renderRefreshSettings();
   $('restore-hidden').disabled = !(library.hidden || []).length;
   $('api-key').value = key; $('settings-error').textContent = '';
   try { $('remember-key').checked = store?.remembersKey() || false; } catch { $('remember-key').checked = false; }
@@ -323,12 +338,14 @@ function play(video) {
 }
 async function refresh(force = false) {
   if (busy || staleTab || storageBlocked || !key || !state.channels.length) return;
-  if (!force && now() - lastRefreshAttempt < CACHE_TTL) return;
+  if (!force && !automaticRefreshDue(preferences, lastRefreshAttempt, now(), !document.hidden)) return;
+  const policy = refreshSettings(preferences);
+  const refreshPreferences = preferences;
   lastRefreshAttempt = now(); busy = true; render(); renderChannels();
   try {
     const revision = stateRevision;
     const next = structuredClone(state);
-    const errors = await refreshChannels(next, new YouTubeClient(key), { force, now: now() });
+    const errors = await refreshChannels(next, new YouTubeClient(key), { force, now: now(), preferences: refreshPreferences, shouldContinue: () => !staleTab && !storageBlocked && (force || (!document.hidden && refreshSettings(preferences).mode === 'auto' && refreshSettings(preferences).minutes === policy.minutes)) });
     const result = applyRefreshResult(state, next, revision, stateRevision);
     if (!result.applied) return;
     commitState(result.state);
@@ -368,11 +385,19 @@ bind('restore-hidden','click',()=>{const next={...library,hidden:[]};persist(()=
 window.addEventListener('hashchange',()=>{if(location.hash!=='#feed')changeMode(viewFromHash(location.hash));});
 bind('expiry', 'change', () => { const next = { ...state, days: Number($('expiry').value) }; commitState(next); render(); });
 bind('refresh', 'click', () => refresh(true));
+bind('refresh-mode', 'change', () => { $('refresh-settings-status').textContent = ''; renderRefreshDraft(); });
+bind('refresh-interval', 'change', () => { $('refresh-settings-status').textContent = ''; renderRefreshDraft(); });
+bind('refresh-settings-form', 'submit', event => {
+  event.preventDefault();
+  const next = parsePreferences({...preferences,refreshMode:$('refresh-mode').value,refreshMinutes:Number($('refresh-interval').value)});
+  persist(() => store.writePreferences(next)); preferences = next;
+  render(); renderRefreshSettings(); $('refresh-settings-status').textContent = text('refreshSettingsSaved');
+}, 'refresh-settings-error');
 bind('settings-form', 'submit', event => {
   event.preventDefault(); if (busy) throw new AppError('busy');
   const nextKey = $('api-key').value.trim();
   persist(() => store.saveKey(nextKey, $('remember-key').checked)); key = nextKey;
-  $('settings-dialog').close(); notify('connectionReady'); render(); void refresh(true);
+  $('settings-dialog').close(); notify('connectionReady'); render(); void refresh();
 }, 'settings-error');
 bind('forget-key', 'click', () => {
   if (busy) throw new AppError('busy'); persist(() => store.forgetKey()); key = ''; $('api-key').value = ''; $('remember-key').checked = false; notify('keyRemoved'); render();
@@ -391,7 +416,7 @@ bind('channel-form', 'submit', async event => {
     const next = { ...state, channels: [...state.channels, channel] };
     commitState(next); added = true; $('channel-form').reset(); renderFilters();
   } finally { busy = false; render(); renderChannels(); }
-  if (added) { lastRefreshAttempt = 0; await refresh(); }
+  if (added) { lastRefreshAttempt = null; await refresh(); }
 }, 'channel-error');
 bind('fetch-durations', 'click', async () => {
   if (!key) { openSettings(); return; }

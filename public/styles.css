@@ -1320,3 +1320,14 @@ html:not([data-selecting=true]) .card-select { display:none; }
 .selection-actions { position:fixed; z-index:20; inset-block-end:22px; left:50%; transform:translateX(-50%); width:max-content; max-width:calc(100vw - 32px); box-sizing:border-box; padding:12px 18px; border:1px solid var(--input-line); border-radius:14px; background:var(--surface); box-shadow:0 8px 30px #071d3a35; }
 html[data-selecting=true] .d-main { padding-bottom:110px; }
 @media(max-width:600px) { .selection-actions { justify-content:center; gap:6px 14px; inset-block-end:12px; padding:10px 14px; } }
+
+.refresh-settings { padding:16px; margin:0 0 24px; border:1px solid var(--line); border-radius:12px; background:var(--blue-soft); }
+.refresh-settings h3 { margin:0 0 14px; }
+.refresh-fields { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+.refresh-fields .d-field { min-width:0; }
+.refresh-settings .help { font-size:12px; line-height:1.7; margin-block:12px; }
+.refresh-settings .d-btn { min-height:40px; padding:8px 14px; font-size:12px; }
+#refresh-settings-status { font-size:12px; color:var(--success-ink); }
+@media(max-width:480px) { .refresh-fields { grid-template-columns:1fr; gap:10px; } }
+.refresh-usage { margin-top:14px; padding:10px 0 0; border-bottom:0; }
+.refresh-usage summary { min-height:24px; font-size:12px; }

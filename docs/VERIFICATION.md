@@ -2,6 +2,12 @@
 
 Reviewed: 2026-11-04.
 
+## Refresh controls (1.6.0)
+
+145 deterministic tests and 22 deliberate defects pass. Tests use injected clients and explicit clocks to verify manual refusal, explicit forced refresh, selected cache/attempt boundaries, legacy defaults, interval validation, between-channel cancellation, hidden-page refusal and preference backup roundtrip. Only the explicit Refresh channels action bypasses the policy. No live YouTube or model call was used for these tests.
+
+Browser checks verified manual mode survives reload, disables but retains the chosen 6-hour interval, and switching to automatic restores that interval. The original automatic 30-minute setting was restored afterward. Controls work independently from key entry; channel help reflects the active policy. Arabic/dark and English/light were visually inspected at desktop/tablet/mobile widths with no horizontal overflow or browser warning/error logs. Independent review found a visible-only lifecycle mismatch, fixed with a RED/GREEN regression and re-reviewed with 16 focused passing tests and no remaining blocker. See [refresh contract](REFRESH_SETTINGS.md).
+
 ## Setup navigation and viewing controls (1.5.2)
 
 137 deterministic tests and20 deliberate defects pass. A fresh localhost browser origin showed setup once; reloading while it was still open, without pressing Done, showed no dialog. Nested YouTube settings returned to setup via both Back and close; closing standalone Settings returned to the feed. Independent review found a preference-reset lifecycle edge case, fixed with idempotent visit persistence and a RED/GREEN regression; seven focused tests passed on re-review with no remaining blocker.
@@ -32,7 +38,7 @@ Arabic/dark and English/light were visually inspected; viewport checks at 390, 8
 
 ## Automated checks
 
-`npm run check` passes 137 Node tests and detects twenty deliberate defects in isolated scratch copies: setup visit persistence, explicit connection selection, queued-poll deadline, subscription refusal, provider output validation, hidden-ID budget, disabled Claude tools, automatic community call budget, cancellation before another model call, positive-evidence threshold, unknown analysis input, malformed-key rejection, community Origin enforcement, exact classification quote evidence, backup byte budget, strict community source validation, foreign Host refusal, key exclusion from backups, stale-tab refusal and stale-refresh refusal. It also checks JavaScript syntax, project-specific formatting, import cycles, domain boundaries, asset presence and source/brand SHA-256 integrity. This is not a general linter, coverage report or formal security certification.
+`npm run check` passes 145 Node tests and detects twenty-two deliberate defects in isolated scratch copies: manual refresh refusal, selected cache interval, setup visit persistence, explicit connection selection, queued-poll deadline, subscription refusal, provider output validation, hidden-ID budget, disabled Claude tools, automatic community call budget, cancellation before another model call, positive-evidence threshold, unknown analysis input, malformed-key rejection, community Origin enforcement, exact classification quote evidence, backup byte budget, strict community source validation, foreign Host refusal, key exclusion from backups, stale-tab refusal and stale-refresh refusal. It also checks JavaScript syntax, project-specific formatting, import cycles, domain boundaries, asset presence and source/brand SHA-256 integrity. This is not a general linter, coverage report or formal security certification.
 
 The earlier 82-test/nine-defect check also passed in a clean temporary copy without `.git`, `.local`, historical records or ignored original community source files.
 

@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { parsePreferences, preferenceAttributes } from '../public/domain/preferences.js';
+import { parsePreferences, preferenceAttributes, refreshSettings, automaticRefreshDue } from '../public/domain/preferences.js';
 import { messages, t, number, areaName } from '../public/locale.js';
 
 test('preferences default to English and automatic theme; reject unsupported versions and values', () => {
@@ -23,4 +23,27 @@ test('message catalogs have complete parity and matching template fields', () =>
   assert.equal(number('ar', 123), '١٢٣');
   assert.equal(number('en', 123), '123');
   assert.notEqual(areaName('ar', 'software', 'Software'), 'Software');
+});
+test('video refresh preferences validate modes and bounded intervals without changing legacy defaults',()=>{
+ const base={version:1,language:'en',theme:'auto'};
+ assert.deepEqual(parsePreferences({...base,refreshMode:'manual',refreshMinutes:360}),{...base,refreshMode:'manual',refreshMinutes:360});
+ for(const refreshMode of ['off',true,null])assert.throws(()=>parsePreferences({...base,refreshMode}));
+ for(const refreshMinutes of [0,1,-15,31,Infinity,'60',null])assert.throws(()=>parsePreferences({...base,refreshMinutes}));
+ for(const refreshMinutes of [15,30,60,180,360,720,1440])assert.equal(parsePreferences({...base,refreshMode:'auto',refreshMinutes}).refreshMinutes,refreshMinutes);
+});
+
+test('automatic attempt scheduling honors manual mode, selected boundaries and legacy defaults',()=>{
+ assert.deepEqual(refreshSettings(),{mode:'auto',minutes:30,intervalMs:1800000});
+ for(const last of [null,0,100])assert.equal(automaticRefreshDue({refreshMode:'manual'},last,999999999),false);
+ assert.equal(automaticRefreshDue({},null,0),true);
+ const prefs={refreshMinutes:60};
+ assert.equal(automaticRefreshDue(prefs,100,3600099),false);
+ assert.equal(automaticRefreshDue(prefs,100,3600100),true);
+ assert.equal(automaticRefreshDue({refreshMinutes:15},100,900100),true);
+ assert.equal(automaticRefreshDue(prefs,200,100),false);
+});
+test('automatic refresh does not start while the page is hidden',()=>{
+ assert.equal(automaticRefreshDue({},null,0,false),false);
+ assert.equal(automaticRefreshDue({refreshMinutes:15},0,900000,false),false);
+ assert.equal(automaticRefreshDue({},null,0,true),true);
 });

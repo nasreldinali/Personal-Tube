@@ -4,6 +4,8 @@ import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const cases = [
+  { name: 'manual-refresh-refusal', file: 'public/services/refresh.js', from: "if (!force && mode === 'manual')", to: 'if (false)', test: 'test/refresh-settings.test.js' },
+  { name: 'selected-refresh-interval', file: 'public/services/refresh.js', from: 'now - previous.fetchedAt < intervalMs', to: 'now - previous.fetchedAt < 1800000', test: 'test/refresh-settings.test.js' },
   { name: 'setup-visit-persisted', file: 'public/ui/setup-panel.js', from: 'try { finish(); } catch', to: 'try { /* missing visit persistence */ } catch', test: 'test/setup-interaction.test.js' },
   { name: 'connect-activates-provider', file: 'server/provider-manager.js', from: 'selected = provider;', to: '', test: 'test/provider-manager.test.js' },
   { name: 'connection-poll-deadline', file: 'public/ui/setup-panel.js', from: "if (now() >= pollUntil) { message = 'connectionFailed'; render(); return; }\n      void request", to: "void request", test: 'test/setup-interaction.test.js' },
