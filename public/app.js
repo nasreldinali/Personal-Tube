@@ -41,10 +41,6 @@ const selectedVideos = new Set();
 let selectionMode = false;
 let pageSize = 18;
 let activeVideo = null;
-let confirmation = null;
-let noticeKey = '';
-let noticeValues = {};
-let noticeError = false;
 const text = (name, values) => t(preferences.language, name, values);
 const now = () => Date.now();
 
@@ -57,7 +53,7 @@ try {
   discovery = store.readDiscovery();
   metadata = store.readMetadata(now());
   key = store.readKey();
-} catch { storageBlocked = true; noticeKey = 'storageRead'; noticeError = true; }
+} catch { storageBlocked = true; }
 
 function youtubeClient() {
   return new YouTubeClient(key, undefined, { onRequest: async resource => { await usage?.record(resource); renderUsage(); } });
@@ -72,22 +68,6 @@ function renderUsage() {
     $(`usage-${bucket}-bar`).value = Math.min(limit, value[bucket]);
   }
   $('usage-day').textContent = text('usageDay', { day: value.day });
-}
-function notify(name = '', values = {}, error = false) {
-  noticeKey = name; noticeValues = values; noticeError = error;
-  renderNotice();
-}
-function renderNotice() {
-  const name = staleTab ? 'storageConflict' : storageBlocked ? 'storageRead' : noticeKey;
-  $('notice').hidden = !name;
-  $('notice').textContent = name ? text(name, noticeValues) : '';
-  $('notice').dataset.kind = storageBlocked || noticeError ? 'error' : 'info';
-}
-function errorCode(error) { return messages.en[error?.code] ? error.code : 'unexpected'; }
-function showError(error, target) {
-  const code = errorCode(error);
-  notify(code, {}, true);
-  if (target) $(target).textContent = text(code);
 }
 function persist(action) {
   if (staleTab) throw new AppError('storageConflict');
@@ -127,7 +107,7 @@ function applyPreferences() {
   $('language').value = preferences.language;
   $('theme').value = preferences.theme;
   applyLayout(); renderFilters(); render(); renderChannels(); renderPlayerButtons();
-  if (confirmation) $('confirm-text').textContent = text(confirmation.message);
+  renderConfirmation();
 }
 function renderFilters() {
   const lang = preferences.language;
@@ -375,14 +355,43 @@ async function refresh(force = false, channelId = null) {
   } catch (error) { showError(error); }
   finally { busy = false; render(); renderChannels(); }
 }
-function askConfirmation(message, action) {
-  confirmation = { message, action }; $('confirm-text').textContent = text(message); $('confirm-dialog').showModal();
-}
 function resetFilters() {
   $('search').value = ''; $('area').value = ''; $('category').value = ''; $('duration').value = 'all'; $('hide-watched').checked = false;
   pageSize = 18; renderFilters(); render();
 }
 
+function createFeedbackPanel({ text, isStale, isStorageBlocked, bind }) {
+  let confirmation = null;
+  let noticeKey = '';
+  let noticeValues = {};
+  let noticeError = false;
+  function notify(name = '', values = {}, error = false) {
+    noticeKey = name; noticeValues = values; noticeError = error;
+    renderNotice();
+  }
+  function renderNotice() {
+    const name = isStale() ? 'storageConflict' : isStorageBlocked() ? 'storageRead' : noticeKey;
+    $('notice').hidden = !name;
+    $('notice').textContent = name ? text(name, noticeValues) : '';
+    $('notice').dataset.kind = isStorageBlocked() || noticeError ? 'error' : 'info';
+  }
+  function errorCode(error) { return messages.en[error?.code] ? error.code : 'unexpected'; }
+  function showError(error, target) {
+    const code = errorCode(error);
+    notify(code, {}, true);
+    if (target) $(target).textContent = text(code);
+  }
+  function askConfirmation(message, action) {
+    confirmation = { message, action }; $('confirm-text').textContent = text(message); $('confirm-dialog').showModal();
+  }
+  bind('confirm-yes', 'click', async () => { const action = confirmation?.action; $('confirm-dialog').close(); await action?.(); }, 'settings-error');
+  document.querySelectorAll('[data-close]').forEach(button => button.addEventListener('click', () => $(button.dataset.close).close()));
+  $('confirm-dialog').addEventListener('close', () => { confirmation = null; });
+  function renderConfirmation() { if (confirmation) $('confirm-text').textContent = text(confirmation.message); }
+  return { notify, renderNotice, showError, askConfirmation, renderConfirmation };
+}
+
+const { notify, renderNotice, showError, askConfirmation, renderConfirmation } = createFeedbackPanel({ text, isStale: () => staleTab, isStorageBlocked: () => storageBlocked, bind });
 for (const view of ['discover', 'channels', 'later', 'watched', 'recommendations', 'community']) bind(`view-${view}`, 'click', () => changeMode(view));
 for (const id of ['channels-open', 'hero-add', 'empty-add']) bind(id, 'click', openChannels);
 bind('settings-open', 'click', openSettings);
@@ -489,13 +498,10 @@ bind('clear-data', 'click', () => {
     $('api-key').value = ''; $('remember-key').checked = false; applyPreferences(); notify('cleared');
   });
 }, 'settings-error');
-bind('confirm-yes', 'click', async () => { const action = confirmation?.action; $('confirm-dialog').close(); await action?.(); }, 'settings-error');
 bind('player-later', 'click', () => toggleSaved('later', activeVideo.id, activeVideo));
 bind('player-watched', 'click', () => toggleSaved('watched', activeVideo.id, activeVideo));
-document.querySelectorAll('[data-close]').forEach(button => button.addEventListener('click', () => $(button.dataset.close).close()));
 $('player-dialog').addEventListener('close', () => { $('player-container').replaceChildren(); activeVideo = null; });
 $('settings-dialog').addEventListener('close', () => { $('api-key').value = ''; });
-$('confirm-dialog').addEventListener('close', () => { confirmation = null; });
 document.addEventListener('keydown', event => {
   if (event.key === '/' && !document.querySelector('dialog[open]') && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) { event.preventDefault(); $('search').focus(); }
 });

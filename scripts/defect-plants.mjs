@@ -4,6 +4,8 @@ import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const cases = [
+  { name: 'player-unloads-on-close', file: 'public/app.js', from: "$('player-container').replaceChildren(); activeVideo = null;", to: 'activeVideo = null;', test: 'test/frontend-workflows.test.js' },
+  { name: 'application-stale-write-refusal', file: 'public/app.js', from: "if (staleTab) throw new AppError('storageConflict');", to: '', test: 'test/frontend-workflows.test.js' },
   { name: 'reject-unsupported-interface-language', file: 'public/domain/preferences.js', from: "!['en', 'ar', 'de', 'es'].includes(value.language)", to: 'false', test: 'test/preferences.test.js' },
   { name: 'do-not-claim-untested-analysis', file: 'public/ui/setup-panel.js', from: 'result.usage[provider].completed > 0', to: 'true', test: 'test/setup-interaction.test.js' },
   { name: 'ci-read-only-token', file: '.github/workflows/check.yml', from: 'contents: read', to: 'contents: write', test: 'test/repository-package.test.js' },
