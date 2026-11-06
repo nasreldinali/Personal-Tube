@@ -41,7 +41,6 @@ let mode = viewFromHash(location.hash);
 const selectedVideos = new Set();
 let selectionMode = false;
 let pageSize = 18;
-let activeVideo = null;
 const text = (name, values) => t(preferences.language, name, values);
 const now = () => Date.now();
 
@@ -301,11 +300,6 @@ function openSettings() {
   $('settings-dialog').showModal();
 }
 function openChannels() { $('channel-error').textContent = ''; renderChannels(); $('channels-dialog').showModal(); }
-function renderPlayerButtons() {
-  if (!activeVideo) return;
-  $('player-later').textContent = text(library.later.includes(activeVideo.id) ? 'removeLater' : 'saveLater');
-  $('player-watched').textContent = text(library.watched.includes(activeVideo.id) ? 'removeWatched' : 'markWatched');
-}
 function toggleSaved(field, id, video) {
   try {
     const next = toggleLibrary(library, field, id);
@@ -317,26 +311,6 @@ function toggleSaved(field, id, video) {
     render(); renderPlayerButtons();
     document.querySelector(`[data-video-id="${id}"][data-action="${field}"]`)?.focus();
   } catch (error) { showError(error); }
-}
-function play(video) {
-  if (!videoPattern.test(video.id)) { showError(new AppError('invalidVideo')); return; }
-  activeVideo = video;
-  $('player-title').textContent = video.title;
-  $('youtube-link').href = `https://www.youtube.com/watch?v=${video.id}`;
-  $('player-container').replaceChildren();
-  if (video.embeddable === false || metadata[video.id]?.embeddable === false || metadata[video.id]?.unavailable) $('player-container').append(element('p', 'd-note', text('embedBlocked')));
-  else {
-    const iframe = element('iframe'); iframe.title = video.title;
-    iframe.src = `https://www.youtube.com/embed/${video.id}?autoplay=1&playsinline=1`;
-    iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen'; iframe.allowFullscreen = true; iframe.referrerPolicy = 'strict-origin-when-cross-origin';
-    $('player-container').append(iframe);
-  }
-  $('recommendation').hidden = !video.summary && !video.why;
-  $('video-summary').textContent = video.summary || ''; $('video-why').textContent = video.why || '';
-  $('video-quote').textContent = video.quote?.text || ''; $('video-quote').hidden = !video.quote;
-  $('hn-comment').hidden = !video.quote;
-  if (video.quote) $('hn-comment').href = `https://news.ycombinator.com/item?id=${video.quote.commentId}`;
-  renderPlayerButtons(); $('player-dialog').showModal();
 }
 async function refresh(force = false, channelId = null) {
   if (busy || staleTab || storageBlocked || !key || !state.channels.length) return;
@@ -362,11 +336,45 @@ function resetFilters() {
 }
 
 const { notify, renderNotice, showError, askConfirmation, renderConfirmation } = createFeedbackPanel({ text, isStale: () => staleTab, isStorageBlocked: () => storageBlocked, bind });
+function createVideoPlayer({ text, readLibrary, readMetadata, showError, bind, toggleSaved, onSimilar }) {
+  let activeVideo = null;
+  function renderPlayerButtons() {
+    if (!activeVideo) return;
+    $('player-later').textContent = text(readLibrary().later.includes(activeVideo.id) ? 'removeLater' : 'saveLater');
+    $('player-watched').textContent = text(readLibrary().watched.includes(activeVideo.id) ? 'removeWatched' : 'markWatched');
+  }
+  function play(video) {
+    if (!videoPattern.test(video.id)) { showError(new AppError('invalidVideo')); return; }
+    activeVideo = video;
+    $('player-title').textContent = video.title;
+    $('youtube-link').href = `https://www.youtube.com/watch?v=${video.id}`;
+    $('player-container').replaceChildren();
+    if (video.embeddable === false || readMetadata()[video.id]?.embeddable === false || readMetadata()[video.id]?.unavailable) $('player-container').append(element('p', 'd-note', text('embedBlocked')));
+    else {
+      const iframe = element('iframe'); iframe.title = video.title;
+      iframe.src = `https://www.youtube.com/embed/${video.id}?autoplay=1&playsinline=1`;
+      iframe.allow = 'autoplay; encrypted-media; picture-in-picture; fullscreen'; iframe.allowFullscreen = true; iframe.referrerPolicy = 'strict-origin-when-cross-origin';
+      $('player-container').append(iframe);
+    }
+    $('recommendation').hidden = !video.summary && !video.why;
+    $('video-summary').textContent = video.summary || ''; $('video-why').textContent = video.why || '';
+    $('video-quote').textContent = video.quote?.text || ''; $('video-quote').hidden = !video.quote;
+    $('hn-comment').hidden = !video.quote;
+    if (video.quote) $('hn-comment').href = `https://news.ycombinator.com/item?id=${video.quote.commentId}`;
+    renderPlayerButtons(); $('player-dialog').showModal();
+  }
+  bind('player-similar', 'click', () => { const video = activeVideo; $('player-dialog').close(); if (video) onSimilar(video); });
+  bind('player-later', 'click', () => toggleSaved('later', activeVideo.id, activeVideo));
+  bind('player-watched', 'click', () => toggleSaved('watched', activeVideo.id, activeVideo));
+  $('player-dialog').addEventListener('close', () => { $('player-container').replaceChildren(); activeVideo = null; });
+  return { renderPlayerButtons, play };
+}
+
+const { renderPlayerButtons, play } = createVideoPlayer({ text, readLibrary: () => library, readMetadata: () => metadata, showError, bind, toggleSaved: (...args) => toggleSaved(...args), onSimilar: video => discoveryPanel.similar(video) });
 for (const view of ['discover', 'channels', 'later', 'watched', 'recommendations', 'community']) bind(`view-${view}`, 'click', () => changeMode(view));
 for (const id of ['channels-open', 'hero-add', 'empty-add']) bind(id, 'click', openChannels);
 bind('settings-open', 'click', openSettings);
 bind('sidebar-toggle', 'click', () => { saveDiscovery({ ...discovery, collapsed: !discovery.collapsed }); applyLayout(); });
-bind('player-similar', 'click', () => { const video = activeVideo; $('player-dialog').close(); if (video) discoveryPanel.similar(video); });
 bind('hero-explore', 'click', () => { changeMode('discover'); $('feed').scrollIntoView(); });
 bind('language', 'change', () => { const next = { ...preferences, language: $('language').value }; persist(() => store.writePreferences(next)); preferences = next; applyPreferences(); });
 bind('theme', 'change', () => { const next = { ...preferences, theme: $('theme').value }; persist(() => store.writePreferences(next)); preferences = next; applyPreferences(); });
@@ -468,9 +476,6 @@ bind('clear-data', 'click', () => {
     $('api-key').value = ''; $('remember-key').checked = false; applyPreferences(); notify('cleared');
   });
 }, 'settings-error');
-bind('player-later', 'click', () => toggleSaved('later', activeVideo.id, activeVideo));
-bind('player-watched', 'click', () => toggleSaved('watched', activeVideo.id, activeVideo));
-$('player-dialog').addEventListener('close', () => { $('player-container').replaceChildren(); activeVideo = null; });
 $('settings-dialog').addEventListener('close', () => { $('api-key').value = ''; });
 document.addEventListener('keydown', event => {
   if (event.key === '/' && !document.querySelector('dialog[open]') && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) { event.preventDefault(); $('search').focus(); }
