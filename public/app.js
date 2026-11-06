@@ -59,17 +59,6 @@ try {
 function youtubeClient() {
   return new YouTubeClient(key, undefined, { onRequest: async resource => { await usage?.record(resource); renderUsage(); } });
 }
-function renderUsage() {
-  const value = usage?.snapshot();
-  $('usage-unavailable').hidden = Boolean(value);
-  $('usage-totals').hidden = !value;
-  if (!value) return;
-  for (const [bucket, limit] of [['units', 10000], ['search', 100]]) {
-    $(`usage-${bucket}`).textContent = text('usageNumbers', { used: number(preferences.language, value[bucket]), remaining: number(preferences.language, Math.max(0, limit - value[bucket])), limit: number(preferences.language, limit) });
-    $(`usage-${bucket}-bar`).value = Math.min(limit, value[bucket]);
-  }
-  $('usage-day').textContent = text('usageDay', { day: value.day });
-}
 function persist(action) {
   if (staleTab) throw new AppError('storageConflict');
   if (storageBlocked || !store) throw new AppError('storageRead');
@@ -237,25 +226,6 @@ function confirmHide(ids) {
     const next = hideVideos(library, ids); persist(()=>store.writeLibrary(next));library=next;selectedVideos.clear();render();notify('videosHidden');
   });
 }
-function renderRefreshDraft() {
-  const manual = $('refresh-mode').value === 'manual';
-  $('refresh-interval').disabled = manual;
-  $('refresh-settings-help').textContent = text(manual ? 'refreshManualHelp' : 'refreshAutoHelp', {interval:text(`refreshInterval${$('refresh-interval').value}`)});
-}
-function renderRefreshSettings() {
-  const settings = refreshSettings(preferences);
-  $('refresh-mode').value = settings.mode;
-  selectOptions($('refresh-interval'), REFRESH_INTERVALS.map(minutes=>[String(minutes),text(`refreshInterval${minutes}`)]), String(settings.minutes));
-  $('refresh-settings-status').textContent = ''; $('refresh-settings-error').textContent = '';
-  renderRefreshDraft();
-}
-function openSettings() {
-  renderUsage(); renderRefreshSettings();
-  $('restore-hidden').disabled = !(library.hidden || []).length;
-  $('api-key').value = key; $('settings-error').textContent = '';
-  try { $('remember-key').checked = store?.remembersKey() || false; } catch { $('remember-key').checked = false; }
-  $('settings-dialog').showModal();
-}
 function toggleSaved(field, id, video) {
   try {
     const next = toggleLibrary(library, field, id);
@@ -294,8 +264,68 @@ function resetFilters() {
 const { notify, renderNotice, showError, askConfirmation, renderConfirmation } = createFeedbackPanel({ text, isStale: () => staleTab, isStorageBlocked: () => storageBlocked, bind });
 const { renderPlayerButtons, play } = createVideoPlayer({ text, readLibrary: () => library, readMetadata: () => metadata, showError, bind, toggleSaved: (...args) => toggleSaved(...args), onSimilar: video => discoveryPanel.similar(video) });
 const { renderChannels, openChannels, renderAddState } = createChannelManager({ text, readState: () => state, readKey: () => key, isBusy: () => busy, isStale: () => staleTab, isStorageBlocked: () => storageBlocked, commitState, renderFilters: () => renderFilters(), render: () => render(), showError, notify, askConfirmation, bind, youtubeClient: () => youtubeClient(), refreshAdded: id => { lastRefreshAttempt = null; void refresh(false, id); } });
+function createSettingsPanel({ text, readPreferences, readUsage, hiddenCount, readKey, remembersKey, saveKey, forgetKey, savePreferences, isBusy, bind, render, notify, refresh }) {
+  function renderUsage() {
+    const value = readUsage();
+    $('usage-unavailable').hidden = Boolean(value);
+    $('usage-totals').hidden = !value;
+    if (!value) return;
+    for (const [bucket, limit] of [['units', 10000], ['search', 100]]) {
+      $(`usage-${bucket}`).textContent = text('usageNumbers', { used: number(readPreferences().language, value[bucket]), remaining: number(readPreferences().language, Math.max(0, limit - value[bucket])), limit: number(readPreferences().language, limit) });
+      $(`usage-${bucket}-bar`).value = Math.min(limit, value[bucket]);
+    }
+    $('usage-day').textContent = text('usageDay', { day: value.day });
+  }
+  function renderRefreshDraft() {
+    const manual = $('refresh-mode').value === 'manual';
+    $('refresh-interval').disabled = manual;
+    $('refresh-settings-help').textContent = text(manual ? 'refreshManualHelp' : 'refreshAutoHelp', {interval:text(`refreshInterval${$('refresh-interval').value}`)});
+  }
+  function renderRefreshSettings() {
+    const settings = refreshSettings(readPreferences());
+    $('refresh-mode').value = settings.mode;
+    selectOptions($('refresh-interval'), REFRESH_INTERVALS.map(minutes=>[String(minutes),text(`refreshInterval${minutes}`)]), String(settings.minutes));
+    $('refresh-settings-status').textContent = ''; $('refresh-settings-error').textContent = '';
+    renderRefreshDraft();
+  }
+  function openSettings() {
+    renderUsage(); renderRefreshSettings();
+    $('restore-hidden').disabled = !hiddenCount();
+    $('api-key').value = readKey(); $('settings-error').textContent = '';
+    try { $('remember-key').checked = remembersKey(); } catch { $('remember-key').checked = false; }
+    $('settings-dialog').showModal();
+  }
+  bind('settings-open', 'click', openSettings);
+  bind('refresh-mode', 'change', () => { $('refresh-settings-status').textContent = ''; renderRefreshDraft(); });
+  bind('refresh-interval', 'change', () => { $('refresh-settings-status').textContent = ''; renderRefreshDraft(); });
+  bind('refresh-settings-form', 'submit', event => {
+    event.preventDefault();
+    const next = parsePreferences({...readPreferences(),refreshMode:$('refresh-mode').value,refreshMinutes:Number($('refresh-interval').value)});
+    savePreferences(next);
+    render(); renderRefreshSettings(); $('refresh-settings-status').textContent = text('refreshSettingsSaved');
+  }, 'refresh-settings-error');
+  bind('settings-form', 'submit', event => {
+    event.preventDefault(); if (isBusy()) throw new AppError('busy');
+    const nextKey = $('api-key').value.trim();
+    saveKey(nextKey, $('remember-key').checked);
+    $('settings-dialog').close(); notify('connectionReady'); render(); void refresh();
+  }, 'settings-error');
+  bind('forget-key', 'click', () => {
+    if (isBusy()) throw new AppError('busy'); forgetKey(); $('api-key').value = ''; $('remember-key').checked = false; notify('keyRemoved'); render();
+  }, 'settings-error');
+  $('settings-dialog').addEventListener('close', () => { $('api-key').value = ''; });
+  return { renderUsage, renderRefreshDraft, renderRefreshSettings, openSettings };
+}
+
+const { renderUsage, openSettings } = createSettingsPanel({
+  text, readPreferences: () => preferences, readUsage: () => usage?.snapshot(), hiddenCount: () => (library.hidden || []).length,
+  readKey: () => key, remembersKey: () => store?.remembersKey() || false,
+  saveKey: (value, remember) => { persist(() => store.saveKey(value, remember)); key = value; },
+  forgetKey: () => { persist(() => store.forgetKey()); key = ''; },
+  savePreferences: next => { persist(() => store.writePreferences(next)); preferences = next; },
+  isBusy: () => busy, bind, render: () => render(), notify, refresh: () => refresh(),
+});
 for (const view of ['discover', 'channels', 'later', 'watched', 'recommendations', 'community']) bind(`view-${view}`, 'click', () => changeMode(view));
-bind('settings-open', 'click', openSettings);
 bind('sidebar-toggle', 'click', () => { saveDiscovery({ ...discovery, collapsed: !discovery.collapsed }); applyLayout(); });
 bind('hero-explore', 'click', () => { changeMode('discover'); $('feed').scrollIntoView(); });
 bind('language', 'change', () => { const next = { ...preferences, language: $('language').value }; persist(() => store.writePreferences(next)); preferences = next; applyPreferences(); });
@@ -315,23 +345,6 @@ bind('restore-hidden','click',()=>{const next={...library,hidden:[]};persist(()=
 window.addEventListener('hashchange',()=>{if(location.hash!=='#feed')changeMode(viewFromHash(location.hash));});
 bind('expiry', 'change', () => { const next = { ...state, days: Number($('expiry').value) }; commitState(next); render(); });
 bind('refresh', 'click', () => refresh(true));
-bind('refresh-mode', 'change', () => { $('refresh-settings-status').textContent = ''; renderRefreshDraft(); });
-bind('refresh-interval', 'change', () => { $('refresh-settings-status').textContent = ''; renderRefreshDraft(); });
-bind('refresh-settings-form', 'submit', event => {
-  event.preventDefault();
-  const next = parsePreferences({...preferences,refreshMode:$('refresh-mode').value,refreshMinutes:Number($('refresh-interval').value)});
-  persist(() => store.writePreferences(next)); preferences = next;
-  render(); renderRefreshSettings(); $('refresh-settings-status').textContent = text('refreshSettingsSaved');
-}, 'refresh-settings-error');
-bind('settings-form', 'submit', event => {
-  event.preventDefault(); if (busy) throw new AppError('busy');
-  const nextKey = $('api-key').value.trim();
-  persist(() => store.saveKey(nextKey, $('remember-key').checked)); key = nextKey;
-  $('settings-dialog').close(); notify('connectionReady'); render(); void refresh();
-}, 'settings-error');
-bind('forget-key', 'click', () => {
-  if (busy) throw new AppError('busy'); persist(() => store.forgetKey()); key = ''; $('api-key').value = ''; $('remember-key').checked = false; notify('keyRemoved'); render();
-}, 'settings-error');
 bind('fetch-durations', 'click', async () => {
   if (!key) { openSettings(); return; }
   if (busy) return;
@@ -377,7 +390,6 @@ bind('clear-data', 'click', () => {
     $('api-key').value = ''; $('remember-key').checked = false; applyPreferences(); notify('cleared');
   });
 }, 'settings-error');
-$('settings-dialog').addEventListener('close', () => { $('api-key').value = ''; });
 document.addEventListener('keydown', event => {
   if (event.key === '/' && !document.querySelector('dialog[open]') && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) { event.preventDefault(); $('search').focus(); }
 });

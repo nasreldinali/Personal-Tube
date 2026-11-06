@@ -70,3 +70,32 @@ test('all four languages and theme controls retain current navigation', () => wi
   }
   for (const theme of ['light', 'dark', 'auto']) { f.$('theme').value = theme; await f.$('theme').emit('change'); assert.equal(f.document.documentElement.dataset.theme, theme === 'auto' ? undefined : theme); }
 }));
+
+test('import validates before confirmation, reloads state after approval and clears the file control', () => withApp({}, async f => {
+  const backup={version:1,format:'personaltube-backup',days:2,channels:[],preferences:{version:1,language:'de',theme:'light',setupDone:true},library:{version:1,later:[VIDEO.id],watched:[]}};
+  const content=JSON.stringify(backup);
+  f.$('import-data').files=[{name:'fixture.json',size:content.length,text:async()=>content}]; f.$('import-data').value='fixture.json';
+  await f.$('import-data').emit('change'); assert.equal(f.$('import-data').value,''); assert.equal(f.state().days,7);
+  assert.equal(f.$('confirm-dialog').open,true); await f.$('confirm-yes').click();
+  assert.equal(f.state().days,2); assert.equal(f.state().channels.length,0); assert.deepEqual(f.library().later,[VIDEO.id]); assert.equal(f.document.documentElement.lang,'de');
+  f.$('import-data').files=[{name:'fixture.json',size:1,text:async()=>'{'}];await f.$('import-data').emit('change');assert.equal(f.$('confirm-dialog').open,false);assert.equal(f.state().days,2);
+}));
+
+test('clearing requires confirmation and waits for temporary community deletion before local reset', async () => {
+  let release;
+  await withApp({fetcher:async(url,options)=>{
+    if(String(url)==='/api/community'&&JSON.parse(options.body).action==='clearAll')return new Promise(resolve=>{release=resolve;});
+  }}, async f => {
+    await f.$('clear-data').click(); assert.equal(f.state().channels.length,1);
+    const pending=f.$('confirm-yes').click(); assert.equal(f.state().channels.length,1);
+    release({ok:true,json:async()=>({version:1,videos:[]})}); await pending;
+    assert.equal(f.local.getItem('personaltube.state.v1'),null); assert.equal(f.$('videos').children.length,0);
+    assert.equal(f.$('api-key').value,''); assert.equal(f.$('remember-key').checked,false);
+  });
+});
+
+test('failed community deletion preserves personal data and reports a safe error', () => withApp({fetcher:async(url)=>{
+  if(String(url)==='/api/community')return {ok:false,json:async()=>({error:'communitySourceUnavailable'})};
+}},async f=>{
+  await f.$('clear-data').click();await f.$('confirm-yes').click();assert.equal(f.state().channels.length,1);assert.ok(f.$('settings-error').textContent);
+}));
