@@ -21,3 +21,7 @@ Extraction follows separate dependency preparation and literal move checkpoints.
 ## Stylesheets
 
 `public/styles.css` is an ordered import entry. Its 23 fragments preserve the original rule and responsive-override sequence. Do not merge base and later overrides by selector without checking their cascade. Brand tokens load first and remain unchanged. Every fragment has an explicit static route and CSS MIME type. Tests read the composed stylesheet through `test/stylesheet-fixture.js`, which rejects missing imports, cycles and external paths.
+
+## Static markup
+
+The HTML remains a static document. Formatting changes preserve parsed element order, attributes and text-bearing inline contents; no runtime templates or HTML interpolation are introduced. DOM workflow tests and real-browser layout comparisons cover the formatted document.

@@ -1,154 +1,514 @@
 <!doctype html>
 <html lang="en" dir="ltr">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="description" content="PersonalTube by DEEDA — your channels and the original HackerTube collection, in a personal bilingual dashboard.">
-  <title>PersonalTube · DEEDA IT-Solutions</title>
-  <link rel="icon" href="/assets/logo/favicon.ico">
-  <link rel="apple-touch-icon" href="/assets/logo/apple-touch-icon.png">
-  <link rel="stylesheet" href="/assets/tokens/deeda.css">
-  <link rel="stylesheet" href="/styles.css">
-  <script type="module" src="/app.js"></script>
-</head>
-<body>
-  <a class="skip" href="#feed" data-i18n="skip">Skip to videos</a>
-  <div class="d-shell">
-    <aside class="d-side">
-      <div class="d-brand" aria-label="PersonalTube · DEEDA IT-Solutions">
-        <img src="/assets/logo/deeda-mark-96.png" width="48" height="48" alt="">
-        <div><div class="d-wordmark"><b>DEEDA</b> <span>IT-Solutions</span></div><div class="d-appname">PersonalTube</div></div>
-      </div>
-      <button id="sidebar-toggle" class="sidebar-toggle" aria-expanded="true" aria-controls="sidebar-navigation" data-i18n-label="collapseSidebar"><span aria-hidden="true">☰</span><span data-i18n="collapseSidebar"></span></button>
-      <nav id="sidebar-navigation" class="d-nav" data-i18n-label="navigation" aria-label="Main navigation">
-        <p class="nav-label" data-i18n="workspace">YOUR VIEWING SPACE</p>
-        <button id="view-discover" data-view="discover" aria-current="page"><span aria-hidden="true">▦</span><span data-i18n="discover">Discover</span></button>
-        <button id="view-channels" data-view="channels"><span aria-hidden="true">▤</span><span data-i18n="channels">My channels</span><span id="nav-channels-count" class="nav-count">0</span></button>
-        <button id="view-recommendations" data-view="recommendations"><span aria-hidden="true">✧</span><span data-i18n="recommendations"></span></button>
-        <button id="view-community" data-view="community"><span aria-hidden="true">◎</span><span data-i18n="community"></span></button>
-        <p class="nav-label" data-i18n="library">YOUR LIBRARY</p>
-        <button id="view-later" data-view="later"><span aria-hidden="true">◷</span><span data-i18n="later">Watch later</span><span id="nav-later-count" class="nav-count">0</span></button>
-        <button id="view-watched" data-view="watched"><span aria-hidden="true">✓</span><span data-i18n="watched">Watched</span></button>
-        <div class="nav-divider"></div>
-        <button id="channels-open"><span aria-hidden="true">＋</span><span data-i18n="manage">Manage channels</span></button>
-        <button id="setup-open"><span aria-hidden="true">◉</span><span data-i18n="setupTitle"></span></button><button id="settings-open"><span aria-hidden="true">⚙</span><span data-i18n="settings">Settings &amp; data</span></button>
-      </nav>
-      <div class="d-side-foot">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="PersonalTube by DEEDA — your channels and the original HackerTube collection, in a personal bilingual dashboard.">
+    <title>PersonalTube · DEEDA IT-Solutions</title>
+    <link rel="icon" href="/assets/logo/favicon.ico">
+    <link rel="apple-touch-icon" href="/assets/logo/apple-touch-icon.png">
+    <link rel="stylesheet" href="/assets/tokens/deeda.css">
+    <link rel="stylesheet" href="/styles.css">
+    <script type="module" src="/app.js"></script>
+  </head>
+  <body>
+    <a class="skip" href="#feed" data-i18n="skip">Skip to videos</a>
+    <div class="d-shell">
+      <aside class="d-side">
+        <div class="d-brand" aria-label="PersonalTube · DEEDA IT-Solutions">
+          <img src="/assets/logo/deeda-mark-96.png" width="48" height="48" alt="">
+          <div>
+            <div class="d-wordmark"><b>DEEDA</b> <span>IT-Solutions</span></div>
+            <div class="d-appname">PersonalTube</div>
+          </div>
+        </div>
+        <button id="sidebar-toggle" class="sidebar-toggle" aria-expanded="true" aria-controls="sidebar-navigation" data-i18n-label="collapseSidebar"><span aria-hidden="true">☰</span><span data-i18n="collapseSidebar"></span></button>
+        <nav id="sidebar-navigation" class="d-nav" data-i18n-label="navigation" aria-label="Main navigation">
+          <p class="nav-label" data-i18n="workspace">YOUR VIEWING SPACE</p>
+          <button id="view-discover" data-view="discover" aria-current="page"><span aria-hidden="true">▦</span><span data-i18n="discover">Discover</span></button>
+          <button id="view-channels" data-view="channels"><span aria-hidden="true">▤</span><span data-i18n="channels">My channels</span><span id="nav-channels-count" class="nav-count">0</span></button>
+          <button id="view-recommendations" data-view="recommendations"><span aria-hidden="true">✧</span><span data-i18n="recommendations"></span></button>
+          <button id="view-community" data-view="community"><span aria-hidden="true">◎</span><span data-i18n="community"></span></button>
+          <p class="nav-label" data-i18n="library">YOUR LIBRARY</p>
+          <button id="view-later" data-view="later"><span aria-hidden="true">◷</span><span data-i18n="later">Watch later</span><span id="nav-later-count" class="nav-count">0</span></button>
+          <button id="view-watched" data-view="watched"><span aria-hidden="true">✓</span><span data-i18n="watched">Watched</span></button>
+          <div class="nav-divider"></div>
+          <button id="channels-open"><span aria-hidden="true">＋</span><span data-i18n="manage">Manage channels</span></button>
+          <button id="setup-open"><span aria-hidden="true">◉</span><span data-i18n="setupTitle"></span></button>
+          <button id="settings-open"><span aria-hidden="true">⚙</span><span data-i18n="settings">Settings &amp; data</span></button>
+        </nav>
+        <div class="d-side-foot">
         <p class="local-note"><span class="local-dot" aria-hidden="true"></span><span data-i18n="local">Stored on this browser</span><small data-i18n="localDetail">Your choices stay with you.</small></p>
       </div>
-    </aside>
-    <main class="d-main">
-      <header class="topbar"><span class="page-brand" dir="ltr">PersonalTube<span class="brand-divider">/</span><span id="current-view">Discover</span></span><label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" data-i18n-label="search" data-i18n-placeholder="searchPlaceholder" aria-label="Search videos, channels or topics" placeholder="What would you like to learn?"></label><div class="header-preferences"><label class="header-control"><span aria-hidden="true">🌐</span><span class="sr-only" data-i18n="language"></span><select id="language"><option value="en">English</option><option value="ar">العربية</option><option value="de">Deutsch</option><option value="es">Español</option></select></label><label class="header-control"><span aria-hidden="true">◐</span><span class="sr-only" data-i18n="theme"></span><select id="theme"><option value="auto" data-i18n="auto"></option><option value="light" data-i18n="light"></option><option value="dark" data-i18n="dark"></option></select></label></div></header>
-      <section class="d-hero" id="hero"><img class="d-watermark" src="/assets/logo/deeda-mark-256.png" alt=""><div class="hero-copy"><p class="d-eyebrow" data-i18n="heroEyebrow">PERSONALTUBE · BY DEEDA</p><h1 data-i18n="heroTitle">A little less noise. A lot more worth watching.</h1><p class="d-lead" data-i18n="heroDescription">Explore talks recommended by the Hacker News community, or follow the channels you choose. Your time, your feed.</p><div class="hero-actions"><button id="hero-explore" class="d-btn d-btn-primary" data-i18n="exploreToday">Explore today’s selection</button><button id="hero-add" class="d-btn d-btn-ghost"><span aria-hidden="true">＋</span><span data-i18n="addChannel">Add a channel</span></button></div></div></section>
-      <div class="stats" id="stats"><div><strong id="catalog-count">—</strong><span data-i18n="catalogCount">Videos in the collection</span></div><div><strong id="topic-count">—</strong><span data-i18n="topicCount">Topics to explore</span></div><div><strong id="channel-count">0</strong><span data-i18n="yourChannels">Channels you follow</span></div></div>
-      <p id="notice" class="d-note notice" role="status" hidden></p>
-      <div class="panel-tools"><label class="image-choice"><span data-i18n="thumbnailStyle"></span><select id="thumbnail-style" class="d-select" data-i18n-label="thumbnailStyle"><option value="frame" data-i18n="videoFrame"></option><option value="original" data-i18n="originalThumbnail"></option></select></label><button id="select-toggle" class="d-btn d-btn-secondary" data-i18n="selectVideos" aria-controls="selection-actions"></button><div id="selection-actions" class="selection-actions" hidden><span id="selection-count" role="status"></span><button id="select-visible" class="text-button"></button><button id="delete-selected" class="d-btn d-btn-secondary"></button><button id="selection-cancel" class="text-button" data-i18n="cancel"></button></div></div><section id="discovery-panel" hidden aria-labelledby="discovery-title">
-        <div class="feed-heading"><div><h2 id="discovery-title"></h2><p id="discovery-description" class="muted"></p></div></div>
-        <section id="recommendation-controls">
-          <form id="recommendation-form" class="discovery-form">
-            <label class="d-field wide-field"><span data-i18n="recommendationTopic"></span><input id="rec-query" class="d-input" maxlength="200" required data-i18n-placeholder="recommendationPlaceholder"></label>
-            <label class="d-field"><span data-i18n="audioLanguage"></span><select id="rec-language" class="d-select"><option value="any" data-i18n="anyLanguage"></option><option value="ar">العربية</option><option value="en">English</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option><option value="pt">Português</option><option value="it">Italiano</option><option value="tr">Türkçe</option><option value="hi">हिन्दी</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="zh">中文</option><option value="ru">Русский</option></select></label>
-            <label class="d-field"><span data-i18n="minViews"></span><input id="rec-min-views" class="d-input" type="number" min="0" max="1000000000000" step="1" required></label>
-            <label class="d-field"><span data-i18n="minLikes"></span><input id="rec-min-likes" class="d-input" type="number" min="0" max="1000000000000" step="1" required></label>
-            <label class="d-field"><span data-i18n="sort"></span><select id="rec-sort" class="d-select"><option value="views" data-i18n="mostViews"></option><option value="likes" data-i18n="mostLikes"></option></select></label>
-            <div class="button-row wide-field"><button id="recommendation-search" class="d-btn d-btn-primary" data-i18n="findRecommendations"></button></div>
-          </form>
-          <p class="d-note" data-i18n="recommendationHelp"></p>
+      </aside>
+      <main class="d-main">
+        <header class="topbar">
+          <span class="page-brand" dir="ltr">PersonalTube<span class="brand-divider">/</span><span id="current-view">Discover</span></span>
+          <label class="search"><span aria-hidden="true">⌕</span><input id="search" type="search" data-i18n-label="search" data-i18n-placeholder="searchPlaceholder" aria-label="Search videos, channels or topics" placeholder="What would you like to learn?"></label>
+          <div class="header-preferences">
+            <label class="header-control">
+              <span aria-hidden="true">🌐</span>
+              <span class="sr-only" data-i18n="language"></span>
+              <select id="language">
+                <option value="en">English</option>
+                <option value="ar">العربية</option>
+                <option value="de">Deutsch</option>
+                <option value="es">Español</option>
+              </select>
+            </label>
+            <label class="header-control">
+              <span aria-hidden="true">◐</span>
+              <span class="sr-only" data-i18n="theme"></span>
+              <select id="theme">
+                <option value="auto" data-i18n="auto"></option>
+                <option value="light" data-i18n="light"></option>
+                <option value="dark" data-i18n="dark"></option>
+              </select>
+            </label>
+          </div>
+        </header>
+        <section class="d-hero" id="hero">
+          <img class="d-watermark" src="/assets/logo/deeda-mark-256.png" alt="">
+          <div class="hero-copy">
+            <p class="d-eyebrow" data-i18n="heroEyebrow">PERSONALTUBE · BY DEEDA</p>
+            <h1 data-i18n="heroTitle">A little less noise. A lot more worth watching.</h1>
+            <p class="d-lead" data-i18n="heroDescription">Explore talks recommended by the Hacker News community, or follow the channels you choose. Your time, your feed.</p>
+            <div class="hero-actions"><button id="hero-explore" class="d-btn d-btn-primary" data-i18n="exploreToday">Explore today’s selection</button><button id="hero-add" class="d-btn d-btn-ghost"><span aria-hidden="true">＋</span><span data-i18n="addChannel">Add a channel</span></button></div>
+          </div>
         </section>
-        <section id="community-controls" hidden>
-          <section id="community-live" aria-labelledby="community-live-title">
-            <div class="community-entry"><h3 id="community-live-title" data-i18n="communityLiveTitle"></h3><button id="community-browse-library" type="button" class="d-btn d-btn-secondary" data-i18n="communityLibraryShortcut"></button></div>
-            <form id="community-collect-form">
-              <fieldset id="community-inputs" class="community-inputs">
-                <legend class="sr-only" data-i18n="communitySearchLegend"></legend>
-                <div class="discovery-form">
-                  <label class="d-field"><span data-i18n="recommendationTopic"></span><input id="collect-query" class="d-input" maxlength="120" required data-i18n-placeholder="communityQueryPlaceholder"></label>
-                  <label class="d-field"><span data-i18n="communitySource"></span><select id="collect-source" class="d-select"><option value="hn" data-i18n="hnLiveSource"></option><option value="stackexchange" data-i18n="stackLiveSource"></option><option value="reddit" data-i18n="redditLiveSource"></option><option value="archive" data-i18n="communityReadyLibrary"></option></select></label>
-                </div>
-                <p id="collect-source-help" class="help"></p>
-                <fieldset id="community-quality" class="community-quality"><legend data-i18n="communityQualityTitle"></legend><div class="discovery-form">
-                  <label class="d-field"><span data-i18n="minViews"></span><input id="collect-min-views" class="d-input" type="number" min="0" max="1000000000000" step="1" value="100000" required></label>
-                  <label class="d-field"><span data-i18n="minLikes"></span><input id="collect-min-likes" class="d-input" type="number" min="0" max="1000000000000" step="1" value="1000" required></label>
-                  <label class="d-field"><span data-i18n="audioLanguage"></span><select id="collect-language" class="d-select"><option value="any" data-i18n="anyLanguage"></option><option value="ar">العربية</option><option value="en">English</option><option value="de">Deutsch</option><option value="fr">Français</option><option value="es">Español</option><option value="pt">Português</option><option value="it">Italiano</option><option value="tr">Türkçe</option><option value="hi">हिन्दी</option><option value="ja">日本語</option><option value="ko">한국어</option><option value="zh">中文</option><option value="ru">Русский</option></select></label>
-                  <label class="d-field"><span data-i18n="communityMinEndorsers"></span><select id="collect-min-recommenders" class="d-select"><option value="2">2</option><option value="3">3</option><option value="5">5</option></select></label>
-                </div></fieldset>
-                <p id="collect-quality-help" class="help" data-i18n="communityQualityHelp"></p>
-                <details id="community-options" class="community-options"><summary data-i18n="communityMoreOptions"></summary><div class="discovery-form">
-                  <label id="collect-days-field" class="d-field"><span data-i18n="commentWindow"></span><select id="collect-days" class="d-select"><option value="7" data-i18n="sevenDays"></option><option value="30" selected data-i18n="thirtyDays"></option><option value="365" data-i18n="yearWindow"></option></select></label>
-                  <label id="collect-scope-field" class="d-field" hidden><span id="collect-scope-label"></span><input id="collect-scope" class="d-input" maxlength="60" value="stackoverflow"></label>
-                </div></details>
-                <fieldset id="reddit-connection" class="community-reddit" hidden><legend data-i18n="redditConnection"></legend><p class="help" data-i18n="redditConnectionHelp"></p><label class="d-field"><span data-i18n="redditUsername"></span><input id="reddit-username" class="d-input" maxlength="30" autocomplete="off"></label><label class="d-field"><span data-i18n="redditToken"></span><input id="reddit-token" class="d-input" type="password" maxlength="2000" autocomplete="off"></label><label class="check"><input id="reddit-approved" type="checkbox"><span data-i18n="redditApproved"></span></label></fieldset>
-              </fieldset>
-              <div class="button-row"><button id="collect-submit" class="d-btn d-btn-primary" data-i18n="communityFind"></button><button id="collect-stop" type="button" class="d-btn d-btn-secondary" data-i18n="communityStop" hidden></button></div>
+        <div class="stats" id="stats">
+          <div><strong id="catalog-count">—</strong><span data-i18n="catalogCount">Videos in the collection</span></div>
+          <div><strong id="topic-count">—</strong><span data-i18n="topicCount">Topics to explore</span></div>
+          <div><strong id="channel-count">0</strong><span data-i18n="yourChannels">Channels you follow</span></div>
+        </div>
+        <p id="notice" class="d-note notice" role="status" hidden></p>
+        <div class="panel-tools">
+          <label class="image-choice">
+            <span data-i18n="thumbnailStyle"></span>
+            <select id="thumbnail-style" class="d-select" data-i18n-label="thumbnailStyle">
+              <option value="frame" data-i18n="videoFrame"></option>
+              <option value="original" data-i18n="originalThumbnail"></option>
+            </select>
+          </label>
+          <button id="select-toggle" class="d-btn d-btn-secondary" data-i18n="selectVideos" aria-controls="selection-actions"></button>
+          <div id="selection-actions" class="selection-actions" hidden><span id="selection-count" role="status"></span><button id="select-visible" class="text-button"></button><button id="delete-selected" class="d-btn d-btn-secondary"></button><button id="selection-cancel" class="text-button" data-i18n="cancel"></button></div>
+        </div>
+        <section id="discovery-panel" hidden aria-labelledby="discovery-title">
+          <div class="feed-heading">
+            <div><h2 id="discovery-title"></h2><p id="discovery-description" class="muted"></p></div>
+          </div>
+          <section id="recommendation-controls">
+            <form id="recommendation-form" class="discovery-form">
+              <label class="d-field wide-field"><span data-i18n="recommendationTopic"></span><input id="rec-query" class="d-input" maxlength="200" required data-i18n-placeholder="recommendationPlaceholder"></label>
+              <label class="d-field">
+                <span data-i18n="audioLanguage"></span>
+                <select id="rec-language" class="d-select">
+                  <option value="any" data-i18n="anyLanguage"></option>
+                  <option value="ar">العربية</option>
+                  <option value="en">English</option>
+                  <option value="de">Deutsch</option>
+                  <option value="fr">Français</option>
+                  <option value="es">Español</option>
+                  <option value="pt">Português</option>
+                  <option value="it">Italiano</option>
+                  <option value="tr">Türkçe</option>
+                  <option value="hi">हिन्दी</option>
+                  <option value="ja">日本語</option>
+                  <option value="ko">한국어</option>
+                  <option value="zh">中文</option>
+                  <option value="ru">Русский</option>
+                </select>
+              </label>
+              <label class="d-field"><span data-i18n="minViews"></span><input id="rec-min-views" class="d-input" type="number" min="0" max="1000000000000" step="1" required></label>
+              <label class="d-field"><span data-i18n="minLikes"></span><input id="rec-min-likes" class="d-input" type="number" min="0" max="1000000000000" step="1" required></label>
+              <label class="d-field">
+                <span data-i18n="sort"></span>
+                <select id="rec-sort" class="d-select">
+                  <option value="views" data-i18n="mostViews"></option>
+                  <option value="likes" data-i18n="mostLikes"></option>
+                </select>
+              </label>
+              <div class="button-row wide-field"><button id="recommendation-search" class="d-btn d-btn-primary" data-i18n="findRecommendations"></button></div>
             </form>
-            <button id="collect-connect" type="button" class="text-button" data-i18n="communityConnectYouTube"></button><p id="collect-cooldown" class="help" aria-live="off" hidden></p>
-            <p id="collect-analysis-help" class="help" data-i18n="communityAutomaticHelp"></p>
-            <progress id="collect-progress" max="1" data-i18n-label="communityProgressLabel" hidden></progress>
-            <p id="collect-status" class="d-note" role="status" aria-live="polite"></p>
-            <button id="collect-clear" class="text-button" data-i18n="communityClear" hidden></button>
-            <div id="community-live-videos" class="video-grid"></div>
-            <button id="collect-more" class="d-btn d-btn-secondary" data-i18n="showMore" hidden></button>
+            <p class="d-note" data-i18n="recommendationHelp"></p>
           </section>
-          <details id="community-guide" class="community-guide"><summary data-i18n="communityGuideTitle"></summary><ol><li data-i18n="communityGuideLive"></li><li data-i18n="communityGuideArchive"></li><li data-i18n="communityGuideResults"></li></ol><p class="help" data-i18n="communityGuideOld"></p></details>
-          <details class="community-import-details"><summary data-i18n="archiveImports"></summary>
-          <p class="d-note" data-i18n="communityHelp"></p>
-          <form id="community-form" class="discovery-form">
-            <label class="d-field"><span data-i18n="communitySource"></span><select id="community-source" class="d-select"><option value="reddit">Reddit / Academic Torrents</option><option value="huggingface">Hugging Face</option><option value="kaggle">Kaggle</option><option value="stackexchange">Stack Exchange</option><option value="commoncrawl">Common Crawl</option><option value="wikipedia">Wikipedia</option></select></label>
-            <label class="d-field"><span data-i18n="collectionName"></span><input id="community-name" class="d-input" maxlength="80" required></label>
-            <label class="d-field wide-field"><span data-i18n="communityFile"></span><input id="community-file" class="d-input" type="file" accept=".json,.jsonl,application/json" required></label>
-            <div class="button-row wide-field"><button id="community-import" class="d-btn d-btn-primary" data-i18n="importCollection"></button><button id="community-example" type="button" class="d-btn d-btn-secondary" data-i18n="downloadExample"></button><a id="community-source-link" class="text-button" target="_blank" rel="noopener noreferrer" data-i18n="browseSource"></a></div>
-          </form>
-          <p id="source-help" class="help"></p><p class="help" data-i18n="ngramsHelp"></p>
-          <div id="community-collections" class="collection-list"></div>
+          <section id="community-controls" hidden>
+            <section id="community-live" aria-labelledby="community-live-title">
+              <div class="community-entry"><h3 id="community-live-title" data-i18n="communityLiveTitle"></h3><button id="community-browse-library" type="button" class="d-btn d-btn-secondary" data-i18n="communityLibraryShortcut"></button></div>
+              <form id="community-collect-form">
+                <fieldset id="community-inputs" class="community-inputs">
+                  <legend class="sr-only" data-i18n="communitySearchLegend"></legend>
+                  <div class="discovery-form">
+                    <label class="d-field"><span data-i18n="recommendationTopic"></span><input id="collect-query" class="d-input" maxlength="120" required data-i18n-placeholder="communityQueryPlaceholder"></label>
+                    <label class="d-field">
+                      <span data-i18n="communitySource"></span>
+                      <select id="collect-source" class="d-select">
+                        <option value="hn" data-i18n="hnLiveSource"></option>
+                        <option value="stackexchange" data-i18n="stackLiveSource"></option>
+                        <option value="reddit" data-i18n="redditLiveSource"></option>
+                        <option value="archive" data-i18n="communityReadyLibrary"></option>
+                      </select>
+                    </label>
+                  </div>
+                  <p id="collect-source-help" class="help"></p>
+                  <fieldset id="community-quality" class="community-quality">
+                    <legend data-i18n="communityQualityTitle"></legend>
+                    <div class="discovery-form">
+                      <label class="d-field"><span data-i18n="minViews"></span><input id="collect-min-views" class="d-input" type="number" min="0" max="1000000000000" step="1" value="100000" required></label>
+                      <label class="d-field"><span data-i18n="minLikes"></span><input id="collect-min-likes" class="d-input" type="number" min="0" max="1000000000000" step="1" value="1000" required></label>
+                      <label class="d-field">
+                        <span data-i18n="audioLanguage"></span>
+                        <select id="collect-language" class="d-select">
+                          <option value="any" data-i18n="anyLanguage"></option>
+                          <option value="ar">العربية</option>
+                          <option value="en">English</option>
+                          <option value="de">Deutsch</option>
+                          <option value="fr">Français</option>
+                          <option value="es">Español</option>
+                          <option value="pt">Português</option>
+                          <option value="it">Italiano</option>
+                          <option value="tr">Türkçe</option>
+                          <option value="hi">हिन्दी</option>
+                          <option value="ja">日本語</option>
+                          <option value="ko">한국어</option>
+                          <option value="zh">中文</option>
+                          <option value="ru">Русский</option>
+                        </select>
+                      </label>
+                      <label class="d-field">
+                        <span data-i18n="communityMinEndorsers"></span>
+                        <select id="collect-min-recommenders" class="d-select">
+                          <option value="2">2</option>
+                          <option value="3">3</option>
+                          <option value="5">5</option>
+                        </select>
+                      </label>
+                    </div>
+                  </fieldset>
+                  <p id="collect-quality-help" class="help" data-i18n="communityQualityHelp"></p>
+                  <details id="community-options" class="community-options">
+                    <summary data-i18n="communityMoreOptions"></summary>
+                    <div class="discovery-form">
+                      <label id="collect-days-field" class="d-field">
+                        <span data-i18n="commentWindow"></span>
+                        <select id="collect-days" class="d-select">
+                          <option value="7" data-i18n="sevenDays"></option>
+                          <option value="30" selected data-i18n="thirtyDays"></option>
+                          <option value="365" data-i18n="yearWindow"></option>
+                        </select>
+                      </label>
+                      <label id="collect-scope-field" class="d-field" hidden><span id="collect-scope-label"></span><input id="collect-scope" class="d-input" maxlength="60" value="stackoverflow"></label>
+                    </div>
+                  </details>
+                  <fieldset id="reddit-connection" class="community-reddit" hidden>
+                    <legend data-i18n="redditConnection"></legend>
+                    <p class="help" data-i18n="redditConnectionHelp"></p>
+                    <label class="d-field"><span data-i18n="redditUsername"></span><input id="reddit-username" class="d-input" maxlength="30" autocomplete="off"></label>
+                    <label class="d-field"><span data-i18n="redditToken"></span><input id="reddit-token" class="d-input" type="password" maxlength="2000" autocomplete="off"></label>
+                    <label class="check"><input id="reddit-approved" type="checkbox"><span data-i18n="redditApproved"></span></label>
+                  </fieldset>
+                </fieldset>
+                <div class="button-row"><button id="collect-submit" class="d-btn d-btn-primary" data-i18n="communityFind"></button><button id="collect-stop" type="button" class="d-btn d-btn-secondary" data-i18n="communityStop" hidden></button></div>
+              </form>
+              <button id="collect-connect" type="button" class="text-button" data-i18n="communityConnectYouTube"></button>
+              <p id="collect-cooldown" class="help" aria-live="off" hidden></p>
+              <p id="collect-analysis-help" class="help" data-i18n="communityAutomaticHelp"></p>
+              <progress id="collect-progress" max="1" data-i18n-label="communityProgressLabel" hidden></progress>
+              <p id="collect-status" class="d-note" role="status" aria-live="polite"></p>
+              <button id="collect-clear" class="text-button" data-i18n="communityClear" hidden></button>
+              <div id="community-live-videos" class="video-grid"></div>
+              <button id="collect-more" class="d-btn d-btn-secondary" data-i18n="showMore" hidden></button>
+            </section>
+            <details id="community-guide" class="community-guide">
+              <summary data-i18n="communityGuideTitle"></summary>
+              <ol><li data-i18n="communityGuideLive"></li><li data-i18n="communityGuideArchive"></li><li data-i18n="communityGuideResults"></li></ol>
+              <p class="help" data-i18n="communityGuideOld"></p>
+            </details>
+            <details class="community-import-details">
+              <summary data-i18n="archiveImports"></summary>
+              <p class="d-note" data-i18n="communityHelp"></p>
+              <form id="community-form" class="discovery-form">
+                <label class="d-field">
+                  <span data-i18n="communitySource"></span>
+                  <select id="community-source" class="d-select">
+                    <option value="reddit">Reddit / Academic Torrents</option>
+                    <option value="huggingface">Hugging Face</option>
+                    <option value="kaggle">Kaggle</option>
+                    <option value="stackexchange">Stack Exchange</option>
+                    <option value="commoncrawl">Common Crawl</option>
+                    <option value="wikipedia">Wikipedia</option>
+                  </select>
+                </label>
+                <label class="d-field"><span data-i18n="collectionName"></span><input id="community-name" class="d-input" maxlength="80" required></label>
+                <label class="d-field wide-field"><span data-i18n="communityFile"></span><input id="community-file" class="d-input" type="file" accept=".json,.jsonl,application/json" required></label>
+                <div class="button-row wide-field"><button id="community-import" class="d-btn d-btn-primary" data-i18n="importCollection"></button><button id="community-example" type="button" class="d-btn d-btn-secondary" data-i18n="downloadExample"></button><a id="community-source-link" class="text-button" target="_blank" rel="noopener noreferrer" data-i18n="browseSource"></a></div>
+              </form>
+              <p id="source-help" class="help"></p>
+              <p class="help" data-i18n="ngramsHelp"></p>
+              <div id="community-collections" class="collection-list"></div>
+            </details>
+          </section>
+          <p id="discovery-status" class="d-note" role="status" hidden></p>
+          <div id="discovery-videos" class="video-grid"></div>
+          <button id="community-more" class="d-btn d-btn-secondary" data-i18n="showMore" hidden></button>
+        </section>
+        <section id="feed" aria-labelledby="feed-title">
+          <div class="feed-heading">
+            <div><h2 id="feed-title">Today’s discoveries</h2><p id="feed-description" class="muted"></p></div>
+            <button id="refresh" class="d-btn d-btn-secondary" data-i18n="refresh" hidden>Refresh channels</button>
+          </div>
+          <div class="filters">
+            <div id="catalog-filters" class="filter-group">
+              <label class="d-field">
+                <span data-i18n="topic">Topic</span>
+                <select id="area" class="d-select"></select>
+              </label>
+              <label class="d-field">
+                <span data-i18n="category">Category</span>
+                <select id="category" class="d-select"></select>
+              </label>
+              <label class="d-field">
+                <span data-i18n="length">Length</span>
+                <select id="duration" class="d-select">
+                  <option value="all" data-i18n="anyLength">Any length</option>
+                  <option value="short" data-i18n="short">Under 20 minutes</option>
+                  <option value="medium" data-i18n="medium">20–60 minutes</option>
+                  <option value="long" data-i18n="long">Over an hour</option>
+                </select>
+              </label>
+              <label class="d-field">
+                <span data-i18n="sort">Sort by</span>
+                <select id="sort" class="d-select">
+                  <option value="daily" data-i18n="daily">Daily mix</option>
+                  <option value="top" data-i18n="top">Most recommended</option>
+                </select>
+              </label>
+            </div>
+            <div id="channel-filters" class="filter-group" hidden>
+              <label class="d-field">
+                <span data-i18n="expiry">Published within</span>
+                <select id="expiry" class="d-select">
+                  <option value="1" data-i18n="oneDay">24 hours</option>
+                  <option value="2" data-i18n="twoDays"></option>
+                  <option value="3" data-i18n="threeDays">3 days</option>
+                  <option value="4" data-i18n="fourDays"></option>
+                  <option value="5" data-i18n="fiveDays"></option>
+                  <option value="6" data-i18n="sixDays"></option>
+                  <option value="7" data-i18n="sevenDays">7 days</option>
+                </select>
+              </label>
+              <label class="d-field">
+                <span data-i18n="category">Category</span>
+                <select id="channel-filter" class="d-select"></select>
+              </label>
+              <label class="d-field">
+                <span data-i18n="channelName"></span>
+                <select id="channel-name-filter" class="d-select"></select>
+              </label>
+              <label class="d-field">
+                <span data-i18n="contentKind"></span>
+                <select id="channel-kind" class="d-select">
+                  <option value="videos" selected data-i18n="regularVideos"></option>
+                  <option value="shorts" data-i18n="estimatedShorts"></option>
+                  <option value="all" data-i18n="allContent"></option>
+                </select>
+              </label>
+              <span id="update-time" class="muted"></span>
+            </div>
+          </div>
+          <p id="channel-refresh-help" class="help" hidden></p>
+          <p id="channel-sample-help" class="help" hidden data-i18n="channelSampleHelp"></p>
+          <p id="shorts-help" class="help" hidden data-i18n="shortsHelp"></p>
+          <div class="feed-meta">
+            <span id="feed-count" role="status"></span>
+            <label class="check"><input id="hide-watched" type="checkbox"><span data-i18n="hideWatched">Hide watched</span></label>
+          </div>
+          <p id="metadata-help" class="d-note" hidden data-i18n="metadataHelp">Length filters use verified YouTube data only. Connect a key, then load lengths for the displayed videos.</p>
+          <div id="videos" class="video-grid" aria-live="polite"></div>
+          <div id="empty" class="empty" hidden><span class="empty-symbol" aria-hidden="true">▤</span><h3 id="empty-title"></h3><p id="empty-copy"></p><button id="reset-filters" class="d-btn d-btn-secondary" data-i18n="resetFilters">Reset filters</button><button id="empty-add" class="d-btn d-btn-primary" data-i18n="addChannel" hidden>Add a channel</button></div>
+          <div class="feed-actions"><button id="show-more" class="d-btn d-btn-secondary" data-i18n="showMore" hidden>Show more videos</button><button id="fetch-durations" class="text-button" data-i18n="fetchDurations">Load lengths for these videos</button></div>
+        </section>
+        <footer>
+          <p><b dir="ltr">PersonalTube</b> <span data-i18n="footer">Built for intentional viewing.</span></p>
+          <a href="https://hackertube.org/about" target="_blank" rel="noopener noreferrer" data-i18n="sourceCredit">Collection: HackerTube / open-index Hacker News · ODC-By 1.0</a>
+          <p><a href="https://huggingface.co/datasets/open-index/hacker-news" target="_blank" rel="noopener noreferrer">open-index/hacker-news</a> · <a href="https://opendatacommons.org/licenses/by/1-0/" target="_blank" rel="noopener noreferrer">ODC-By 1.0</a></p>
+          <small data-i18n="notAffiliated">Independent project. Not affiliated with YouTube or HackerTube.</small>
+        </footer>
+      </main>
+    </div>
+    <dialog id="setup-dialog" aria-labelledby="setup-title">
+      <div class="dialog-header">
+        <div><p class="setup-eyebrow">PERSONALTUBE</p><h2 id="setup-title" data-i18n="setupTitle"></h2></div>
+        <button class="close" data-close="setup-dialog" data-i18n-label="close" aria-label="Close">×</button>
+      </div>
+      <div class="setup-body">
+        <p class="setup-intro" data-i18n="setupIntro"></p>
+        <section class="connection-row">
+          <div><h3>YouTube</h3><p data-i18n="youtubeConnectionBrief"></p><small id="setup-youtube-state"></small></div>
+          <button id="setup-youtube" class="d-btn d-btn-secondary"></button>
+        </section>
+        <p class="help" data-i18n="youtubeFree"></p>
+        <section class="analysis-section">
+          <h3 data-i18n="analysisAccount"></h3>
+          <p class="help" data-i18n="analysisBrief"></p>
+          <div id="setup-provider" class="provider-grid">
+            <article class="provider-card" id="setup-card-codex">
+              <div class="provider-heading"><h4>Codex</h4><span id="setup-badge-codex" class="connection-badge"></span></div>
+              <p class="provider-plan">ChatGPT</p>
+              <p id="setup-state-codex" class="provider-state"></p>
+              <button id="setup-codex" class="d-btn d-btn-secondary"></button>
+            </article>
+            <article class="provider-card" id="setup-card-claude">
+              <div class="provider-heading"><h4>Claude Code</h4><span id="setup-badge-claude" class="connection-badge"></span></div>
+              <p class="provider-plan">Claude</p>
+              <p id="setup-state-claude" class="provider-state"></p>
+              <button id="setup-claude" class="d-btn d-btn-secondary"></button>
+            </article>
+          </div>
+          <p id="setup-message" role="status"></p>
+          <p class="help" data-i18n="connectionBrief"></p>
+          <p class="help" data-i18n="analysisCost"></p>
+          <details class="setup-details">
+            <summary data-i18n="setupStepsTitle"></summary>
+            <ol><li data-i18n="setupStepInstall"></li><li data-i18n="setupStepLogin"></li><li data-i18n="setupStepVerify"></li></ol>
+            <a href="https://github.com/nasreldinali/Personal-Tube/blob/main/docs/ANALYSIS_SETUP.md" target="_blank" rel="noopener noreferrer" data-i18n="setupFullGuide"></a>
           </details>
         </section>
-        <p id="discovery-status" class="d-note" role="status" hidden></p>
-        <div id="discovery-videos" class="video-grid"></div>
-        <button id="community-more" class="d-btn d-btn-secondary" data-i18n="showMore" hidden></button>
-      </section>
-      <section id="feed" aria-labelledby="feed-title">
-        <div class="feed-heading"><div><h2 id="feed-title">Today’s discoveries</h2><p id="feed-description" class="muted"></p></div><button id="refresh" class="d-btn d-btn-secondary" data-i18n="refresh" hidden>Refresh channels</button></div>
-        <div class="filters">
-          <div id="catalog-filters" class="filter-group"><label class="d-field"><span data-i18n="topic">Topic</span><select id="area" class="d-select"></select></label><label class="d-field"><span data-i18n="category">Category</span><select id="category" class="d-select"></select></label><label class="d-field"><span data-i18n="length">Length</span><select id="duration" class="d-select"><option value="all" data-i18n="anyLength">Any length</option><option value="short" data-i18n="short">Under 20 minutes</option><option value="medium" data-i18n="medium">20–60 minutes</option><option value="long" data-i18n="long">Over an hour</option></select></label><label class="d-field"><span data-i18n="sort">Sort by</span><select id="sort" class="d-select"><option value="daily" data-i18n="daily">Daily mix</option><option value="top" data-i18n="top">Most recommended</option></select></label></div>
-          <div id="channel-filters" class="filter-group" hidden><label class="d-field"><span data-i18n="expiry">Published within</span><select id="expiry" class="d-select"><option value="1" data-i18n="oneDay">24 hours</option><option value="2" data-i18n="twoDays"></option><option value="3" data-i18n="threeDays">3 days</option><option value="4" data-i18n="fourDays"></option><option value="5" data-i18n="fiveDays"></option><option value="6" data-i18n="sixDays"></option><option value="7" data-i18n="sevenDays">7 days</option></select></label><label class="d-field"><span data-i18n="category">Category</span><select id="channel-filter" class="d-select"></select></label><label class="d-field"><span data-i18n="channelName"></span><select id="channel-name-filter" class="d-select"></select></label><label class="d-field"><span data-i18n="contentKind"></span><select id="channel-kind" class="d-select"><option value="videos" selected data-i18n="regularVideos"></option><option value="shorts" data-i18n="estimatedShorts"></option><option value="all" data-i18n="allContent"></option></select></label><span id="update-time" class="muted"></span></div>
+        <details class="setup-details">
+          <summary data-i18n="analysisUsage"></summary>
+          <div id="setup-usage"></div>
+          <p class="help" data-i18n="usageHelp"></p>
+          <p class="help" data-i18n="analysisLimits"></p>
+        </details>
+        <details class="setup-details" id="setup-requirements">
+          <summary data-i18n="requirementsDetails"></summary>
+          <ul id="setup-status"></ul>
+          <p class="help" data-i18n="setupCatalogFeature"></p>
+          <p class="help" data-i18n="providerSelectionHelp"></p>
+          <details class="installation-help" id="setup-help">
+            <summary data-i18n="manualSetup"></summary>
+            <p data-i18n="manualSetupHelp"></p>
+            <p>Codex: <code>codex -c 'cli_auth_credentials_store="file"' login</code> · <a href="https://developers.openai.com/codex/cli" target="_blank" rel="noopener noreferrer" data-i18n="installGuide"></a></p>
+            <p>Claude: <code>claude auth login --claudeai</code> · <a href="https://code.claude.com/docs/en/setup" target="_blank" rel="noopener noreferrer" data-i18n="installGuide"></a></p>
+          </details>
+        </details>
+      </div>
+      <div class="setup-footer"><button id="setup-check" class="text-button" data-i18n="checkRequirements"></button><button id="setup-finish" class="d-btn d-btn-primary" data-i18n="done"></button></div>
+    </dialog>
+    <dialog id="settings-dialog" aria-labelledby="settings-title">
+      <button id="settings-back" class="text-button settings-back" data-i18n="backToSetup" hidden></button>
+      <div class="dialog-header"><h2 id="settings-title" data-i18n="settings">Settings &amp; data</h2><button class="close" data-close="settings-dialog" data-i18n-label="close" aria-label="Close">×</button></div>
+      <section class="api-usage" aria-labelledby="usage-title">
+        <div class="usage-heading"><h3 id="usage-title" data-i18n="usageTitle"></h3><span class="usage-badge" data-i18n="usageEstimated"></span></div>
+        <p id="usage-day" class="help"></p>
+        <div id="usage-totals" class="usage-totals">
+          <div>
+            <label for="usage-units-bar" data-i18n="usageUnits"></label>
+            <p id="usage-units"></p>
+            <progress id="usage-units-bar" max="10000" value="0"></progress>
+          </div>
+          <div>
+            <label for="usage-search-bar" data-i18n="usageSearch"></label>
+            <p id="usage-search"></p>
+            <progress id="usage-search-bar" max="100" value="0"></progress>
+          </div>
         </div>
-        <p id="channel-refresh-help" class="help" hidden></p><p id="channel-sample-help" class="help" hidden data-i18n="channelSampleHelp"></p><p id="shorts-help" class="help" hidden data-i18n="shortsHelp"></p><div class="feed-meta"><span id="feed-count" role="status"></span><label class="check"><input id="hide-watched" type="checkbox"><span data-i18n="hideWatched">Hide watched</span></label></div>
-        <p id="metadata-help" class="d-note" hidden data-i18n="metadataHelp">Length filters use verified YouTube data only. Connect a key, then load lengths for the displayed videos.</p>
-        <div id="videos" class="video-grid" aria-live="polite"></div>
-        <div id="empty" class="empty" hidden><span class="empty-symbol" aria-hidden="true">▤</span><h3 id="empty-title"></h3><p id="empty-copy"></p><button id="reset-filters" class="d-btn d-btn-secondary" data-i18n="resetFilters">Reset filters</button><button id="empty-add" class="d-btn d-btn-primary" data-i18n="addChannel" hidden>Add a channel</button></div>
-        <div class="feed-actions"><button id="show-more" class="d-btn d-btn-secondary" data-i18n="showMore" hidden>Show more videos</button><button id="fetch-durations" class="text-button" data-i18n="fetchDurations">Load lengths for these videos</button></div>
+        <p id="usage-unavailable" class="error" data-i18n="usageUnavailable" hidden></p>
+        <p class="help" data-i18n="usageBrief"></p>
+        <details>
+          <summary data-i18n="usageDetails"></summary>
+          <p class="help" data-i18n="apiUsageHelp"></p>
+          <a href="https://console.cloud.google.com/apis/api/youtube.googleapis.com/quotas" target="_blank" rel="noopener noreferrer" data-i18n="usageActual"></a>
+        </details>
       </section>
-      <footer><p><b dir="ltr">PersonalTube</b> <span data-i18n="footer">Built for intentional viewing.</span></p><a href="https://hackertube.org/about" target="_blank" rel="noopener noreferrer" data-i18n="sourceCredit">Collection: HackerTube / open-index Hacker News · ODC-By 1.0</a><p><a href="https://huggingface.co/datasets/open-index/hacker-news" target="_blank" rel="noopener noreferrer">open-index/hacker-news</a> · <a href="https://opendatacommons.org/licenses/by/1-0/" target="_blank" rel="noopener noreferrer">ODC-By 1.0</a></p><small data-i18n="notAffiliated">Independent project. Not affiliated with YouTube or HackerTube.</small></footer>
-    </main>
-  </div>
-  <dialog id="setup-dialog" aria-labelledby="setup-title">
-    <div class="dialog-header"><div><p class="setup-eyebrow">PERSONALTUBE</p><h2 id="setup-title" data-i18n="setupTitle"></h2></div><button class="close" data-close="setup-dialog" data-i18n-label="close" aria-label="Close">×</button></div>
-    <div class="setup-body">
-      <p class="setup-intro" data-i18n="setupIntro"></p>
-      <section class="connection-row"><div><h3>YouTube</h3><p data-i18n="youtubeConnectionBrief"></p><small id="setup-youtube-state"></small></div><button id="setup-youtube" class="d-btn d-btn-secondary"></button></section><p class="help" data-i18n="youtubeFree"></p>
-      <section class="analysis-section"><h3 data-i18n="analysisAccount"></h3><p class="help" data-i18n="analysisBrief"></p>
-        <div id="setup-provider" class="provider-grid">
-          <article class="provider-card" id="setup-card-codex"><div class="provider-heading"><h4>Codex</h4><span id="setup-badge-codex" class="connection-badge"></span></div><p class="provider-plan">ChatGPT</p><p id="setup-state-codex" class="provider-state"></p><button id="setup-codex" class="d-btn d-btn-secondary"></button></article>
-          <article class="provider-card" id="setup-card-claude"><div class="provider-heading"><h4>Claude Code</h4><span id="setup-badge-claude" class="connection-badge"></span></div><p class="provider-plan">Claude</p><p id="setup-state-claude" class="provider-state"></p><button id="setup-claude" class="d-btn d-btn-secondary"></button></article>
-        </div>
-        <p id="setup-message" role="status"></p>
-        <p class="help" data-i18n="connectionBrief"></p><p class="help" data-i18n="analysisCost"></p><details class="setup-details"><summary data-i18n="setupStepsTitle"></summary><ol><li data-i18n="setupStepInstall"></li><li data-i18n="setupStepLogin"></li><li data-i18n="setupStepVerify"></li></ol><a href="https://github.com/nasreldinali/Personal-Tube/blob/main/docs/ANALYSIS_SETUP.md" target="_blank" rel="noopener noreferrer" data-i18n="setupFullGuide"></a></details>
+      <section class="refresh-settings" aria-labelledby="refresh-settings-title">
+        <h3 id="refresh-settings-title" data-i18n="refreshSettingsTitle"></h3>
+        <form id="refresh-settings-form">
+          <div class="refresh-fields">
+            <label class="d-field">
+              <span data-i18n="refreshModeLabel"></span>
+              <select id="refresh-mode" class="d-select">
+                <option value="auto" data-i18n="auto"></option>
+                <option value="manual" data-i18n="manualRefresh"></option>
+              </select>
+            </label>
+            <label class="d-field">
+              <span data-i18n="refreshIntervalLabel"></span>
+              <select id="refresh-interval" class="d-select"></select>
+            </label>
+          </div>
+          <p id="refresh-settings-help" class="help"></p>
+          <div class="button-row"><button class="d-btn d-btn-secondary" data-i18n="saveRefreshSettings"></button><span id="refresh-settings-status" role="status"></span></div>
+          <details class="refresh-usage">
+            <summary data-i18n="refreshUsageTitle"></summary>
+            <p class="help" data-i18n="refreshUsageHelp"></p>
+          </details>
+          <p id="refresh-settings-error" class="error" role="alert"></p>
+        </form>
       </section>
-      <details class="setup-details"><summary data-i18n="analysisUsage"></summary><div id="setup-usage"></div><p class="help" data-i18n="usageHelp"></p><p class="help" data-i18n="analysisLimits"></p></details>
-      <details class="setup-details" id="setup-requirements"><summary data-i18n="requirementsDetails"></summary><ul id="setup-status"></ul><p class="help" data-i18n="setupCatalogFeature"></p><p class="help" data-i18n="providerSelectionHelp"></p>
-    <details class="installation-help" id="setup-help"><summary data-i18n="manualSetup"></summary><p data-i18n="manualSetupHelp"></p><p>Codex: <code>codex -c 'cli_auth_credentials_store="file"' login</code> · <a href="https://developers.openai.com/codex/cli" target="_blank" rel="noopener noreferrer" data-i18n="installGuide"></a></p><p>Claude: <code>claude auth login --claudeai</code> · <a href="https://code.claude.com/docs/en/setup" target="_blank" rel="noopener noreferrer" data-i18n="installGuide"></a></p></details>
+      <h3 data-i18n="connection">Connect YouTube</h3>
+      <p class="muted" data-i18n="connectionDescription"></p>
+      <p class="help" data-i18n="youtubeFree"></p>
+      <form id="settings-form">
+        <label class="d-field"><span data-i18n="apiKey">YouTube API key</span><input class="d-input" id="api-key" type="password" dir="ltr" autocomplete="off" spellcheck="false" data-i18n-placeholder="keyPlaceholder" maxlength="250" required></label>
+        <label class="check"><input type="checkbox" id="remember-key"><span data-i18n="rememberKey">Remember the key in this browser</span></label>
+        <p class="help" data-i18n="keyHelp"></p>
+        <p id="settings-error" class="error" role="alert"></p>
+        <div class="button-row"><button class="d-btn d-btn-primary" data-i18n="saveConnection">Save connection</button><button id="forget-key" type="button" class="d-btn d-btn-secondary" data-i18n="forgetKey">Remove saved key</button></div>
+      </form>
+      <details>
+        <summary data-i18n="keyGuide">Get a YouTube API key</summary>
+        <ol><li><span data-i18n="guide1"></span> <a href="https://console.cloud.google.com/" target="_blank" rel="noopener noreferrer">Google Cloud Console ↗</a></li><li data-i18n="guide2"></li><li data-i18n="guide3"></li><li><span data-i18n="guide4"></span><code>http://127.0.0.1:4173/*</code></li><li data-i18n="guide5"></li></ol>
+        <p class="help" data-i18n="quotaHelp"></p>
       </details>
-    </div>
-    <div class="setup-footer"><button id="setup-check" class="text-button" data-i18n="checkRequirements"></button><button id="setup-finish" class="d-btn d-btn-primary" data-i18n="done"></button></div>
-  </dialog>
-  <dialog id="settings-dialog" aria-labelledby="settings-title"><button id="settings-back" class="text-button settings-back" data-i18n="backToSetup" hidden></button><div class="dialog-header"><h2 id="settings-title" data-i18n="settings">Settings &amp; data</h2><button class="close" data-close="settings-dialog" data-i18n-label="close" aria-label="Close">×</button></div><section class="api-usage" aria-labelledby="usage-title"><div class="usage-heading"><h3 id="usage-title" data-i18n="usageTitle"></h3><span class="usage-badge" data-i18n="usageEstimated"></span></div><p id="usage-day" class="help"></p><div id="usage-totals" class="usage-totals"><div><label for="usage-units-bar" data-i18n="usageUnits"></label><p id="usage-units"></p><progress id="usage-units-bar" max="10000" value="0"></progress></div><div><label for="usage-search-bar" data-i18n="usageSearch"></label><p id="usage-search"></p><progress id="usage-search-bar" max="100" value="0"></progress></div></div><p id="usage-unavailable" class="error" data-i18n="usageUnavailable" hidden></p><p class="help" data-i18n="usageBrief"></p><details><summary data-i18n="usageDetails"></summary><p class="help" data-i18n="apiUsageHelp"></p><a href="https://console.cloud.google.com/apis/api/youtube.googleapis.com/quotas" target="_blank" rel="noopener noreferrer" data-i18n="usageActual"></a></details></section><section class="refresh-settings" aria-labelledby="refresh-settings-title"><h3 id="refresh-settings-title" data-i18n="refreshSettingsTitle"></h3><form id="refresh-settings-form"><div class="refresh-fields"><label class="d-field"><span data-i18n="refreshModeLabel"></span><select id="refresh-mode" class="d-select"><option value="auto" data-i18n="auto"></option><option value="manual" data-i18n="manualRefresh"></option></select></label><label class="d-field"><span data-i18n="refreshIntervalLabel"></span><select id="refresh-interval" class="d-select"></select></label></div><p id="refresh-settings-help" class="help"></p><div class="button-row"><button class="d-btn d-btn-secondary" data-i18n="saveRefreshSettings"></button><span id="refresh-settings-status" role="status"></span></div><details class="refresh-usage"><summary data-i18n="refreshUsageTitle"></summary><p class="help" data-i18n="refreshUsageHelp"></p></details><p id="refresh-settings-error" class="error" role="alert"></p></form></section><h3 data-i18n="connection">Connect YouTube</h3><p class="muted" data-i18n="connectionDescription"></p><p class="help" data-i18n="youtubeFree"></p>
-    <form id="settings-form"><label class="d-field"><span data-i18n="apiKey">YouTube API key</span><input class="d-input" id="api-key" type="password" dir="ltr" autocomplete="off" spellcheck="false" data-i18n-placeholder="keyPlaceholder" maxlength="250" required></label><label class="check"><input type="checkbox" id="remember-key"><span data-i18n="rememberKey">Remember the key in this browser</span></label><p class="help" data-i18n="keyHelp"></p><p id="settings-error" class="error" role="alert"></p><div class="button-row"><button class="d-btn d-btn-primary" data-i18n="saveConnection">Save connection</button><button id="forget-key" type="button" class="d-btn d-btn-secondary" data-i18n="forgetKey">Remove saved key</button></div></form>
-    <details><summary data-i18n="keyGuide">Get a YouTube API key</summary><ol><li><span data-i18n="guide1"></span> <a href="https://console.cloud.google.com/" target="_blank" rel="noopener noreferrer">Google Cloud Console ↗</a></li><li data-i18n="guide2"></li><li data-i18n="guide3"></li><li><span data-i18n="guide4"></span><code>http://127.0.0.1:4173/*</code></li><li data-i18n="guide5"></li></ol><p class="help" data-i18n="quotaHelp"></p></details>
-    <section class="settings-data"><h3 data-i18n="dataTitle"></h3><p class="muted" data-i18n="dataHelp"></p><div class="button-row"><button id="export-data" class="d-btn d-btn-secondary" data-i18n="exportData"></button><label class="d-btn d-btn-secondary file-label"><span data-i18n="importData"></span><input id="import-data" type="file" accept=".json,application/json" data-i18n-label="importData" aria-label="Import backup"></label><button id="restore-hidden" class="d-btn d-btn-secondary" data-i18n="restoreHidden"></button><button id="clear-data" class="d-btn danger-button" data-i18n="clearData"></button></div></section><p class="d-note" data-i18n="privacy"></p>
-  </dialog>
-  <dialog id="channels-dialog" aria-labelledby="channels-title"><div class="dialog-header"><h2 id="channels-title" data-i18n="manage"></h2><button class="close" data-close="channels-dialog" data-i18n-label="close" aria-label="Close">×</button></div><form id="channel-form"><label class="d-field"><span data-i18n="channelInput"></span><input id="channel-input" class="d-input" dir="ltr" placeholder="@lexfridman · youtube.com/@…" maxlength="500" required></label><label class="d-field"><span data-i18n="categoryInput"></span><input id="channel-category" class="d-input" maxlength="60" list="categories-list" data-i18n-placeholder="categoryPlaceholder"></label><datalist id="categories-list"></datalist><p id="channel-status" class="help" role="status"></p><p id="channel-error" class="error" role="alert"></p><button id="add-channel" class="d-btn d-btn-primary" data-i18n="addChannel"></button></form><h3 data-i18n="channelsList"></h3><div id="channel-list" class="channel-scroll" role="region" tabindex="0" data-i18n-label="channelsList"></div><details class="category-management"><summary data-i18n="manageCategories"></summary><p class="help" data-i18n="categoryDeleteHelp"></p><div id="category-manager"></div></details></dialog>
-  <dialog id="player-dialog" aria-labelledby="player-title"><div class="dialog-header"><h2 id="player-title" dir="auto"></h2><button class="close" data-close="player-dialog" data-i18n-label="close" aria-label="Close">×</button></div><div id="player-container"></div><div class="player-toolbar"><a id="youtube-link" class="d-btn d-btn-primary" target="_blank" rel="noopener noreferrer" data-i18n="watchYouTube"></a><button id="player-later" class="d-btn d-btn-secondary"></button><button id="player-watched" class="d-btn d-btn-secondary"></button><button id="player-similar" class="d-btn d-btn-secondary" data-i18n="findSimilar"></button></div><p class="help" data-i18n="playbackHelp"></p><section id="recommendation"><h3 data-i18n="why"></h3><p id="video-summary" dir="auto"></p><p id="video-why" dir="auto"></p><blockquote id="video-quote" dir="auto"></blockquote><a id="hn-comment" target="_blank" rel="noopener noreferrer" data-i18n="originalComment"></a><p class="help" data-i18n="originalMetadata"></p></section></dialog>
-  <dialog id="confirm-dialog" aria-labelledby="confirm-text"><p id="confirm-text"></p><div class="button-row"><button id="confirm-yes" class="d-btn d-btn-primary" data-i18n="confirm"></button><button data-close="confirm-dialog" class="d-btn d-btn-secondary" data-i18n="cancel"></button></div></dialog>
-  <noscript>PersonalTube needs JavaScript to browse the local catalog. يتطلب PersonalTube تفعيل JavaScript.</noscript>
-</body>
+      <section class="settings-data">
+        <h3 data-i18n="dataTitle"></h3>
+        <p class="muted" data-i18n="dataHelp"></p>
+        <div class="button-row">
+          <button id="export-data" class="d-btn d-btn-secondary" data-i18n="exportData"></button>
+          <label class="d-btn d-btn-secondary file-label"><span data-i18n="importData"></span><input id="import-data" type="file" accept=".json,application/json" data-i18n-label="importData" aria-label="Import backup"></label>
+          <button id="restore-hidden" class="d-btn d-btn-secondary" data-i18n="restoreHidden"></button>
+          <button id="clear-data" class="d-btn danger-button" data-i18n="clearData"></button>
+        </div>
+      </section>
+      <p class="d-note" data-i18n="privacy"></p>
+    </dialog>
+    <dialog id="channels-dialog" aria-labelledby="channels-title">
+      <div class="dialog-header"><h2 id="channels-title" data-i18n="manage"></h2><button class="close" data-close="channels-dialog" data-i18n-label="close" aria-label="Close">×</button></div>
+      <form id="channel-form">
+        <label class="d-field"><span data-i18n="channelInput"></span><input id="channel-input" class="d-input" dir="ltr" placeholder="@lexfridman · youtube.com/@…" maxlength="500" required></label>
+        <label class="d-field"><span data-i18n="categoryInput"></span><input id="channel-category" class="d-input" maxlength="60" list="categories-list" data-i18n-placeholder="categoryPlaceholder"></label>
+        <datalist id="categories-list"></datalist>
+        <p id="channel-status" class="help" role="status"></p>
+        <p id="channel-error" class="error" role="alert"></p>
+        <button id="add-channel" class="d-btn d-btn-primary" data-i18n="addChannel"></button>
+      </form>
+      <h3 data-i18n="channelsList"></h3>
+      <div id="channel-list" class="channel-scroll" role="region" tabindex="0" data-i18n-label="channelsList"></div>
+      <details class="category-management">
+        <summary data-i18n="manageCategories"></summary>
+        <p class="help" data-i18n="categoryDeleteHelp"></p>
+        <div id="category-manager"></div>
+      </details>
+    </dialog>
+    <dialog id="player-dialog" aria-labelledby="player-title">
+      <div class="dialog-header"><h2 id="player-title" dir="auto"></h2><button class="close" data-close="player-dialog" data-i18n-label="close" aria-label="Close">×</button></div>
+      <div id="player-container"></div>
+      <div class="player-toolbar"><a id="youtube-link" class="d-btn d-btn-primary" target="_blank" rel="noopener noreferrer" data-i18n="watchYouTube"></a><button id="player-later" class="d-btn d-btn-secondary"></button><button id="player-watched" class="d-btn d-btn-secondary"></button><button id="player-similar" class="d-btn d-btn-secondary" data-i18n="findSimilar"></button></div>
+      <p class="help" data-i18n="playbackHelp"></p>
+      <section id="recommendation">
+        <h3 data-i18n="why"></h3>
+        <p id="video-summary" dir="auto"></p>
+        <p id="video-why" dir="auto"></p>
+        <blockquote id="video-quote" dir="auto"></blockquote>
+        <a id="hn-comment" target="_blank" rel="noopener noreferrer" data-i18n="originalComment"></a>
+        <p class="help" data-i18n="originalMetadata"></p>
+      </section>
+    </dialog>
+    <dialog id="confirm-dialog" aria-labelledby="confirm-text">
+      <p id="confirm-text"></p>
+      <div class="button-row"><button id="confirm-yes" class="d-btn d-btn-primary" data-i18n="confirm"></button><button data-close="confirm-dialog" class="d-btn d-btn-secondary" data-i18n="cancel"></button></div>
+    </dialog>
+    <noscript>PersonalTube needs JavaScript to browse the local catalog. يتطلب PersonalTube تفعيل JavaScript.</noscript>
+  </body>
 </html>
