@@ -21,3 +21,14 @@ test('stylesheet fixture refuses cycles, missing fragments and external imports'
   await assert.rejects(readStylesheet(root,async url=>{if(url.href===root.href)return directive('./absent.css');throw new Error('Missing fragment');}),/Missing fragment/);
   await assert.rejects(readStylesheet(root,async()=> directive('./../outside.css')),/outside/);
 });
+
+test('stylesheet HTTP delivery keeps MIME, CSP and the explicit allowlist',async()=>{
+  const {createHandler}=await import('../server/http-app.js');
+  const handler=createHandler({port:4173,readAsset:file=>readFile(new URL('../public/'+file,import.meta.url)),catalog:async()=>({version:1,videos:[],areas:[]})});
+  async function request(path){let result;await handler({url:path,method:'GET',headers:{host:'127.0.0.1:4173'}},{writeHead(status,headers){result={status,headers};},end(body){result.body=body;}});return result;}
+  for(const [path,[,type]] of assetManifest){
+    if(type!=='text/css')continue;
+    const response=await request(path);assert.equal(response.status,200);assert.match(response.headers['Content-Type'],/^text\/css/);assert.match(response.headers['Content-Security-Policy'],/style-src 'self'/);assert.ok(response.body.length>0);
+  }
+  for(const path of ['/styles/not-allowlisted.css','/styles/%2e%2e/%2e%2e/records/FRONTEND_CLEANUP_MAP.md'])assert.equal((await request(path)).status,404);
+});

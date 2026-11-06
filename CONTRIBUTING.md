@@ -7,8 +7,10 @@ PersonalTube is a local, dependency-free Node.js application. Use Node.js 20 or 
 1. Describe the behavior and acceptance criteria before editing.
 2. For behavioral changes, reproduce the failure with a focused test before fixing it. For layout changes, record the failing browser geometry and verify the corrected view.
 3. Keep business rules in `public/domain`, browser/network access in adapters, and rendering in `public/ui`. Avoid new dependencies unless necessary and approved.
-4. Run `npm run check` and `git diff --check` before committing. Check both languages, both themes and relevant narrow/wide layouts for UI changes.
+4. Run `npm run check` and `git diff --check` before committing. Check all four interface languages, light/dark/system themes and relevant narrow/wide layouts for UI changes.
 5. Review the staged diff for secrets, personal data, generated files and unintended scope. Keep commits focused.
+
+For frontend refactors, characterize existing behavior before moving code, prepare dependency boundaries separately, and keep one responsibility per move. Preserve the stylesheet import order and explicit server asset routes. See [frontend maintenance contract](docs/FRONTEND_CLEANUP.md).
 
 Never commit API keys, browser backups, environment files, screenshots with personal content or raw local logs. `.local/` is ignored and can hold private development evidence. Checks create `.local/reports/defect-plants.json` automatically. Test credentials are synthetic.
 

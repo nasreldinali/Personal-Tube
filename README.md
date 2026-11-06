@@ -121,11 +121,14 @@ The check runs deterministic Node tests, syntax/format/structure checks, data/br
 
 | Directory | Contents |
 |---|---|
-| `public/` | UI, pure domain rules, browser storage/API adapters and brand assets |
+| `public/` | Composition root, focused UI modules, pure domain rules, browser adapters and brand assets |
+| `public/styles/` | Ordered style sections for components, responsive layouts and later overrides |
 | `server/` | Local HTTP server, bounded collectors and analysis adapters |
 | `data/hackertube/` | Original catalog/taxonomy and derived recommendation evidence |
 | `test/`, `scripts/` | Deterministic tests, checks and launch tools |
 | `docs/` | User guide, architecture, formats and verification |
+
+The frontend is separated by responsibility, with characterization tests for user workflows and explicit stylesheet loading order. See the [maintenance map and verification approach](docs/FRONTEND_CLEANUP.md).
 
 ## Credit and license
 

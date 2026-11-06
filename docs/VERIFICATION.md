@@ -1,6 +1,16 @@
 # Verification
 
-Reviewed: 2026-11-06.
+Reviewed: 2026-11-07.
+
+## Frontend responsibility cleanup
+
+MEASURED (2026-11-06 to 2026-11-07): 207 deterministic tests and all 37 deliberate defects pass. The prior 183 tests and 35 defects remain covered, with added application workflow, module boundary and stylesheet-delivery checks. Each of nine prepared JavaScript factories was moved byte-for-byte with locally recorded SHA-256 proof and separate preparation/move commits. The composition root is 150 lines (previously 531).
+
+The 1,362-line stylesheet was first extracted unchanged into 23 explicitly served sections; concatenation reproduced the original SHA-256. A later approved cleanup removed 14 verified unused application rules (50 lines), without changing supplied brand assets. The import entry is 23 lines. HTML formatting preserved parsed structure and text-bearing inline content; its longest line decreased from 2,519 to 386 characters.
+
+Real-browser comparisons found identical geometry and representative computed styles in 42 video/Shorts/sidebar cases across 14 viewport widths. An additional 60 comparisons covered English, Arabic RTL, German and Spanish with dark, light and system themes at 390/768/1024/1200/1600px. All six views matched DOM elements, attributes and leaf text after the same navigation sequence; 18 dialog comparisons also matched. Tested views had no horizontal overflow or warning/error logs. Nested settings returned to setup, and cancelling removal retained all displayed fixture videos. These are browser viewport checks, not physical-device certification.
+
+Tests use isolated synthetic storage, fixed time and fake API responses; no personal YouTube key, account login or model analysis was used. Data/schema, request budgets, server authorization, provider policies, original catalog, translations and brand hashes are unchanged. ASVS Level 1 remains a review target, not certification. See [frontend maintenance contract](FRONTEND_CLEANUP.md).
 
 ## Repository preparation (1.8.2)
 

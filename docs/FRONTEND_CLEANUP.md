@@ -29,3 +29,9 @@ The HTML remains a static document. Formatting changes preserve parsed element o
 ## Confirmed unused rules
 
 After literal extraction, 14 application-only rules (50 lines) for `.d-ctl`, `.d-ctls` and `.community-live-filters` were removed with owner approval. Current HTML/JavaScript has no producers, and all six rendered views plus dialogs contained no matching elements. Supplied brand tokens remain untouched. An unused DOM import introduced in the refresh adapter extraction was also removed; that adapter depends on injected UI callbacks.
+
+## Verification and rollback
+
+MEASURED: the final check passes 207 tests and 37 deliberate-defect detections. Browser comparisons cover 42 responsive cases, 60 language/theme/viewport cases, six view DOM comparisons and 18 dialogs. See [verification scope](VERIFICATION.md). Factory bodies retain their extraction hashes; source/brand integrity checks remain in the normal check command. UI factories are internal package interfaces, not a versioned plugin API; stored and HTTP formats retain their existing versions.
+
+Preparation and literal moves are separate focused commits. Revert the relevant commit through normal Git history to roll back; do not reset user storage, rewrite published history or change repository visibility.

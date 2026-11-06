@@ -1,12 +1,14 @@
 # Architecture and formats
 
-Version: 1. Reviewed: 2026-11-04.
+Version: 1. Reviewed: 2026-11-07.
 
 ## Responsibilities
 
-MEASURED: public/domain holds pure validation, expiry, catalog, library and preference rules with explicit time inputs. public/data owns storage and the YouTube adapter. public/services coordinates refresh through an injected client and protects revisions. public/ui constructs DOM and cards. public/app.js is the browser composition root, event controller and screen-state renderer. server/http-app.js handles HTTP; server/catalog-repository.js reads the original export; server.mjs manages the process. public/config.js contains constants. The compatibility facade public/core.js preserves existing test imports.
+MEASURED: public/domain holds pure validation, expiry, catalog, library and preference rules with explicit time inputs. public/data owns storage and the YouTube adapter. public/services coordinates refresh through an injected client and protects revisions. public/ui constructs DOM and cards. public/app.js is the browser composition root and shared-state owner. Dedicated UI factories own feedback, player, channel management, settings, portable data, library actions, feed rendering and navigation. public/data/feed-updates.js owns browser refresh scheduling and metadata requests through injected state operations. server/http-app.js handles HTTP; server/catalog-repository.js reads the original export; server.mjs manages the process. public/config.js contains constants. The compatibility facade public/core.js preserves existing test imports.
 
 INFERRED: a functional core with explicit adapters suits this local app without a framework or database. The composition root constructs adapters; UI and adapters share domain rules. This dependency-inversion arrangement is a documented interpretation of the requested layers, not a claim that every import follows a literal five-level call chain. No circular imports are allowed. No external runtime or test packages are required.
+
+Frontend factory ports are internal to this package, not a public extension API. Callbacks read current state at action time, including after awaited requests; no feature imports the composition root. `public/styles.css` loads ordered functional fragments, with brand tokens first. See [frontend maintenance contract](FRONTEND_CLEANUP.md).
 
 ## Trust and access boundaries
 
@@ -33,7 +35,7 @@ INFERRED: a functional core with explicit adapters suits this local app without 
 | personaltube.youtube-usage.v1 | version 1; Pacific YYYY-MM-DD day, nonnegative safe integer units/search. Daily aggregate only, no request identities or keys. Unknown/corrupt records show unavailable. |
 | personaltube.youtube-usage-incomplete.v1 | Versioned-key format: Pacific YYYY-MM-DD string marking a lost increment. Shared across tabs, excludes that day from numeric display; next day can recover. |
 | personaltube.state.v1 | version 1; integer days 1–7; channels <=200; cache keyed by channel ID, with at most 250 videos plus fetchedAt/limited. Legacy single-video entries remain readable but do not satisfy the new refresh cache. Channel IDs are UC plus 22 allowed characters, title <=250, category <=60, uploads ID 2-100 allowed characters; images use an HTTPS host allowlist. |
-| personaltube.preferences.v1 | version 1; language en/ar; theme auto/light/dark; optional thumbnail original/frame, boolean setupDone, refreshMode auto/manual and refreshMinutes 15/30/60/180/360/720/1440; other versions/enums refused. |
+| personaltube.preferences.v1 | version 1; language en/ar/de/es; theme auto/light/dark; optional thumbnail original/frame, boolean setupDone, refreshMode auto/manual and refreshMinutes 15/30/60/180/360/720/1440; other versions/enums refused. |
 | personaltube.library.v1 | version 1; later/watched and optional hidden each <=20,000 strict string video IDs, deduplicated. |
 | personaltube.metadata.v1 | version 1; videos dictionary; entries expire one day after fetchedAt. |
 | personaltube.key.v1 | 1-250 trimmed characters, raw string in sessionStorage by default, optional localStorage; never exported/logged. |
