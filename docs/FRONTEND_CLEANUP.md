@@ -12,3 +12,4 @@ Extraction follows separate dependency preparation and literal move checkpoints.
 - `ui/video-player.js` owns active playback, embed construction, saved controls and iframe cleanup. Library/metadata are read at action time.
 - `ui/channel-manager.js` owns channel/category editing and add-request state. A pending addition checks current channel identity and key identity before saving. Background refresh never owns the add spinner.
 - `ui/settings-panel.js` owns key-entry presentation, refresh drafts and estimated quota display. Persistence is injected and key fields still empty when the dialog closes.
+- `ui/data-transfer.js` owns validated backup import/export and reset confirmations. Transactional persistence stays in BrowserStore; temporary community deletion still completes before personal data is cleared.

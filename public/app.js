@@ -1,10 +1,11 @@
+import { createDataTransfer } from './ui/data-transfer.js';
 import { createSettingsPanel } from './ui/settings-panel.js';
 import { createChannelManager } from './ui/channel-manager.js';
 import { createVideoPlayer } from './ui/video-player.js';
 import { createFeedbackPanel } from './ui/feedback-panel.js';
 import { videoPattern } from './config.js';
 import { emptyState, visibleVideos, channelVideos } from './domain/feed.js';
-import { emptyLibrary, toggleLibrary, parseBackup, validateBackupFile } from './domain/library.js';
+import { emptyLibrary, toggleLibrary } from './domain/library.js';
 import { parsePreferences, preferenceAttributes, refreshSettings, automaticRefreshDue } from './domain/preferences.js';
 import { selectCatalog } from './domain/catalog.js';
 import { AppError } from './domain/errors.js';
@@ -273,43 +274,6 @@ const { renderUsage, openSettings } = createSettingsPanel({
   savePreferences: next => { persist(() => store.writePreferences(next)); preferences = next; },
   isBusy: () => busy, bind, render: () => render(), notify, refresh: () => refresh(),
 });
-function createDataTransfer({ hasStore, isStorageBlocked, isBusy, exportData, importData, reloadImportedData, clearPersonalData, clearCommunity, now, bind, askConfirmation, applyPreferences, notify }) {
-  function exportBackup() {
-    if (!hasStore() || isStorageBlocked()) throw new AppError('storageRead');
-    const blob = new Blob([JSON.stringify(exportData(now()), null, 2)], { type: 'application/json' });
-    const url = URL.createObjectURL(blob); const link = element('a'); link.href = url; link.download = 'personaltube-backup.json'; link.click();
-    setTimeout(() => URL.revokeObjectURL(url), 1000);
-  }
-  async function importBackup() {
-    const file = $('import-data').files[0]; $('import-data').value = '';
-    if (!file) return;
-    if (isBusy()) throw new AppError('busy');
-    validateBackupFile(file);
-    const content = await file.text();
-    try { parseBackup(JSON.parse(content)); } catch { throw new AppError('invalidBackup'); }
-    askConfirmation('confirmImport', () => {
-      if (isBusy()) throw new AppError('busy');
-      importData(content, now());
-      reloadImportedData();
-      applyPreferences(); notify('imported');
-    });
-  }
-  function confirmClearData() {
-    if (isBusy()) throw new AppError('busy');
-    askConfirmation('confirmClear', async () => {
-      if (isBusy()) throw new AppError('busy');
-      if (!hasStore()) throw new AppError('storageWrite');
-      await clearCommunity();
-      clearPersonalData();
-      $('api-key').value = ''; $('remember-key').checked = false; applyPreferences(); notify('cleared');
-    });
-  }
-  bind('export-data', 'click', exportBackup, 'settings-error');
-  bind('import-data', 'change', importBackup, 'settings-error');
-  bind('clear-data', 'click', confirmClearData, 'settings-error');
-  return { exportBackup, importBackup, confirmClearData };
-}
-
 createDataTransfer({
   hasStore: () => Boolean(store), isStorageBlocked: () => storageBlocked, isBusy: () => busy,
   exportData: timestamp => store.exportData(timestamp), importData: (content, timestamp) => persist(() => store.importData(content, timestamp)),
