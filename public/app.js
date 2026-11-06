@@ -71,36 +71,8 @@ function bind(id, event, action, errorTarget) {
     try { await action(eventObject); } catch (error) { showError(error, errorTarget); }
   });
 }
-function applyLayout() {
-  document.documentElement.dataset.collapsed = String(discovery.collapsed);
-  const label = text(discovery.collapsed ? 'expandSidebar' : 'collapseSidebar');
-  $('sidebar-toggle').setAttribute('aria-expanded', String(!discovery.collapsed));
-  $('sidebar-toggle').setAttribute('aria-label', label); $('sidebar-toggle').title = label;
-  $('sidebar-toggle').lastElementChild.textContent = label;
-  document.querySelectorAll('.d-nav button').forEach(button => {
-    const key = button.querySelector('[data-i18n]')?.dataset.i18n;
-    if (key) { button.setAttribute('aria-label', text(key)); button.title = text(key); }
-  });
-}
 function saveDiscovery(next) {
   persist(() => store.writeDiscovery(next)); discovery = next;
-}
-function applyPreferences() {
-  const attrs = preferenceAttributes(preferences);
-  document.documentElement.lang = attrs.lang;
-  document.documentElement.dir = attrs.dir;
-  if (attrs.theme) document.documentElement.dataset.theme = attrs.theme;
-  else delete document.documentElement.dataset.theme;
-  translatePage(preferences.language);
-  $('language').value = preferences.language;
-  $('theme').value = preferences.theme;
-  applyLayout(); renderFilters(); render(); renderChannels(); renderPlayerButtons();
-  renderConfirmation();
-}
-function changeMode(value) {
-  mode = value; history.replaceState(null,'',`#${value}`); resetPageSize(); resetSelection();
-  $('search').value = ''; $('area').value = ''; $('category').value = ''; $('duration').value = 'all'; $('hide-watched').checked = false;
-  renderFilters(); render();
 }
 async function refresh(force = false, channelId = null) {
   if (busy || staleTab || storageBlocked || !key || !state.channels.length) return;
@@ -161,12 +133,6 @@ const { render, renderFilters, filteredVideos, getPageSize, resetPageSize } = cr
   renderPanels: () => { discoveryPanel?.render(); renderPanelTools(); setupPanel?.render(); renderAddState(); renderUsage(); },
   renderPanelTools, renderNotice, play, toggleSaved, confirmHide, selectVideo, isSelected: id => selectedVideos.has(id), bind, commitState,
 });
-for (const view of ['discover', 'channels', 'later', 'watched', 'recommendations', 'community']) bind(`view-${view}`, 'click', () => changeMode(view));
-bind('sidebar-toggle', 'click', () => { saveDiscovery({ ...discovery, collapsed: !discovery.collapsed }); applyLayout(); });
-bind('hero-explore', 'click', () => { changeMode('discover'); $('feed').scrollIntoView(); });
-bind('language', 'change', () => { const next = { ...preferences, language: $('language').value }; persist(() => store.writePreferences(next)); preferences = next; applyPreferences(); });
-bind('theme', 'change', () => { const next = { ...preferences, theme: $('theme').value }; persist(() => store.writePreferences(next)); preferences = next; applyPreferences(); });
-window.addEventListener('hashchange',()=>{if(location.hash!=='#feed')changeMode(viewFromHash(location.hash));});
 bind('refresh', 'click', () => refresh(true));
 bind('fetch-durations', 'click', async () => {
   if (!key) { openSettings(); return; }
@@ -180,9 +146,6 @@ bind('fetch-durations', 'click', async () => {
     const next = { ...metadata, ...fetched }; persist(() => store.writeMetadata(next)); metadata = next; notify('metadataLoaded');
   } finally { busy = false; render(); }
 });
-document.addEventListener('keydown', event => {
-  if (event.key === '/' && !document.querySelector('dialog[open]') && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) { event.preventDefault(); $('search').focus(); }
-});
 window.addEventListener('offline', () => notify('offline'));
 window.addEventListener('storage', event => {
   if (event.key === USAGE_KEY || event.key === USAGE_FAILURE_KEY) { renderUsage(); return; }
@@ -194,6 +157,55 @@ window.addEventListener('online', () => { notify(); void refresh(); });
 document.addEventListener('visibilitychange', () => { if (!document.hidden) { render(); void refresh(); } });
 setInterval(() => { if (!document.hidden) { render(); void refresh(); } }, 60000);
 
+function createNavigationPanel({
+  text, readPreferences, readDiscovery, savePreferences, saveDiscovery, setMode, resetPageSize, resetSelection,
+  renderFilters, render, renderChannels, renderPlayerButtons, renderConfirmation, bind,
+}) {
+  function applyLayout() {
+    document.documentElement.dataset.collapsed = String(readDiscovery().collapsed);
+    const label = text(readDiscovery().collapsed ? 'expandSidebar' : 'collapseSidebar');
+    $('sidebar-toggle').setAttribute('aria-expanded', String(!readDiscovery().collapsed));
+    $('sidebar-toggle').setAttribute('aria-label', label); $('sidebar-toggle').title = label;
+    $('sidebar-toggle').lastElementChild.textContent = label;
+    document.querySelectorAll('.d-nav button').forEach(button => {
+      const key = button.querySelector('[data-i18n]')?.dataset.i18n;
+      if (key) { button.setAttribute('aria-label', text(key)); button.title = text(key); }
+    });
+  }
+  function applyPreferences() {
+    const attrs = preferenceAttributes(readPreferences());
+    document.documentElement.lang = attrs.lang;
+    document.documentElement.dir = attrs.dir;
+    if (attrs.theme) document.documentElement.dataset.theme = attrs.theme;
+    else delete document.documentElement.dataset.theme;
+    translatePage(readPreferences().language);
+    $('language').value = readPreferences().language;
+    $('theme').value = readPreferences().theme;
+    applyLayout(); renderFilters(); render(); renderChannels(); renderPlayerButtons();
+    renderConfirmation();
+  }
+  function changeMode(value) {
+    setMode(value); history.replaceState(null,'',`#${value}`); resetPageSize(); resetSelection();
+    $('search').value = ''; $('area').value = ''; $('category').value = ''; $('duration').value = 'all'; $('hide-watched').checked = false;
+    renderFilters(); render();
+  }
+  for (const view of ['discover', 'channels', 'later', 'watched', 'recommendations', 'community']) bind(`view-${view}`, 'click', () => changeMode(view));
+  bind('sidebar-toggle', 'click', () => { saveDiscovery({ ...readDiscovery(), collapsed: !readDiscovery().collapsed }); applyLayout(); });
+  bind('hero-explore', 'click', () => { changeMode('discover'); $('feed').scrollIntoView(); });
+  bind('language', 'change', () => { const next = { ...readPreferences(), language: $('language').value }; savePreferences(next); applyPreferences(); });
+  bind('theme', 'change', () => { const next = { ...readPreferences(), theme: $('theme').value }; savePreferences(next); applyPreferences(); });
+  window.addEventListener('hashchange',()=>{if(location.hash!=='#feed')changeMode(viewFromHash(location.hash));});
+  document.addEventListener('keydown', event => {
+    if (event.key === '/' && !document.querySelector('dialog[open]') && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) { event.preventDefault(); $('search').focus(); }
+  });
+  return { applyPreferences, applyLayout, changeMode };
+}
+
+const { applyPreferences, changeMode } = createNavigationPanel({
+  text, readPreferences: () => preferences, readDiscovery: () => discovery,
+  savePreferences: next => { persist(() => store.writePreferences(next)); preferences = next; }, saveDiscovery,
+  setMode: value => { mode = value; }, resetPageSize, resetSelection, renderFilters, render, renderChannels, renderPlayerButtons, renderConfirmation, bind,
+});
 discoveryPanel = createDiscoveryPanel({
   context: () => ({ language: preferences.language, mode, discovery, library, metadata, areas: catalog.areas, thumbnailStyle: preferences.thumbnail, onHide: confirmHide, onSelect: selectVideo, selectedVideos, query: $('search').value, busy, hasKey: Boolean(key), stale: staleTab || storageBlocked }),
   saveDiscovery, setBusy: value => { busy = value; render(); renderChannels(); },
