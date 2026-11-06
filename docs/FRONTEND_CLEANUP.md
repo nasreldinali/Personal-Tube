@@ -9,3 +9,4 @@ Extraction follows separate dependency preparation and literal move checkpoints.
 ## Extracted responsibilities
 
 - `ui/feedback-panel.js` owns notices and pending confirmations. It receives safety readers and translation; it has no access to keys or storage.
+- `ui/video-player.js` owns active playback, embed construction, saved controls and iframe cleanup. Library/metadata are read at action time.
