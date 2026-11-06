@@ -4,7 +4,7 @@ Reviewed: 2026-11-06.
 
 ## Repository preparation (1.8.2)
 
-176 deterministic tests and 33 deliberate defects pass locally. CI permission/persisted-credential regressions and defects were added without dropping existing checks. Documentation relative links resolve; English/light and Arabic/dark screenshots use only public catalog content from an isolated browser origin, with empty warning/error logs. Independent read-only review found no blocker for private preparation. Public visibility/history decisions remain separate. See [release preparation](PUBLIC_READINESS.md).
+177 deterministic tests and 33 deliberate defects pass locally. The defect runner explicitly selects the same reporter across Node versions. CI permission/persisted-credential regressions and defects were added without dropping existing checks. Documentation relative links resolve; English/light and Arabic/dark screenshots use only public catalog content from an isolated browser origin, with empty warning/error logs. Independent read-only review found no blocker for private preparation. Public visibility/history decisions remain separate. See [release preparation](PUBLIC_READINESS.md).
 
 ## Dependent channel filters (1.8.1)
 

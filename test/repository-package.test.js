@@ -14,3 +14,9 @@ test('contribution CI runs untrusted changes without write permissions or saved 
   assert.equal(actions.length, 2);
   for (const action of actions) assert.match(action, /^actions\/(checkout|setup-node)@[a-f0-9]{40}$/);
 });
+
+test('defect checks select a stable reporter across supported Node versions', async () => {
+  const source = await readFile(new URL('../scripts/defect-plants.mjs', import.meta.url), 'utf8');
+  assert.match(source, /\['--test', '--test-reporter=spec', plant\.test\]/);
+  assert.match(source, /result\.status !== 0 && result\.status !== null/);
+});

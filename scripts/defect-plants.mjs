@@ -43,12 +43,12 @@ const results = [];
 for (const plant of cases) {
   const scratch = await mkdtemp(join(tmpdir(), 'personaltube-plant-'));
   try {
-    for (const name of ['public', 'server', 'test', '.github', 'package.json']) await cp(name, join(scratch, name), { recursive: true });
+    for (const name of ['public', 'server', 'test', 'scripts', '.github', 'package.json']) await cp(name, join(scratch, name), { recursive: true });
     const file = join(scratch, plant.file);
     const before = await readFile(file, 'utf8');
     if (!before.includes(plant.from)) throw new Error(`Plant target changed: ${plant.name}`);
     await writeFile(file, before.replace(plant.from, plant.to));
-    const result = spawnSync(process.execPath, ['--test', plant.test], { cwd: scratch, encoding: 'utf8', timeout: 10000, env: { PATH: process.env.PATH } });
+    const result = spawnSync(process.execPath, ['--test', '--test-reporter=spec', plant.test], { cwd: scratch, encoding: 'utf8', timeout: 10000, env: { PATH: process.env.PATH } });
     const detected = result.status !== 0 && result.status !== null && /AssertionError|assertion|test failed|✖/.test(result.stdout + result.stderr);
     results.push({ name: plant.name, detected, exitCode: result.status });
     if (!detected) throw new Error(`Undetected defect: ${plant.name}`);
