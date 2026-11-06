@@ -33,7 +33,6 @@ let key = '';
 let catalog = { version: 1, videos: [], areas: [] };
 let loading = true;
 let busy = false;
-let addingChannel = false;
 let usage;
 let storageBlocked = false;
 let staleTab = false;
@@ -163,9 +162,7 @@ function render() {
   discoveryPanel?.render();
   renderPanelTools();
   setupPanel?.render();
-  $('add-channel').disabled = addingChannel || storageBlocked || staleTab;
-  $('add-channel').textContent = text(addingChannel ? 'adding' : 'addChannel');
-  $('channel-form').setAttribute('aria-busy', String(addingChannel));
+  renderAddState();
   renderUsage();
   if (discoveryMode) { renderNotice(); return; }
   $('feed-title').textContent = text(titles[mode][0]);
@@ -228,38 +225,6 @@ function changeMode(value) {
   $('search').value = ''; $('area').value = ''; $('category').value = ''; $('duration').value = 'all'; $('hide-watched').checked = false;
   renderFilters(); render();
 }
-function renderChannels() {
-  $('channel-list').replaceChildren();
-  renderCategoryManager();
-  if (!state.channels.length) $('channel-list').append(element('p', 'muted', text('noChannels')));
-  for (const channel of state.channels) {
-    const row = element('div', 'channel-row');
-    const image = safeImage(channel.image);
-    const avatar = element(image ? 'img' : 'span', 'avatar');
-    if (image) { avatar.src = image; avatar.alt = ''; } else avatar.setAttribute('aria-hidden', 'true');
-    const details = element('div', 'channel-details');
-    const title = element('strong', '', channel.title); title.dir = 'auto';
-    const input = element('input', 'd-input'); input.value = channel.category; input.maxLength = 60; input.disabled = busy || storageBlocked;
-    input.setAttribute('aria-label', text('channelCategory', { title: channel.title })); input.setAttribute('list', 'categories-list');
-    input.addEventListener('change', () => {
-      try {
-        const next = { ...state, channels: state.channels.map(c => c.id === channel.id ? { ...c, category: input.value.trim() } : c) };
-        commitState(next); renderFilters(); render();
-      } catch (error) { input.value = channel.category; showError(error, 'channel-error'); }
-    });
-    const remove = element('button', 'text-button', text('delete')); remove.disabled = busy || storageBlocked;
-    remove.setAttribute('aria-label', text('removeChannel', { title: channel.title }));
-    remove.addEventListener('click', () => askConfirmation('confirmRemoveChannel', () => {
-      try {
-        if (busy) throw new AppError('busy');
-        const cache = { ...state.cache }; delete cache[channel.id];
-        const next = { ...state, channels: state.channels.filter(c => c.id !== channel.id), cache };
-        commitState(next); renderFilters(); renderChannels(); render(); notify('channelRemoved');
-      } catch (error) { showError(error, 'channel-error'); }
-    }));
-    details.append(title, input); row.append(avatar, details, remove); $('channel-list').append(row);
-  }
-}
 function selectVideo(id, selected) {
   if (selected) selectedVideos.add(id); else selectedVideos.delete(id);
   render();
@@ -270,16 +235,6 @@ function confirmHide(ids) {
     if (busy) throw new AppError('busy');
     const next = hideVideos(library, ids); persist(()=>store.writeLibrary(next));library=next;selectedVideos.clear();render();notify('videosHidden');
   });
-}
-function renderCategoryManager() {
-  const categories = [...new Set(state.channels.map(c=>c.category).filter(Boolean))];
-  $('category-manager').replaceChildren(...categories.map(category=>{
-    const row=element('div','category-row'); const title=element('span','',category);title.dir='auto';
-    const remove=element('button','text-button',text('delete'));remove.disabled=busy||storageBlocked;remove.setAttribute('aria-label',text('removeCategory',{category}));
-    remove.addEventListener('click',()=>askConfirmation('confirmRemoveCategory',()=>{
-      if(busy)throw new AppError('busy');commitState(removeCategory(state,category));renderFilters();renderChannels();render();
-    }));row.append(title,remove);return row;
-  }));
 }
 function renderRefreshDraft() {
   const manual = $('refresh-mode').value === 'manual';
@@ -300,7 +255,6 @@ function openSettings() {
   try { $('remember-key').checked = store?.remembersKey() || false; } catch { $('remember-key').checked = false; }
   $('settings-dialog').showModal();
 }
-function openChannels() { $('channel-error').textContent = ''; renderChannels(); $('channels-dialog').showModal(); }
 function toggleSaved(field, id, video) {
   try {
     const next = toggleLibrary(library, field, id);
@@ -338,8 +292,83 @@ function resetFilters() {
 
 const { notify, renderNotice, showError, askConfirmation, renderConfirmation } = createFeedbackPanel({ text, isStale: () => staleTab, isStorageBlocked: () => storageBlocked, bind });
 const { renderPlayerButtons, play } = createVideoPlayer({ text, readLibrary: () => library, readMetadata: () => metadata, showError, bind, toggleSaved: (...args) => toggleSaved(...args), onSimilar: video => discoveryPanel.similar(video) });
+function createChannelManager({ text, readState, readKey, isBusy, isStale, isStorageBlocked, commitState, renderFilters, render, showError, notify, askConfirmation, bind, youtubeClient, refreshAdded }) {
+  let addingChannel = false;
+  function renderChannels() {
+    $('channel-list').replaceChildren();
+    renderCategoryManager();
+    if (!readState().channels.length) $('channel-list').append(element('p', 'muted', text('noChannels')));
+    for (const channel of readState().channels) {
+      const row = element('div', 'channel-row');
+      const image = safeImage(channel.image);
+      const avatar = element(image ? 'img' : 'span', 'avatar');
+      if (image) { avatar.src = image; avatar.alt = ''; } else avatar.setAttribute('aria-hidden', 'true');
+      const details = element('div', 'channel-details');
+      const title = element('strong', '', channel.title); title.dir = 'auto';
+      const input = element('input', 'd-input'); input.value = channel.category; input.maxLength = 60; input.disabled = isBusy() || isStorageBlocked();
+      input.setAttribute('aria-label', text('channelCategory', { title: channel.title })); input.setAttribute('list', 'categories-list');
+      input.addEventListener('change', () => {
+        try {
+          const next = { ...readState(), channels: readState().channels.map(c => c.id === channel.id ? { ...c, category: input.value.trim() } : c) };
+          commitState(next); renderFilters(); render();
+        } catch (error) { input.value = channel.category; showError(error, 'channel-error'); }
+      });
+      const remove = element('button', 'text-button', text('delete')); remove.disabled = isBusy() || isStorageBlocked();
+      remove.setAttribute('aria-label', text('removeChannel', { title: channel.title }));
+      remove.addEventListener('click', () => askConfirmation('confirmRemoveChannel', () => {
+        try {
+          if (isBusy()) throw new AppError('busy');
+          const cache = { ...readState().cache }; delete cache[channel.id];
+          const next = { ...readState(), channels: readState().channels.filter(c => c.id !== channel.id), cache };
+          commitState(next); renderFilters(); renderChannels(); render(); notify('channelRemoved');
+        } catch (error) { showError(error, 'channel-error'); }
+      }));
+      details.append(title, input); row.append(avatar, details, remove); $('channel-list').append(row);
+    }
+  }
+  function renderCategoryManager() {
+    const categories = [...new Set(readState().channels.map(c=>c.category).filter(Boolean))];
+    $('category-manager').replaceChildren(...categories.map(category=>{
+      const row=element('div','category-row'); const title=element('span','',category);title.dir='auto';
+      const remove=element('button','text-button',text('delete'));remove.disabled=isBusy()||isStorageBlocked();remove.setAttribute('aria-label',text('removeCategory',{category}));
+      remove.addEventListener('click',()=>askConfirmation('confirmRemoveCategory',()=>{
+        if(isBusy())throw new AppError('busy');commitState(removeCategory(readState(),category));renderFilters();renderChannels();render();
+      }));row.append(title,remove);return row;
+    }));
+  }
+  function openChannels() { $('channel-error').textContent = ''; renderChannels(); $('channels-dialog').showModal(); }
+  for (const id of ['channels-open', 'hero-add', 'empty-add']) bind(id, 'click', openChannels);
+  bind('channel-form', 'submit', async event => {
+    event.preventDefault(); if (addingChannel) return;
+    if (isStorageBlocked()) throw new AppError('storageRead');
+    if (isStale()) throw new AppError('storageConflict');
+    if (!readKey()) throw new AppError('keyRequired');
+    if (readState().channels.length >= 200) throw new AppError('channelLimit');
+    const channels = readState().channels, requestKey = readKey();
+    const input = $('channel-input').value, category = $('channel-category').value.trim();
+    addingChannel = true; $('channel-error').textContent = ''; $('channel-status').textContent = ''; render();
+    let added;
+    try {
+      const channel = await youtubeClient().resolve(input);
+      if (channels !== readState().channels || requestKey !== readKey()) throw new AppError('channelChanged');
+      if (readState().channels.some(c => c.id === channel.id)) throw new AppError('duplicateChannel');
+      channel.category = category;
+      commitState({ ...readState(), channels: [...readState().channels, channel] });
+      added = channel; $('channel-form').reset(); renderFilters();
+      $('channel-status').textContent = text('channelAdded', { title: channel.title });
+    } finally { addingChannel = false; render(); renderChannels(); }
+    if (added) { refreshAdded(added.id); }
+  }, 'channel-error');
+  function renderAddState() {
+  $('add-channel').disabled = addingChannel || isStorageBlocked() || isStale();
+  $('add-channel').textContent = text(addingChannel ? 'adding' : 'addChannel');
+  $('channel-form').setAttribute('aria-busy', String(addingChannel));
+  }
+  return { renderChannels, openChannels, renderAddState, isAddingChannel: () => addingChannel };
+}
+
+const { renderChannels, openChannels, renderAddState } = createChannelManager({ text, readState: () => state, readKey: () => key, isBusy: () => busy, isStale: () => staleTab, isStorageBlocked: () => storageBlocked, commitState, renderFilters: () => renderFilters(), render: () => render(), showError, notify, askConfirmation, bind, youtubeClient: () => youtubeClient(), refreshAdded: id => { lastRefreshAttempt = null; void refresh(false, id); } });
 for (const view of ['discover', 'channels', 'later', 'watched', 'recommendations', 'community']) bind(`view-${view}`, 'click', () => changeMode(view));
-for (const id of ['channels-open', 'hero-add', 'empty-add']) bind(id, 'click', openChannels);
 bind('settings-open', 'click', openSettings);
 bind('sidebar-toggle', 'click', () => { saveDiscovery({ ...discovery, collapsed: !discovery.collapsed }); applyLayout(); });
 bind('hero-explore', 'click', () => { changeMode('discover'); $('feed').scrollIntoView(); });
@@ -377,27 +406,6 @@ bind('settings-form', 'submit', event => {
 bind('forget-key', 'click', () => {
   if (busy) throw new AppError('busy'); persist(() => store.forgetKey()); key = ''; $('api-key').value = ''; $('remember-key').checked = false; notify('keyRemoved'); render();
 }, 'settings-error');
-bind('channel-form', 'submit', async event => {
-  event.preventDefault(); if (addingChannel) return;
-  if (storageBlocked) throw new AppError('storageRead');
-  if (staleTab) throw new AppError('storageConflict');
-  if (!key) throw new AppError('keyRequired');
-  if (state.channels.length >= 200) throw new AppError('channelLimit');
-  const channels = state.channels, requestKey = key;
-  const input = $('channel-input').value, category = $('channel-category').value.trim();
-  addingChannel = true; $('channel-error').textContent = ''; $('channel-status').textContent = ''; render();
-  let added;
-  try {
-    const channel = await youtubeClient().resolve(input);
-    if (channels !== state.channels || requestKey !== key) throw new AppError('channelChanged');
-    if (state.channels.some(c => c.id === channel.id)) throw new AppError('duplicateChannel');
-    channel.category = category;
-    commitState({ ...state, channels: [...state.channels, channel] });
-    added = channel; $('channel-form').reset(); renderFilters();
-    $('channel-status').textContent = text('channelAdded', { title: channel.title });
-  } finally { addingChannel = false; render(); renderChannels(); }
-  if (added) { lastRefreshAttempt = null; void refresh(false, added.id); }
-}, 'channel-error');
 bind('fetch-durations', 'click', async () => {
   if (!key) { openSettings(); return; }
   if (busy) return;

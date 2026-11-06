@@ -1,14 +1,12 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { readFile } from 'node:fs/promises';
+import { frontendSource, factorySource } from './frontend-source-fixture.js';
+import { setupDocumentFixture } from './fixtures.js';
 import { runInNewContext } from 'node:vm';
 import { AppError } from '../public/domain/errors.js';
 import { CHANNEL, VIDEO, NOW } from './fixtures.js';
 
-const source=await readFile(new URL('../public/app.js',import.meta.url),'utf8');
-const start=source.indexOf("bind('channel-form', 'submit',");
-const end=source.indexOf("bind('fetch-durations',",start);
-assert.ok(start>=0&&end>start,'exercise the actual channel-add event handler');
+const source=await frontendSource('ui/channel-manager.js');
 const added=()=>({...CHANNEL,id:'UC'+'b'.repeat(22),title:'New fixture channel'});
 function fixture() {
   let handler,resolve,reject,resolves=0,writes=0,resets=0;
@@ -17,16 +15,21 @@ function fixture() {
     ['channel-input',{value:'@fixture'}],['channel-category',{value:' Learning '}],
     ['channel-error',{}],['channel-status',{}],['channel-form',{reset(){resets++;}}],
   ]);
+  const dom=setupDocumentFixture();
+  const make=()=>dom.document.createElement('div');
   const context={
     AppError,addingChannel:false,busy:true,storageBlocked:false,staleTab:false,
     key:'fixture',stateRevision:0,state:{version:1,days:7,channels:[{...CHANNEL}],cache:{}},lastRefreshAttempt:NOW,
-    bind:(id,event,callback)=>{assert.equal(id,'channel-form');assert.equal(event,'submit');handler=callback;},
-    $:id=>nodes.get(id),render(){},renderChannels(){},renderFilters(){},text:key=>key,
+    bind:(id,event,callback)=>{if(id==='channel-form'){assert.equal(event,'submit');handler=callback;}},
+    $:id=>nodes.get(id)||dom.document.getElementById(id),element:make,safeImage:()=>'',render(){},renderChannels(){},renderFilters(){},text:key=>key,
     youtubeClient:()=>({resolve:input=>{resolves++;assert.equal(input,'@fixture');return new Promise((yes,no)=>{resolve=yes;reject=no;});}}),
     commitState:next=>{context.state=next;context.stateRevision++;writes++;},
     refresh:(force,id)=>{refreshed.push({force,id});},
   };
-  runInNewContext(source.slice(start,end),context);
+  const ports={text:context.text,readState:()=>context.state,readKey:()=>context.key,isBusy:()=>context.busy,isStale:()=>context.staleTab,isStorageBlocked:()=>context.storageBlocked,commitState:context.commitState,renderFilters:context.renderFilters,render:context.render,showError:()=>{},notify:()=>{},askConfirmation:()=>{},bind:context.bind,youtubeClient:context.youtubeClient,refreshAdded:id=>{context.lastRefreshAttempt=null;context.refresh(false,id);}};
+  context.ports=ports;
+  const manager=runInNewContext(factorySource(source,'createChannelManager')+';createChannelManager(ports);',context);
+  Object.defineProperty(context,'addingChannel',{get:manager.isAddingChannel});
   return {context,nodes,refreshed,submit:()=>handler({preventDefault(){}}),resolve:value=>resolve(value),reject:error=>reject(error),counts:()=>({resolves,writes,resets})};
 }
 test('adding during background work survives cache-only refresh commits and scopes its own refresh',async()=>{
@@ -55,4 +58,14 @@ test('channel request rejection releases its spinner without releasing unrelated
   await assert.rejects(pending,error=>error.code==='network');
   assert.equal(f.context.addingChannel,false);assert.equal(f.context.busy,true);
   assert.equal(f.counts().writes,0);assert.equal(f.refreshed.length,0);
+});
+
+test('channel addition refuses missing keys, stale storage, full lists and duplicate channels',async()=>{
+  for(const [change,code] of [
+    [c=>{c.key='';},'keyRequired'],[c=>{c.staleTab=true;},'storageConflict'],
+    [c=>{c.storageBlocked=true;},'storageRead'],[c=>{c.state.channels=Array(200).fill(CHANNEL);},'channelLimit'],
+  ]) {
+    const f=fixture();change(f.context);await assert.rejects(f.submit(),error=>error.code===code);assert.equal(f.counts().resolves,0);assert.equal(f.counts().writes,0);
+  }
+  const f=fixture();const pending=f.submit();f.resolve({...CHANNEL});await assert.rejects(pending,error=>error.code==='duplicateChannel');assert.equal(f.context.addingChannel,false);assert.equal(f.counts().writes,0);
 });
