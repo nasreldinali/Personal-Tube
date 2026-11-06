@@ -23,3 +23,21 @@ test('Codex login/status explicitly share the classifier credential store',async
  const p=createProviderProcesses({environment:{},run:async(file,args)=>{if(args[0]==='--version')return {stdout:'codex-cli 0.155.1',stderr:''};assert.deepEqual(args,['-c','cli_auth_credentials_store="file"','login','status']);return {stdout:'',stderr:'Logged in using ChatGPT'};},launch:(file,args)=>{assert.deepEqual(args,['-c','cli_auth_credentials_store="file"','login']);const child=new EventEmitter();queueMicrotask(()=>child.emit('close',0));return child;}});
  assert.equal((await p.inspect('codex')).connected,true);await p.login('codex');
 });
+
+test('fresh, incompatible and failed-login installations never look connected',async()=>{
+ for(const provider of ['codex','claude']) {
+  let probes=0;
+  const incompatible=createProviderProcesses({run:async()=>{probes++;return {stdout:'unreviewed version',stderr:''};}});
+  assert.deepEqual(await incompatible.inspect(provider),{installed:true,supported:false,connected:false,method:'none'});assert.equal(probes,1);
+  const signedOut=createProviderProcesses({run:async(file,args)=>{
+   if(args[0]==='--version')return {stdout:file==='codex'?'codex-cli 0.155.1':'2.1.281 (Claude Code)',stderr:''};
+   if(file==='codex')throw new Error('Not logged in');
+   return {stdout:'{"loggedIn":false}',stderr:''};
+  }});
+  assert.deepEqual(await signedOut.inspect(provider),{installed:true,supported:true,connected:false,method:'none'});
+  for(const event of ['error','close']) {
+   const failed=createProviderProcesses({launch:()=>{const child=new EventEmitter();queueMicrotask(()=>child.emit(event,event==='error'?new Error('fixture'):1));return child;}});
+   await assert.rejects(failed.login(provider),{code:'connectionFailed'});
+  }
+ }
+});

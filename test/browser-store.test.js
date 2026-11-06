@@ -97,3 +97,14 @@ test('a failed import rolls back and can be retried after a transient storage fa
   store.importData(JSON.stringify(backup), NOW);
   assert.equal(store.readState(NOW).days, 3);
 });
+
+
+test('new interface languages survive storage and backup transfer without changing channels',()=>{
+ for(const language of ['de','es']) {
+  const storage=memoryStorage();const source=new BrowserStore(storage,memoryStorage());
+  source.writePreferences({version:1,language,theme:'light'});source.writeState({...emptyState(),channels:[CHANNEL]});
+  assert.equal(new BrowserStore(storage,memoryStorage()).readPreferences().language,language);
+  const target=new BrowserStore(memoryStorage(),memoryStorage());target.importData(JSON.stringify(source.exportData(NOW)),NOW);
+  assert.equal(target.readPreferences().language,language);assert.equal(target.readState(NOW).channels[0].id,CHANNEL.id);
+ }
+});

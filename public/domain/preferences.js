@@ -15,7 +15,7 @@ export function automaticRefreshDue(preferences, lastAttempt, now, visible = tru
 
 export function parsePreferences(value) {
   if (value === null) return { version: 1, language: 'en', theme: 'auto' };
-  if (value?.version !== 1 || !['en', 'ar'].includes(value.language) || !['auto', 'light', 'dark'].includes(value.theme)) throw new AppError('invalidPreferences');
+  if (value?.version !== 1 || !['en', 'ar', 'de', 'es'].includes(value.language) || !['auto', 'light', 'dark'].includes(value.theme)) throw new AppError('invalidPreferences');
   if (value.thumbnail !== undefined && !['original','frame'].includes(value.thumbnail)) throw new AppError('invalidPreferences');
   refreshSettings(value);
   if (value.setupDone !== undefined && typeof value.setupDone !== 'boolean') throw new AppError('invalidPreferences');

@@ -1,7 +1,7 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { parsePreferences, preferenceAttributes, refreshSettings, automaticRefreshDue } from '../public/domain/preferences.js';
-import { messages, t, number, areaName } from '../public/locale.js';
+import { messages, t, number, dateLabel, areaName } from '../public/locale.js';
 
 test('preferences default to English and automatic theme; reject unsupported versions and values', () => {
   assert.deepEqual(parsePreferences(null), { version: 1, language: 'en', theme: 'auto' });
@@ -46,4 +46,19 @@ test('automatic refresh does not start while the page is hidden',()=>{
  assert.equal(automaticRefreshDue({},null,0,false),false);
  assert.equal(automaticRefreshDue({refreshMinutes:15},0,900000,false),false);
  assert.equal(automaticRefreshDue({},null,0,true),true);
+});
+
+test('German and Spanish preferences persist and format numbers and dates in the selected locale',()=>{
+ for(const language of ['de','es']) {
+  const value={version:1,language,theme:'dark'};
+  assert.deepEqual(parsePreferences(JSON.parse(JSON.stringify(value))),value);
+  assert.deepEqual(preferenceAttributes(value),{lang:language,dir:'ltr',theme:'dark'});
+  assert.deepEqual(Object.keys(messages[language]).sort(),Object.keys(messages.en).sort());
+  for(const key of Object.keys(messages.en)) {
+   assert.ok(messages[language][key].trim());
+   assert.deepEqual(messages[language][key].match(/\{\w+\}/g)?.sort()||[],messages.en[key].match(/\{\w+\}/g)?.sort()||[],`${language}/${key}`);
+  }
+  assert.equal(number(language,12345.6),new Intl.NumberFormat(language).format(12345.6));
+  assert.equal(dateLabel(language,'2026-11-06T12:00:00Z'),new Intl.DateTimeFormat(language,{day:'numeric',month:'short',year:'numeric'}).format(new Date('2026-11-06T12:00:00Z')));
+ }
 });

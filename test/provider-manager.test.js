@@ -38,3 +38,20 @@ test('connecting an already authenticated provider makes it active without launc
  const result=await manager.control({version:1,action:'connect',provider:'claude'});
  assert.equal(result.selected,'claude');assert.equal(calls,0);
 });
+
+test('a first-use connection moves from signed out through pending login to a validated analysis for either provider',async()=>{
+ for(const provider of ['codex','claude']) {
+  let connected=false;let finishLogin;let analyses=0;
+  const manager=createProviderManager({inspect:async()=>({...ready,connected,method:connected?'subscription':'none'}),login:()=>new Promise(resolve=>{finishLogin=()=>{connected=true;resolve();};}),classifiers:{[provider]:async()=>{analyses++;return valid([row]);}},now:()=>100000});
+  assert.equal((await manager.control({version:1,action:'status'})).providers[provider].connected,false);
+  await assert.rejects(manager.classify([row]),{code:'analysisConnectionRequired'});
+  const pending=await manager.control({version:1,action:'connect',provider});
+  assert.equal(pending.providers[provider].connection,'pending');assert.equal(analyses,0);
+  await assert.rejects(manager.classify([row]),{code:'busy'});
+  finishLogin();await new Promise(resolve=>setImmediate(resolve));
+  const signedIn=await manager.control({version:1,action:'status'});
+  assert.equal(signedIn.providers[provider].connected,true);assert.equal(signedIn.usage[provider].completed,0);
+  await manager.classify([row]);
+  assert.equal((await manager.control({version:1,action:'status'})).usage[provider].completed,1);
+ }
+});

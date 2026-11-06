@@ -5,11 +5,11 @@
 [![JavaScript](https://img.shields.io/badge/JavaScript-vanilla-F7DF1E?logo=javascript&logoColor=black)](package.json)
 [![Node.js](https://img.shields.io/badge/Node.js-22%20%7C%2024-339933?logo=nodedotjs&logoColor=white)](#quick-start)
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
-[![Interface](https://img.shields.io/badge/Interface-English%20%2B%20العربية-487EA4)](README.ar.md)
+[![Interface](https://img.shields.io/badge/Interface-EN%20%7C%20AR%20%7C%20DE%20%7C%20ES-487EA4)](README.ar.md)
 
 [العربية](README.ar.md) · [User guide](docs/USER_GUIDE.md) · [Contributing](CONTRIBUTING.md) · [Checks](https://github.com/nasreldinali/Personal-Tube/actions/workflows/check.yml)
 
-PersonalTube is a local YouTube dashboard built on **Andrej Karpathy’s [HackerTube](https://karpathy.bearblog.dev/hacker-tube/) idea and exported collection**. Browse the original recommendations immediately, follow your own channels, and discover videos through public community discussions—with English/Arabic controls, adjustable quality filters and control over refresh usage.
+PersonalTube is a local YouTube dashboard built on **Andrej Karpathy’s [HackerTube](https://karpathy.bearblog.dev/hacker-tube/) idea and exported collection**. Browse the original recommendations immediately, follow your own channels, and discover videos through public community discussions—with English, Arabic, German and Spanish controls, adjustable quality filters and control over refresh usage.
 
 ![PersonalTube English interface in light mode, showing public videos from the original collection](docs/images/discover-en-light.png)
 
@@ -30,7 +30,7 @@ PersonalTube adds a workflow for ongoing personal use:
 |---|---|
 | Your own channel feed | Add channels by handle, URL or ID; see uploads from the last 1–7 days. No source-file editing. |
 | Connected filters | Pick a category, then only its channels. Choose long videos, estimated Shorts, or both. |
-| English + Arabic | Translated controls and taxonomy, full right-to-left layout, light/dark/system themes and responsive cards. Source titles and quotes keep their original language. |
+| Four interface languages | English, Arabic, German and Spanish controls; Arabic right-to-left layout, light/dark/system themes and responsive cards. Source titles and quotes keep their original language; catalog topic/category labels currently have English and Arabic translations. |
 | Live community discovery | Choose a topic and source; collect and analyze the selected comments automatically, with progress and supporting quotes. |
 | Visible recommendation requirements | Adjust minimum views/likes, declared audio language and endorsement count. Unverified results are withheld. |
 | Your choice of analysis provider | Use a supported local Codex or Claude Code subscription login. Each user supplies their own account. |
@@ -67,6 +67,14 @@ Open **[http://127.0.0.1:4173](http://127.0.0.1:4173)** and keep that terminal o
 
 Optional: `npm run open` starts the server and opens a browser; on macOS it tries Chrome. macOS also has **Start PersonalTube.command**. Do not open `index.html` directly.
 
+## What does it cost?
+
+**YouTube Data API access is free within its daily quota. PersonalTube adds no API fee.** The default allocation currently includes **10,000 daily units for general data requests and 100 video-search calls separately**. Quotas reset at midnight Pacific Time. A project may have different limits; see [Google’s current quota table](https://developers.google.com/youtube/data/determine_quota_cost).
+
+This can comfortably fit moderate personal channel-following, but is not an unlimited-use promise. For illustration, 20 channels refreshed four times a day at two data requests per channel would use about 160 units; additional upload pages, searches, comments, retries and other apps using the same project add usage. Select manual refresh or a longer interval to reduce requests. Playing a video does not consume Data API quota. Reaching the limit stops new requests until quota is available; the app does not buy extra quota automatically.
+
+**Comment analysis is separate and optional.** It uses your own eligible Codex/ChatGPT or Claude Code account and its allowance. A paid plan may be needed; PersonalTube does not provide a free model or unlimited analysis, and never switches automatically to paid API billing. The original library works without either connection.
+
 ## What do I need for each feature?
 
 | Feature | YouTube API key | Analysis account |
@@ -79,7 +87,7 @@ Optional: `npm run open` starts the server and opens a browser; on macOS it trie
 
 **Downloading this repository never gives someone access to the maintainer’s API key or subscription.** Each installation uses its own browser key and local analysis account. Analysis consumes that account’s allowance; the app does not sell credits, bundle a model, or provide a shared analysis service. Public comments are sent to the selected provider, so analysis is not fully offline.
 
-For live features, open **Setup & connections**. Create a key with **YouTube Data API v3** enabled, restrict it to that API and the local website origin, then enter it in **Settings & data**. Install/sign in to your chosen analysis CLI separately if needed; PersonalTube does not install it for you. The app currently accepts **Codex CLI 0.155.1** and **Claude Code 2.1.281** only; other versions are refused until their execution policies are reviewed. A paid account alone does not replace the local CLI requirement. See the [setup guide](docs/USER_GUIDE.md#first-run-setup).
+For live features, open **Setup & connections**. Create a key with **YouTube Data API v3** enabled, restrict it to that API and the local website origin, then enter it in **Settings & data**. Install/sign in to your chosen analysis CLI separately if needed; PersonalTube does not install it for you. The app currently accepts **Codex CLI 0.155.1** and **Claude Code 2.1.281** only; other versions are refused until their execution policies are reviewed. A paid account alone does not replace the local CLI requirement. Follow the [first-time account setup guide](docs/ANALYSIS_SETUP.md). Connection detection and a successful analysis are shown separately; the guide explains what has been tested and how to complete your own first-use check.
 
 ## Three ways to find something worth watching
 

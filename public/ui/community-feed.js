@@ -45,7 +45,7 @@ export function createCommunityFeed({ context, onPlay, onToggle, onError, setBus
     }
     const endorsement=video.evidence.find(proof=>['rec','strong_rec'].includes(proof.stance));
     if(endorsement){const quote=element('blockquote','',endorsement.quote||endorsement.text);quote.dir='auto';box.append(quote);}
-    if(video.latest) box.append(element('p','help',`${text('latestMention')}: ${response?.source==='archive'?new Intl.DateTimeFormat(c.language==='ar'?'ar-EG':'en',{month:'long',year:'numeric'}).format(new Date(video.latest)):dateLabel(c.language,video.latest)}`));
+    if(video.latest) box.append(element('p','help',`${text('latestMention')}: ${response?.source==='archive'?new Intl.DateTimeFormat(c.language==='ar'?'ar-EG':c.language,{month:'long',year:'numeric'}).format(new Date(video.latest)):dateLabel(c.language,video.latest)}`));
     const details=element('details');details.append(element('summary','',text('commentEvidence',{count:number(c.language,video.evidence.length)})));
     details.append(element('p','',text('communityScore',{score:video.score,shares:video.shares})),element('p','help',text(video.scoreOrigin==='upstream'?'originalRanking':'sampleRanking')));
     for(const proof of video.evidence){

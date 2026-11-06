@@ -52,3 +52,10 @@ test('YouTube settings has a return path while ordinary settings close does not 
 test('revisiting setup after preferences reset records the visit again',async()=>{
  const f=setup();try{f.panel.open();await tick();f.clearVisit();f.fixture.nodes.get('setup-dialog').listeners.close();f.panel.open();await tick();assert.equal(f.visits(),2);}finally{f.restore();}
 });
+
+test('signed-in status distinguishes an untested account from a completed analysis',async()=>{
+ const f=setup();try {
+  f.panel.open();await tick();assert.match(f.fixture.nodes.get('setup-state-codex').textContent,/not yet tested/i);
+  f.state.usage.codex.completed=1;f.click('setup-check');await tick();assert.match(f.fixture.nodes.get('setup-state-codex').textContent,/completed.*session/i);
+ }finally{f.restore();}
+});

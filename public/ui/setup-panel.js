@@ -30,7 +30,7 @@ export function createSetupPanel({ context, finish, openYouTube, onError, schedu
       button.setAttribute('aria-pressed', String(active));
       $(`setup-card-${provider}`).dataset.active = String(active);
       $(`setup-badge-${provider}`).textContent = active ? text('activeProvider') : state?.connected ? text('connectedBadge') : '';
-      const status = !state ? 'setupChecking' : !state.installed ? 'providerMissing' : !state.supported ? 'classifierVersion' : active ? 'activeConnectionHelp' : state.connected ? 'availableConnectionHelp' : pending ? 'loginAutoCheck' : state.connection === 'failed' ? 'connectionFailed' : state.method === 'other' ? 'subscriptionRequired' : 'providerDisconnected';
+      const status = !state ? 'setupChecking' : !state.installed ? 'providerMissing' : !state.supported ? 'classifierVersion' : active ? (result.usage[provider].completed > 0 ? 'analysisTested' : 'activeConnectionHelp') : state.connected ? 'availableConnectionHelp' : pending ? 'loginAutoCheck' : state.connection === 'failed' ? 'connectionFailed' : state.method === 'other' ? 'subscriptionRequired' : 'providerDisconnected';
       $(`setup-state-${provider}`).textContent = text(status);
     }
     $('setup-status').replaceChildren(...['setupRuntime', context().storageReady ? 'setupStorageReady' : 'setupStorageBlocked'].map(key => element('li', '', text(key))));

@@ -1,4 +1,13 @@
+import { extraMessages } from './locales/extra.js';
 const pairs = {
+  analysisTested: ['Connected · analysis completed in this server session.', 'متصل · اكتمل تحليل خلال جلسة الخادم دي.'],
+  youtubeFree: ['YouTube Data API is free within its daily quota. PersonalTube adds no API fee. Frequent searches and refreshes can exhaust the quota; saved videos remain available.', 'YouTube Data API مجاني ضمن الحصة اليومية. PersonalTube مش بيضيف رسوم API. البحث والتحديث الكتير ممكن يخلّصوا الحصة؛ الفيديوهات المحفوظة بتفضل متاحة.'],
+  analysisCost: ['Optional analysis uses your own eligible account and its limits. A paid plan may be needed. Nobody uses the project owner’s allowance. There is no automatic switch to paid API requests.', 'التحليل اختياري وبيستخدم حسابك المؤهل وحدوده، وممكن يحتاج خطة مدفوعة. محدش بيستخدم رصيد صاحب المشروع، ومفيش تحويل تلقائي لطلبات API مدفوعة.'],
+  setupStepsTitle: ['First time here?', 'أول مرة تستخدم التحليل؟'],
+  setupStepInstall: ['Install a supported official CLI on the same computer as PersonalTube. A browser login alone is not enough. Reviewed versions: Codex 0.155.1 or Claude Code 2.1.281.', 'ثبّت الأداة الرسمية المدعومة على نفس جهاز PersonalTube. تسجيل الدخول في المتصفح لوحده مش كفاية. الإصدارات المراجَعة: Codex 0.155.1 أو Claude Code 2.1.281.'],
+  setupStepLogin: ['Choose Sign in above and finish the official login in your browser. If the tool is missing, open Installation help first.', 'اضغط تسجيل الدخول فوق وكمّل الدخول الرسمي في المتصفح. لو الأداة مش موجودة، افتح مساعدة التثبيت الأول.'],
+  setupStepVerify: ['Return here and check the connection. Then start a search in Recommendations. Connected confirms login only; a completed analysis confirms that the feature has worked.', 'ارجع هنا وافحص الاتصال، وبعدها ابدأ بحث في التوصيات. «متصل» بتأكد تسجيل الدخول بس؛ نجاح طلب تحليل هو اللي يثبت إن الميزة اشتغلت.'],
+  setupFullGuide: ['Step-by-step guide and troubleshooting', 'دليل خطوة بخطوة وحل مشاكل الدخول'],
   communityLiveCard: ['Community recommendation', 'ترشيح من المجتمع'],
   communityLibraryShortcut: ['Browse original HackerTube library', 'تصفّح مكتبة HackerTube الأصلية'],
   communityQualityTitle: ['Show videos that meet these requirements', 'اعرض الفيديوهات اللي تحقق الشروط دي'],
@@ -69,7 +78,7 @@ const pairs = {
   requirementsDetails: ['Requirements & help', 'المتطلبات والمساعدة'],
   loginWaiting: ['Waiting for sign-in…', 'بانتظار تسجيل الدخول…'],
   loginAutoCheck: ['Finish sign-in in the browser. We will check automatically for up to 3 minutes.', 'كمّل تسجيل الدخول في المتصفح. هنفحص الاتصال تلقائياً لمدة ٣ دقائق.'],
-  activeConnectionHelp: ['Connected and ready for your next analysis.', 'متصل وجاهز للتحليل القادم.'],
+  activeConnectionHelp: ['Connected · analysis not yet tested.', 'متصل · التحليل لسه ما اتجرّبش.'],
   availableConnectionHelp: ['Connected. Select this account to use it.', 'متصل. اختاره لو عايز تستخدمه للتحليل.'],
   providerSelected: ['{provider} is now your analysis account.', 'التحليل الآن باستخدام {provider}.'],
 
@@ -120,7 +129,7 @@ const pairs = {
   checkRequirements: ["Check connection again", "إعادة فحص الاتصال"],
   connectionHelp: ["Connect opens the official provider sign-in. Finish it in your browser, then check again. PersonalTube never asks for your account password. Each person uses their own subscription; the project owner does not pay for other users.", "يفتح الربط تسجيل الدخول الرسمي للمزوّد. أكمله في المتصفح ثم أعد الفحص. لا يطلب PersonalTube كلمة مرور حسابك. كل شخص يستخدم اشتراكه الخاص؛ صاحب المشروع لا يدفع عن الآخرين."],
   manualSetup: ["Installation or sign-in help", "مساعدة التثبيت أو تسجيل الدخول"],
-  manualSetupHelp: ["Install the official CLI using its guide if missing. If the sign-in window does not open, run the command below in Terminal, finish sign-in and check again.", "ثبّت الأداة الرسمية من دليلها إن لم تكن موجودة. إذا لم تفتح نافذة الدخول، شغّل الأمر التالي في Terminal وأكمل الدخول ثم أعد الفحص."],
+  manualSetupHelp: ["Install the official CLI using its guide. If the browser does not open or asks you to paste a code, wait for the current login attempt to finish, then run the login command in Terminal. Complete it there and check the connection again.", "ثبّت الأداة الرسمية من دليلها. لو المتصفح ما فتحش أو محتاج تلصق كود دخول، استنى محاولة الدخول الحالية تنتهي، وبعدها شغّل أمر الدخول في Terminal وكمّل هناك، ثم افحص الاتصال تاني."],
   installGuide: ["Official installation guide", "دليل التثبيت الرسمي"],
   analysisUsage: ["Analysis since server start", "التحليل منذ تشغيل الخادم"],
   usageCounts: ["Attempts: {attempted} · Completed: {completed} · Failed: {failed} · Comment/video inputs: {inputs}", "محاولات: {attempted} · مكتملة: {completed} · فاشلة: {failed} · مدخلات تعليق/فيديو: {inputs}"],
@@ -420,7 +429,7 @@ const pairs = {
   communitySessionExpired: ["This temporary collection expired. Collect again to continue.", "انتهت صلاحية المجموعة المؤقتة. اجمع التعليقات مجدداً للمتابعة."],
 };
 
-export const messages = Object.freeze({ en: Object.fromEntries(Object.entries(pairs).map(([key, value]) => [key, value[0]])), ar: Object.fromEntries(Object.entries(pairs).map(([key, value]) => [key, value[1]])) });
+export const messages = Object.freeze({ ...extraMessages, en: Object.fromEntries(Object.entries(pairs).map(([key, value]) => [key, value[0]])), ar: Object.fromEntries(Object.entries(pairs).map(([key, value]) => [key, value[1]])) });
 
 export function t(language, key, values = {}) {
   const text = messages[language]?.[key];
@@ -428,8 +437,8 @@ export function t(language, key, values = {}) {
   return text.replace(/\{(\w+)\}/g, (_, name) => String(values[name] ?? `{${name}}`));
 }
 
-export function number(language, value) { return new Intl.NumberFormat(language === 'ar' ? 'ar-EG' : 'en', { useGrouping: true }).format(value); }
-export function dateLabel(language, value) { return new Intl.DateTimeFormat(language === 'ar' ? 'ar-EG' : 'en', { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(value)); }
+export function number(language, value) { return new Intl.NumberFormat(language === 'ar' ? 'ar-EG' : language, { useGrouping: true }).format(value); }
+export function dateLabel(language, value) { return new Intl.DateTimeFormat(language === 'ar' ? 'ar-EG' : language, { day: 'numeric', month: 'short', year: 'numeric' }).format(new Date(value)); }
 
 const arabicAreas = {
   software: 'البرمجة وهندسة البرمجيات', 'systems-security': 'الأنظمة والشبكات والأمن', 'ai-data': 'الذكاء الاصطناعي والبيانات', 'math-theory': 'الرياضيات وعلوم الحاسوب النظرية', hardware: 'الأجهزة والإلكترونيات', 'computing-history-culture': 'تاريخ الحوسبة وثقافتها', 'design-graphics-media': 'التصميم والرسوم والإعلام', 'business-economics': 'الأعمال والاقتصاد', 'politics-history-society': 'السياسة والتاريخ والمجتمع', 'physics-space': 'الفيزياء والفضاء والكيمياء', 'life-sciences-health': 'علوم الحياة والصحة', 'earth-energy-environment': 'الأرض والطاقة والبيئة', 'engineering-making': 'الهندسة والنقل والصناعة', games: 'الألعاب وتطويرها', 'arts-entertainment': 'الفنون والموسيقى والسينما', 'ideas-education': 'الأفكار والتعلم واللغات',

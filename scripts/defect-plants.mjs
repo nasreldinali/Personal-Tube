@@ -4,6 +4,8 @@ import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const cases = [
+  { name: 'reject-unsupported-interface-language', file: 'public/domain/preferences.js', from: "!['en', 'ar', 'de', 'es'].includes(value.language)", to: 'false', test: 'test/preferences.test.js' },
+  { name: 'do-not-claim-untested-analysis', file: 'public/ui/setup-panel.js', from: 'result.usage[provider].completed > 0', to: 'true', test: 'test/setup-interaction.test.js' },
   { name: 'ci-read-only-token', file: '.github/workflows/check.yml', from: 'contents: read', to: 'contents: write', test: 'test/repository-package.test.js' },
   { name: 'ci-no-persisted-credentials', file: '.github/workflows/check.yml', from: 'persist-credentials: false', to: 'persist-credentials: true', test: 'test/repository-package.test.js' },
   { name: 'community-independent-endorsements', file: 'server/community-controller.js', from: 'video.independentRecommenders >= 2', to: 'video.independentRecommenders >= 1', test: 'test/community-flow.test.js' },
