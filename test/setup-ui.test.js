@@ -1,3 +1,4 @@
+import { frontendSource } from './frontend-source-fixture.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
@@ -11,5 +12,5 @@ test('Shorts uses portrait media and five desktop columns with smaller responsiv
  assert.match(css,/\.video-grid\.shorts-grid[^}]*repeat\(5,minmax\(0,1fr\)\)/);
  assert.match(css,/\.short-card \.thumbnail\s*\{ aspect-ratio:9\/16/);
  assert.match(css,/@media\(max-width:600px\)[^}]*shorts-grid[^}]*repeat\(2,minmax\(0,1fr\)\)/);
- const app=await readFile(new URL('../public/app.js',import.meta.url),'utf8');assert.match(app,/channelMode && \$\('channel-kind'\)\.value === 'shorts'/);
+ const app=await frontendSource('ui/library-feed.js');assert.match(app,/channelMode && \$\('channel-kind'\)\.value === 'shorts'/);
 });

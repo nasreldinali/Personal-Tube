@@ -58,9 +58,11 @@ test('refresh settings are independent of key entry and only explicit refresh by
 
 test('channel loading is independent from background operations on every view',async()=>{
  const source=await frontendSource('ui/channel-manager.js');
- const app=await readFile(new URL('../public/app.js',import.meta.url),'utf8');
+ const app=await frontendSource('ui/library-feed.js');
  assert.match(source,/text\(addingChannel \? 'adding' : 'addChannel'\)/);
- assert.ok(app.indexOf('renderAddState();')<app.indexOf('if (discoveryMode)'));
+ assert.ok(app.indexOf('renderPanels();')<app.indexOf('if (discoveryMode)'));
+ const entry=await readFile(new URL('../public/app.js',import.meta.url),'utf8');
+ assert.match(entry,/renderPanels:.*renderAddState\(\); renderUsage\(\)/);
  const action=source.slice(source.indexOf("bind('channel-form'"),source.indexOf("}, 'channel-error');")+20);
  assert.doesNotMatch(action,/if \(isBusy\(\)\)|busy = true|await refresh\(\)/);
  assert.match(action,/channels !== readState\(\).channels/);
@@ -84,17 +86,18 @@ test('channel category changes narrow names and clear incompatible selections be
  const { setupDocumentFixture }=await import('./fixtures.js');
  const fixture=setupDocumentFixture(); const previous=globalThis.document;globalThis.document=fixture.document;
  try {
-  const source=await readFile(new URL('../public/app.js',import.meta.url),'utf8');
+  const source=await frontendSource('ui/library-feed.js');
   const channels=[{id:'sport-a',title:'Sport A',category:'Sport'},{id:'sport-b',title:'Sport B',category:'Sport'},{id:'tech',title:'Tech',category:'Technology'},{id:'other',title:'Other',category:''}];
   const $=id=>fixture.document.getElementById(id);
   for(const id of ['area','category','channel-filter','channel-name-filter'])$(id).value='';
   const scope={preferences:{language:'en'},catalog:{areas:[]},state:{channels},$,text:key=>key,selectOptions,element};
+  scope.readPreferences=()=>scope.preferences;scope.readState=()=>scope.state;scope.readCatalog=()=>scope.catalog;
   runInNewContext(source.slice(source.indexOf('function renderFilters()'),source.indexOf('function latestVideos()'))+';this.refresh=renderFilters;',scope);
   const ids=()=>$('channel-name-filter').children.map(option=>option.value);
   scope.refresh();assert.deepEqual(ids(),['','sport-a','sport-b','tech','other']);
   $('channel-name-filter').value='tech';$('channel-filter').value='Sport';
   let rendered=false;
-  const eventSource=source.split('\n').find(line=>line.startsWith("for (const id of ['area', 'category'"));
+  const eventSource=source.split('\n').map(line=>line.trimStart()).find(line=>line.startsWith("for (const id of ['area', 'category'"));
   runInNewContext(eventSource,{...scope,pageSize:36,renderFilters:scope.refresh,bind:(id,event,handler)=>{if(id==='channel-filter')handler();},render:()=>{rendered=true;assert.deepEqual(ids(),['','sport-a','sport-b']);assert.equal($('channel-name-filter').value,'');}});
   assert.equal(rendered,true);
   $('channel-name-filter').value='sport-a';scope.refresh();assert.equal($('channel-name-filter').value,'sport-a');
