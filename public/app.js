@@ -135,8 +135,9 @@ function renderFilters() {
   const areas = catalog.areas.filter(a => !$('area').value || a.id === $('area').value);
   selectOptions($('category'), [['', text('allCategories')], ...areas.flatMap(a => a.categories.map(c => [c.id, lang === 'ar' ? categoryLabels[c.id] || c.name : c.name]))], $('category').value);
   const categories = [...new Set(state.channels.map(c => c.category).filter(Boolean))];
-  selectOptions($('channel-name-filter'), [['',text('allChannels')],...state.channels.map(c=>[c.id,c.title])], $('channel-name-filter').value);
   selectOptions($('channel-filter'), [['', text('allCategories')], ...categories.map(c => [c, c])], $('channel-filter').value);
+  const channels = state.channels.filter(c => !$('channel-filter').value || c.category === $('channel-filter').value);
+  selectOptions($('channel-name-filter'), [['', text('allChannels')], ...channels.map(c => [c.id, c.title])], $('channel-name-filter').value);
   $('categories-list').replaceChildren(...categories.map(c => { const option = element('option'); option.value = c; return option; }));
 }
 function latestVideos() {
@@ -390,7 +391,7 @@ bind('player-similar', 'click', () => { const video = activeVideo; $('player-dia
 bind('hero-explore', 'click', () => { changeMode('discover'); $('feed').scrollIntoView(); });
 bind('language', 'change', () => { const next = { ...preferences, language: $('language').value }; persist(() => store.writePreferences(next)); preferences = next; applyPreferences(); });
 bind('theme', 'change', () => { const next = { ...preferences, theme: $('theme').value }; persist(() => store.writePreferences(next)); preferences = next; applyPreferences(); });
-for (const id of ['area', 'category', 'duration', 'sort', 'hide-watched', 'channel-filter', 'channel-name-filter', 'channel-kind']) bind(id, 'change', () => { pageSize = 18; if (id === 'area') { $('category').value = ''; renderFilters(); } render(); });
+for (const id of ['area', 'category', 'duration', 'sort', 'hide-watched', 'channel-filter', 'channel-name-filter', 'channel-kind']) bind(id, 'change', () => { pageSize = 18; if (id === 'area') $('category').value = ''; if (id === 'area' || id === 'channel-filter') renderFilters(); render(); });
 bind('search', 'input', () => { pageSize = 18; render(); });
 bind('reset-filters', 'click', resetFilters);
 bind('show-more', 'click', () => { pageSize += 18; render(); });

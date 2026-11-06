@@ -74,3 +74,37 @@ test('community quality gates and ready-library entry are visible without manual
  assert.match(feed,/verifyCommunityVideos/);assert.doesNotMatch(feed,/response=progress/);
  assert.match(messages.en.apiUsageHelp,/Google/);assert.match(messages.en.usageHelp,/server/);
 });
+
+
+test('channel category changes narrow names and clear incompatible selections before filtering',async()=>{
+ const { runInNewContext }=await import('node:vm');
+ const { selectOptions, element }=await import('../public/ui/dom.js');
+ const { setupDocumentFixture }=await import('./fixtures.js');
+ const fixture=setupDocumentFixture(); const previous=globalThis.document;globalThis.document=fixture.document;
+ try {
+  const source=await readFile(new URL('../public/app.js',import.meta.url),'utf8');
+  const channels=[{id:'sport-a',title:'Sport A',category:'Sport'},{id:'sport-b',title:'Sport B',category:'Sport'},{id:'tech',title:'Tech',category:'Technology'},{id:'other',title:'Other',category:''}];
+  const $=id=>fixture.document.getElementById(id);
+  for(const id of ['area','category','channel-filter','channel-name-filter'])$(id).value='';
+  const scope={preferences:{language:'en'},catalog:{areas:[]},state:{channels},$,text:key=>key,selectOptions,element};
+  runInNewContext(source.slice(source.indexOf('function renderFilters()'),source.indexOf('function latestVideos()'))+';this.refresh=renderFilters;',scope);
+  const ids=()=>$('channel-name-filter').children.map(option=>option.value);
+  scope.refresh();assert.deepEqual(ids(),['','sport-a','sport-b','tech','other']);
+  $('channel-name-filter').value='tech';$('channel-filter').value='Sport';
+  let rendered=false;
+  const eventSource=source.split('\n').find(line=>line.startsWith("for (const id of ['area', 'category'"));
+  runInNewContext(eventSource,{...scope,pageSize:36,renderFilters:scope.refresh,bind:(id,event,handler)=>{if(id==='channel-filter')handler();},render:()=>{rendered=true;assert.deepEqual(ids(),['','sport-a','sport-b']);assert.equal($('channel-name-filter').value,'');}});
+  assert.equal(rendered,true);
+  $('channel-name-filter').value='sport-a';scope.refresh();assert.equal($('channel-name-filter').value,'sport-a');
+  $('channel-filter').value='';scope.refresh();assert.deepEqual(ids(),['','sport-a','sport-b','tech','other']);assert.equal($('channel-name-filter').value,'sport-a');
+  $('channel-filter').value='Technology';scope.refresh();assert.deepEqual(ids(),['','tech']);assert.equal($('channel-name-filter').value,'');
+  $('channel-name-filter').value='tech';scope.state.channels=channels.filter(c=>c.id!=='tech');scope.refresh();assert.equal($('channel-filter').value,'');assert.equal($('channel-name-filter').value,'');assert.deepEqual(ids(),['','sport-a','sport-b','other']);
+ } finally {globalThis.document=previous;}
+});
+
+test('channel content defaults to long videos then offers estimated Shorts and both',async()=>{
+ const html=await readFile(new URL('../public/index.html',import.meta.url),'utf8');
+ const select=html.match(/<select id="channel-kind"[^>]*>(.*?)<\/select>/s)[1];
+ assert.deepEqual([...select.matchAll(/<option value="([^"]+)"/g)].map(match=>match[1]),['videos','shorts','all']);
+ assert.match(select,/<option value="videos" selected/);
+});

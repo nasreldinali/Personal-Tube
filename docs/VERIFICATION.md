@@ -1,6 +1,10 @@
 # Verification
 
-Reviewed: 2026-11-04.
+Reviewed: 2026-11-06.
+
+## Dependent channel filters (1.8.1)
+
+175 deterministic tests and 31 deliberate defects pass. Category changes narrow names and clear incompatible selections before rendering; valid selections survive broader categories. Browser fixtures verified 30-to-15 channel narrowing, default Videos after reload, Shorts grid switching, and clean logs. Production Arabic labels/default were also verified. See [channel decisions and evidence](CHANNEL_ENHANCEMENTS.md).
 
 ## Community quality and usability (1.8.0)
 

@@ -1,5 +1,10 @@
 # Changelog
 
+## 1.8.1 — 2026-11-06
+
+- Channel-name choices follow the selected category and clear incompatible selections before rendering the feed.
+- Default channel content to videos over three minutes; order choices as Videos, estimated Shorts, then Videos + Shorts.
+
 ## 1.8.0 — 2026-11-06
 
 - Live community discovery requires multiple independent account endorsements and current YouTube popularity/language checks, with visible editable thresholds and no unverified fallback. Preserve community ranking and supporting quotes, including late endorsements.
