@@ -68,3 +68,12 @@ test('automatic session refuses model attempts beyond its server budget, includi
   await assert.rejects(controller({version:1,action:'analyze',session:'fixture'}),{code:'communityAnalysisStopped'});
   assert.equal(calls,3);
 });
+
+test('automatic results refuse a lone endorsement and retain multiple independent supporters',async()=>{
+ for(const count of [1,2]) {
+  const comments=Array.from({length:count},(_,i)=>normalizeComment({id:String(i),author:`person${i}`,source:'hn',date:'2026-11-06T12:00:00Z',text:`Useful explanation ${i} https://youtu.be/abcdefghijk`,sourceUrl:`https://news.ycombinator.com/item?id=${i}`}));
+  const controller=createCommunityController({now:()=>0,id:()=> 'fixture',archive:async()=>({}),catalog:async()=>({videos:[]}),collect:async()=>({comments,scanned:count}),analyze:async rows=>rows.map(row=>({...row,labels:{abcdefghijk:{stance:'rec',quote:row.text,origin:'analysis'}}}))});
+  await controller({version:1,action:'discover'});const result=await controller({version:1,action:'analyze',session:'fixture',sort:'top'});
+  assert.equal(result.videos.length,count===1?0:1);
+ }
+});

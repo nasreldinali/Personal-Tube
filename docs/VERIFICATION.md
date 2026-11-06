@@ -2,6 +2,12 @@
 
 Reviewed: 2026-11-04.
 
+## Community quality and usability (1.8.0)
+
+173 deterministic tests and31 deliberate defects pass. New coverage rejects singleton/copied endorsements, weak or missing YouTube statistics and selected-language mismatches; preserves ordering; enforces cancellation, request bounds and source cooldowns; and prevents failed analysis/metadata from exposing raw progress. Independent review found truncated evidence could omit late positive quotes; the correction preserves supporting excerpts and criticism within20 proofs. Re-review passed42 focused tests with no remaining blocker.
+
+Production browser verified the original library (4,654 entries) and a same-recommender result (12 videos), current guide and rounded keyboard focus. Isolated browser fixtures rejected49-view/0-like output, accepted qualifying150,000-view/2,000-like output and exercised the neutral cooldown. No owner's key/model allowance was used. Arabic/dark and English/light mobile/desktop checks and tablet overflow measurements passed; production warning/error logs were empty. See [scope, evidence and limitations](COMMUNITY_QUALITY.md).
+
 ## API usage and channel loading (1.7.0)
 
 158 deterministic tests and 26 deliberate defects pass. Pacific reset (winter/summer), persistence, invalid storage, cross-tab incomplete counts, backup omission/deletion, all request-attempt paths, transport/body stalls and pending-add mutation checks are covered. Independent review found two concurrency issues; corrected regressions and re-review found no remaining blocker.

@@ -17,9 +17,9 @@ export function createCommunityController({ archive, collect, analyze, catalog, 
       const source = await catalog();
       const metadata = Object.fromEntries(source.videos.map(video => [video.id,video]));
       const ranked = rankEvidence(session.comments, metadata,sort);
-      const videos = await enrich(session.automatic ? ranked.filter(video => video.score > 0) : ranked);
+      const videos = await enrich(session.automatic ? ranked.filter(video => video.score > 0 && video.independentRecommenders >= 2 && video.positiveComments > video.criticalComments) : ranked);
       if (sessions.get(key) !== session) throw new AppError('communitySessionExpired');
-      return { version: 1, session: key, source: session.source, fetchedAt: session.fetchedAt, scanned: session.scanned, limited: session.limited, pending: pendingRows(session).length, analyzed: session.comments.length - pendingRows(session).length, videos, totalComments: session.comments.length, ...(session.automatic ? { foundComments: session.foundComments, analysisLimit: COMMUNITY_AUTO_CALLS } : {}) };
+      return { version: 1, session: key, source: session.source, retryAfterSeconds: session.retryAfterSeconds, fetchedAt: session.fetchedAt, scanned: session.scanned, limited: session.limited, pending: pendingRows(session).length, analyzed: session.comments.length - pendingRows(session).length, videos, totalComments: session.comments.length, ...(session.automatic ? { foundComments: session.foundComments, analysisLimit: COMMUNITY_AUTO_CALLS } : {}) };
     } finally { activeResults--; }
   }
   return async input => {

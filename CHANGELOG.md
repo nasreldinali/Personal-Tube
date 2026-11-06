@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.8.0 — 2026-11-06
+
+- Live community discovery requires multiple independent account endorsements and current YouTube popularity/language checks, with visible editable thresholds and no unverified fallback. Preserve community ranking and supporting quotes, including late endorsements.
+- Show a neutral per-source cooldown countdown and keep results available. Add a direct original-library entry and current workflow guide; manual batches remain automatic.
+- Use one rounded focus indicator for header fields, retaining keyboard/forced-color visibility. Separate API-estimate help from analysis-account usage help.
+
 ## 1.7.0 — 2026-11-04
 
 - Settings shows estimated daily YouTube data units and search calls, remaining against default limits, Pacific-midnight reset and a link to actual Google Cloud usage. Local counts include attempts, omit secrets and stay out of backups.

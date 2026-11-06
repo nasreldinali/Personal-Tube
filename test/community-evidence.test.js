@@ -40,3 +40,28 @@ test('unknown dates and unsafe source links are refused; imported stance is pend
   assert.throws(() => normalizeComment({ id: '1', source: 'hn', text: 'https://youtu.be/abcdefghijk', date: 'tomorrow', sourceUrl: 'http://localhost' }));
   assert.equal(comment('1','2026-01').stance, 'pending');
 });
+
+test('independent endorsers exclude copied praise and count criticism separately',()=>{
+ const make=(id,author,text,stance)=>normalizeComment({id,source:'hn',author,text,videoIds:['abcdefghijk'],date:'2026-11-06T12:00:00Z',sourceUrl:`https://news.ycombinator.com/item?id=${id}`,labels:{abcdefghijk:{stance,quote:text,origin:'analysis'}}},true);
+ const rows=[make('1','alice','A clear explanation','rec'),make('2','bob','A clear explanation','rec'),make('3','alice','Another useful part','strong_rec'),make('4','charlie','The explanation is incorrect','critical')];
+ const video=rankEvidence(rows)[0];assert.equal(video.independentRecommenders,1);assert.equal(video.positiveComments,2);assert.equal(video.criticalComments,1);
+});
+
+test('classification receives the requested topic as bounded data alongside the source context',async()=>{
+ const {classificationInputs}=await import('../public/domain/community-evidence.js');
+ const row={...comment('1','2026-01'),topic:'AI agents'};
+ assert.equal(classificationInputs([row])[0].topic,'AI agents');
+ assert.equal(classificationInputs([{...row,topic:'x'.repeat(500)}])[0].topic.length,120);
+});
+
+test('bounded evidence retains late independent endorsements and criticism',()=>{
+ const rows=Array.from({length:20},(_,i)=>comment(String(i),'2026-01',String(i),'reference'));
+ rows.push({...comment('21','2026-02','alice','rec'),text:'This tutorial explains the hard part clearly.'});
+ rows.push({...comment('22','2026-02','bob','strong_rec'),text:'I recommend watching this explanation first.'});
+ rows.push({...comment('23','2026-02','critic','critical'),text:'One example has a mistake.'});
+ const video=rankEvidence(rows)[0];
+ assert.equal(video.independentRecommenders,2);assert.ok(video.evidence.length<=20);
+ assert.equal(video.evidence.filter(row=>['rec','strong_rec'].includes(row.stance)).length,2);
+ assert.ok(video.evidence.some(row=>row.stance==='critical'));
+ assert.ok(video.evidence.every(row=>!Object.hasOwn(row,'priority')));
+});

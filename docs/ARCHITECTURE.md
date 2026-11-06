@@ -23,7 +23,7 @@ INFERRED: a functional core with explicit adapters suits this local app without 
 |---|---|
 | GET/HEAD /health | JSON version 1, app=PersonalTube, status=ready; launcher rejects unknown service/version. |
 | GET/HEAD /catalog.json | JSON version 1, videos and areas arrays; frontend refuses unknown versions. Video IDs are 11-character identifiers. Dates/durations absent from the source are not fabricated. |
-| Asset manifest | Static same-origin modules/styles/fonts/images, package release 1.7.0; not an extension API. |
+| Asset manifest | Static same-origin modules/styles/fonts/images, package release 1.8.0; not an extension API. |
 | YouTube | External Data API v3; channels, playlistItems, videos, search and commentThreads only. X-Goog-Api-Key header, never URL. |
 
 ## Storage and input rules
@@ -79,3 +79,5 @@ MEASURED: `public/domain/community-batches.js` budgets server-held samples by pa
 ## Refresh preferences (1.6.0)
 
 Optional validated preference fields `refreshMode` (auto/manual) and `refreshMinutes` (15,30,60,180,360,720,1440) preserve the existing auto/30-minute behavior for older stores/backups. `refreshSettings` and `automaticRefreshDue` are pure functions. The browser composition root uses explicit time and page visibility for scheduling, passes the captured settings into `refreshChannels`, and supplies a continuation predicate checked between channels. The service independently rejects non-forced manual work and uses the chosen interval for freshness. Only the explicit Refresh channels action forces refresh. Preference saves retain existing storage conflict checks; existing channel revision checks still protect completed results. No new server route, provider command or model call was introduced.
+
+Community result version 1 adds independentRecommenders, positiveComments and criticalComments; the original upstream score is unchanged. Automatic server sessions require two known distinct endorsing accounts and positive evidence exceeding criticism. The browser applies explicit current YouTube popularity/language constraints using services/community-quality.js, preserves community order and never displays raw partial progress as a verified result. Community responses/errors may include an integer retryAfterSeconds (0–86400 on success, 1–86400 on cooldown errors); the browser tracks per-source eligibility without changing the server rate limit. Classification input includes a bounded optional topic string as untrusted data. See COMMUNITY_QUALITY.md.

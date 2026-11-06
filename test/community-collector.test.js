@@ -34,3 +34,12 @@ test('HTTP adapter refuses redirects, non-allowlisted destinations and oversized
   assert.equal(calls, 0);
   await assert.rejects(boundedJSON('https://hn.algolia.com/api/v1/search', { maxBytes: 20 }, fetcher));
 });
+
+test('collector reports exact bounded remaining cooldown and permits retry at the boundary',async()=>{
+ let time=100000,calls=0;
+ const collect=createCommunityCollector({now:()=>time,request:async()=>{calls++;return {hits:[],nbPages:0};}});
+ const input={version:1,source:'hn',query:'ai',scope:'',days:30};
+ const first=await collect(input);assert.equal(first.retryAfterSeconds,60);
+ time+=10000;await assert.rejects(collect(input),error=>error.code==='communityRateLimit'&&error.retryAfterSeconds===50);
+ assert.equal(calls,2);time+=50000;await collect(input);assert.equal(calls,4);
+});

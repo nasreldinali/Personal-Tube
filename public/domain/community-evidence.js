@@ -39,7 +39,7 @@ export function normalizeComment(row, trusted = false) {
   return { id: row.id, source: row.source, videoIds: [...new Set(ids)], text, title: plainText(row.title).slice(0,200), author: typeof row.author === 'string' ? row.author.slice(0,100) : '', date: date.toISOString(), month: date.toISOString().slice(0,7), sourceUrl: url.href, stance: trusted && stances.includes(row.stance) ? row.stance : 'pending', labels: trusted && row.labels ? row.labels : {} };
 }
 export function classificationInputs(rows) {
-  return rows.flatMap((row, i) => row.videoIds.map(id => ({ key: `${i}:${id}`, video: id, context: row.title, text: row.text })));
+  return rows.flatMap((row, i) => row.videoIds.map(id => ({ key: `${i}:${id}`, video: id, context: row.title, topic: typeof row.topic === 'string' ? plainText(row.topic).slice(0,120) : '', text: row.text })));
 }
 export function applyClassifications(rows, result) {
   const inputs = classificationInputs(rows);
@@ -55,6 +55,16 @@ export function applyClassifications(rows, result) {
   }
   return next;
 }
+function evidenceSample(proofs) {
+  const ordered = [...proofs].sort((a,b) => b.priority - a.priority);
+  const selected = new Set(ordered.slice(0,20));
+  const critical = proofs.find(proof => proof.stance === 'critical');
+  if (critical && !selected.has(critical)) {
+    if (selected.size === 20) selected.delete(ordered[19]);
+    selected.add(critical);
+  }
+  return [...selected].map(({priority, ...proof}) => proof);
+}
 export function rankEvidence(rows, metadata = {}, sort = 'top') {
   const videos = new Map();
   const seen = new Set();
@@ -62,17 +72,26 @@ export function rankEvidence(rows, metadata = {}, sort = 'top') {
     const key = `${row.source}:${row.id}:${id}`;
     if (seen.has(key)) continue;
     seen.add(key);
-    if (!videos.has(id)) videos.set(id, { id, title: metadata[id]?.title || `YouTube · ${id}`, channelTitle: metadata[id]?.channelTitle || 'YouTube', categories: metadata[id]?.categories || [], tags: [], summary: metadata[id]?.summary || '', months: new Set(), strong: new Set(), authors: new Set(), shares: 0, latest: '', evidence: [], score: 0 });
+    if (!videos.has(id)) videos.set(id, { id, title: metadata[id]?.title || `YouTube · ${id}`, channelTitle: metadata[id]?.channelTitle || 'YouTube', categories: metadata[id]?.categories || [], tags: [], summary: metadata[id]?.summary || '', months: new Set(), strong: new Set(), authors: new Set(), independent: new Set(), positiveTexts: new Set(), criticalTexts: new Set(), shares: 0, latest: '', evidence: [], score: 0 });
     const video = videos.get(id);
     const label = row.labels?.[id] || { stance: row.stance, quote: row.text.slice(0,300), origin: row.stance === 'pending' ? 'pending' : 'upstream' };
     video.shares++;
     if (row.date > video.latest) video.latest = row.date;
+    let priority = label.stance === 'critical' ? 1 : 0;
     if (['rec','strong_rec'].includes(label.stance)) {
       video.months.add(row.month);
       if (row.author) video.authors.add(`${row.source}:${row.author}`);
+      const normalized = row.text.toLowerCase().replace(/\s+/g, ' ').trim();
+      priority = 2;
+      if (!video.positiveTexts.has(normalized) && row.author) {
+        if (!video.independent.has(`${row.source}:${row.author}`)) priority = 3;
+        video.independent.add(`${row.source}:${row.author}`);
+      }
+      video.positiveTexts.add(normalized);
       if (label.stance === 'strong_rec') video.strong.add(row.month);
     }
-    if (video.evidence.length < 20) video.evidence.push({ source: row.source, date: row.date, sourceUrl: row.sourceUrl, text: row.text, ...label });
+    if (label.stance === 'critical') video.criticalTexts.add(row.text.toLowerCase().replace(/\s+/g, ' ').trim());
+    video.evidence.push({ priority, source: row.source, date: row.date, sourceUrl: row.sourceUrl, text: row.text, ...label });
   }
-  return [...videos.values()].map(({ months, strong, authors, ...video }) => ({ ...video, score: months.size + 0.5 * strong.size, recommenders: authors.size, recommendationMonths: months.size })).filter(v => sort !== 'top' || v.score > 0).sort((a,b) => sort === 'newest' ? b.latest.localeCompare(a.latest) || a.id.localeCompare(b.id) : sort === 'shared' ? b.shares - a.shares || a.id.localeCompare(b.id) : b.score - a.score || b.recommenders - a.recommenders || a.id.localeCompare(b.id));
+  return [...videos.values()].map(({ months, strong, authors, independent, positiveTexts, criticalTexts, ...video }) => ({ ...video, evidence: evidenceSample(video.evidence), score: months.size + 0.5 * strong.size, recommenders: authors.size, independentRecommenders: independent.size, positiveComments: positiveTexts.size, criticalComments: criticalTexts.size, recommendationMonths: months.size })).filter(v => sort !== 'top' || v.score > 0).sort((a,b) => sort === 'newest' ? b.latest.localeCompare(a.latest) || a.id.localeCompare(b.id) : sort === 'shared' ? b.shares - a.shares || a.id.localeCompare(b.id) : b.score - a.score || b.recommenders - a.recommenders || a.id.localeCompare(b.id));
 }

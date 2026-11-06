@@ -14,6 +14,6 @@ export async function handleCommunityRequest(request, controller, maxBytes = 600
     const result = await controller(JSON.parse(Buffer.concat(chunks).toString('utf8')));
     return { status: 200, body: result };
   } catch (error) {
-    return { status: error.code === 'busy' || error.code === 'communityRateLimit' ? 429 : 400, body: { version: 1, error: error instanceof AppError ? error.code : 'communitySourceUnavailable' } };
+    return { status: error.code === 'busy' || error.code === 'communityRateLimit' ? 429 : 400, body: { version: 1, error: error instanceof AppError ? error.code : 'communitySourceUnavailable', ...(error instanceof AppError && error.code === 'communityRateLimit' && Number.isInteger(error.retryAfterSeconds) && error.retryAfterSeconds > 0 && error.retryAfterSeconds <= 86400 ? { retryAfterSeconds: error.retryAfterSeconds } : {}) } };
   }
 }

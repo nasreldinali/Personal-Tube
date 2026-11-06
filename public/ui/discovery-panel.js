@@ -9,7 +9,7 @@ import { recommendVideos } from '../services/recommendations.js';
 import { analyzeYouTubeComments } from '../data/youtube-analysis.js';
 
 export function createDiscoveryPanel({ context, saveDiscovery, setBusy, client, openSettings, onPlay, onToggle, onFollow, onError, confirm, changeMode }) {
-  const communityFeed = createCommunityFeed({ context, onPlay, onToggle, onError, setBusy });
+  const communityFeed = createCommunityFeed({ context, onPlay, onToggle, onError, setBusy, client, openSettings });
   let results = [];
   let resultSummary = null;
   let status = '';

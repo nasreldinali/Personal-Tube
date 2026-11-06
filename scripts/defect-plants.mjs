@@ -4,6 +4,11 @@ import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const cases = [
+  { name: 'community-independent-endorsements', file: 'server/community-controller.js', from: 'video.independentRecommenders >= 2', to: 'video.independentRecommenders >= 1', test: 'test/community-flow.test.js' },
+  { name: 'community-popularity-thresholds', file: 'public/services/community-quality.js', from: 'candidateVideos(response.items, settings)', to: 'candidateVideos(response.items, {...settings,minViews:0,minLikes:0})', test: 'test/community-quality.test.js' },
+  { name: 'community-unverified-progress', file: 'public/ui/community-feed.js', from: "error=caught instanceof AppError?", to: "if(progress)response=progress;error=caught instanceof AppError?", test: 'test/community-ui.test.js' },
+  { name: 'community-cooldown-floor', file: 'server/community-collector.js', from: 'started + 60000', to: 'started', test: 'test/community-collector.test.js' },
+  { name: 'community-late-endorsements', file: 'public/domain/community-evidence.js', from: 'evidence: evidenceSample(video.evidence)', to: 'evidence: video.evidence.slice(0,20)', test: 'test/community-evidence.test.js' },
   { name: 'youtube-attempt-meter', file: 'public/data/youtube.js', from: 'await this.onRequest(resource);', to: '', test: 'test/youtube-usage.test.js' },
   { name: 'usage-incomplete-day-shared', file: 'public/data/youtube-usage.js', from: 'this.storage.setItem(USAGE_FAILURE_KEY, pacificDay(this.clock()));', to: '', test: 'test/youtube-usage.test.js' },
   { name: 'pending-channel-mutation', file: 'public/app.js', from: 'channels !== state.channels || requestKey !== key', to: 'false', test: 'test/channel-add-flow.test.js' },

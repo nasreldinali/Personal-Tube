@@ -13,7 +13,11 @@ export function createCommunityCollector({ request, now }) {
   return async input => {
     const settings = validateCollectionRequest(input);
     const started = now();
-    if ((backoff.get(settings.source) || 0) > started) throw new AppError('communityRateLimit');
+    if ((backoff.get(settings.source) || 0) > started) {
+      const error = new AppError('communityRateLimit');
+      error.retryAfterSeconds = Math.min(86400, Math.ceil((backoff.get(settings.source) - started) / 1000));
+      throw error;
+    }
     backoff.set(settings.source, started + 60000);
     const from = Math.floor(started / 1000) - settings.days * 86400;
     const comments = new Map();
@@ -23,6 +27,7 @@ export function createCommunityCollector({ request, now }) {
       try {
         const comment = normalizeComment(row);
         if (!comment.videoIds.length || new Date(comment.date).getTime() < from * 1000 || (settings.query && !`${comment.title} ${comment.text}`.toLowerCase().includes(settings.query.toLowerCase()))) return;
+        comment.topic = settings.query;
         comment.author = comment.author ? createHash('sha256').update(`${settings.source}:${comment.author}`).digest('hex').slice(0,24) : '';
         comments.set(comment.id, comment);
       } catch { return; }
@@ -64,6 +69,6 @@ export function createCommunityCollector({ request, now }) {
         if (!after || !/^t1_[a-z0-9]+$/.test(after)) break;
       }
     }
-    return { version: 1, source: settings.source, comments: [...comments.values()].slice(0,400), scanned, limited, fetchedAt: new Date(started).toISOString() };
+    return { version: 1, source: settings.source, comments: [...comments.values()].slice(0,400), scanned, limited, retryAfterSeconds: Math.max(0, Math.min(86400, Math.ceil((backoff.get(settings.source) - now()) / 1000))), fetchedAt: new Date(started).toISOString() };
   };
 }

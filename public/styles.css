@@ -1344,3 +1344,19 @@ html[data-selecting=true] .d-main { padding-bottom:110px; }
 .api-usage .help { font-size: 12px; line-height: 1.7; margin-block: .65rem; }
 .api-usage details { margin: .75rem 0 0; padding: .6rem 0 0; border-bottom: 0; }
 .api-usage summary, .api-usage details a { font-size: 12px; }
+
+.search:focus-within, .header-control:has(select:focus-visible) { border-color:var(--focus); box-shadow:0 0 0 2px var(--focus); }
+.search input:focus-visible, .header-control select:focus-visible { outline:none; }
+.d-input:focus-visible, .d-select:focus-visible { outline:none; border-color:var(--focus); box-shadow:0 0 0 1px var(--focus); }
+.community-entry { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:20px; }
+.community-entry h3 { margin:0; }
+.community-entry .d-btn { padding:10px 14px; font-size:12px; }
+.community-quality { min-width:0; border:0; padding:0; margin:24px 0 0; }
+.community-quality legend { font-weight:700; margin-bottom:12px; }
+.community-quality .discovery-form { margin:0; }
+.community-metrics { font-weight:700; }
+.community-guide { margin-top:24px; }
+#collect-cooldown { color:var(--secondary-ink); }
+@media (forced-colors: active) {
+  .search:focus-within, .header-control:has(select:focus-visible), .d-input:focus-visible, .d-select:focus-visible { outline:2px solid Highlight; outline-offset:2px; }
+}

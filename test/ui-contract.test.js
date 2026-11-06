@@ -64,3 +64,13 @@ test('channel loading is independent from background operations on every view',a
  assert.match(action,/channels !== state.channels/);
  assert.match(action,/refresh\(false, added.id\)/);
 });
+
+test('community quality gates and ready-library entry are visible without manual batch controls',async()=>{
+ const html=await readFile(new URL('../public/index.html',import.meta.url),'utf8');
+ for(const id of ['collect-min-views','collect-min-likes','collect-language','collect-min-recommenders','collect-cooldown','community-browse-library','community-guide'])assert.ok(html.includes(`id="${id}"`),id);
+ const css=await readFile(new URL('../public/styles.css',import.meta.url),'utf8');
+ assert.match(css,/\.search:focus-within/);assert.match(css,/\.header-control:has\(select:focus-visible\)/);
+ const feed=await readFile(new URL('../public/ui/community-feed.js',import.meta.url),'utf8');
+ assert.match(feed,/verifyCommunityVideos/);assert.doesNotMatch(feed,/response=progress/);
+ assert.match(messages.en.apiUsageHelp,/Google/);assert.match(messages.en.usageHelp,/server/);
+});
