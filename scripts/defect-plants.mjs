@@ -17,7 +17,7 @@ const cases = [
   { name: 'community-late-endorsements', file: 'public/domain/community-evidence.js', from: 'evidence: evidenceSample(video.evidence)', to: 'evidence: video.evidence.slice(0,20)', test: 'test/community-evidence.test.js' },
   { name: 'youtube-attempt-meter', file: 'public/data/youtube.js', from: 'await this.onRequest(resource);', to: '', test: 'test/youtube-usage.test.js' },
   { name: 'usage-incomplete-day-shared', file: 'public/data/youtube-usage.js', from: 'this.storage.setItem(USAGE_FAILURE_KEY, pacificDay(this.clock()));', to: '', test: 'test/youtube-usage.test.js' },
-  { name: 'pending-channel-mutation', file: 'public/app.js', from: 'channels !== readState().channels || requestKey !== readKey()', to: 'false', test: 'test/channel-add-flow.test.js' },
+  { name: 'pending-channel-mutation', file: 'public/ui/channel-manager.js', from: 'channels !== readState().channels || requestKey !== readKey()', to: 'false', test: 'test/channel-add-flow.test.js' },
   { name: 'youtube-hard-deadline', file: 'public/data/youtube.js', from: 'Promise.race([perform(), deadline])', to: 'perform()', test: 'test/youtube.test.js' },
   { name: 'manual-refresh-refusal', file: 'public/services/refresh.js', from: "if (!force && mode === 'manual')", to: 'if (false)', test: 'test/refresh-settings.test.js' },
   { name: 'selected-refresh-interval', file: 'public/services/refresh.js', from: 'now - previous.fetchedAt < intervalMs', to: 'now - previous.fetchedAt < 1800000', test: 'test/refresh-settings.test.js' },
