@@ -26,3 +26,11 @@ Applicable release delta: CICD-SEC-2/5/6 and SSDF PS/PW for least-privilege chec
 Fresh-download verification: a copy containing only distributable tracked/unignored files, without .git or ignored original archives, passed the full local check and started through npm start; /health returned the expected version-1 ready response. The normal project server was restored afterward.
 
 First GitHub run passed Node.js 24 and all 176 application tests on Node.js 22, but its defect detector did not recognize Node 22's default TAP rendering for a rejected-deadline case. The runner now explicitly selects the spec reporter and keeps process-timeout/null-status refusal. A regression covers the reporter contract; scratch copies include the script required by that regression. Runtime application behavior is unchanged.
+
+## History cleanup and manual publication — 2026-11-06
+
+The owner authorized a verified private backup and removal of personal commit email and internal filesystem records. A targeted rewrite retained all 16 development commits, mapped the owner identity to the GitHub no-reply address and removed historical internal records. Every retained file outside those records and the final application tree were unchanged. Clean-history scans passed, and the same scanner detected the original-history control.
+
+GitHub retained old objects in the original repository after the rewrite. To avoid exposing that retained history, the original repository is preserved as a separate private archive and a separately created, non-fork repository receives only cleaned main at the intended project name. The private backup/archive must not be published or mirrored into this repository. Existing clones should be replaced with a fresh clone rather than merging or pushing their old history.
+
+The owner will change visibility manually after verification. No automated public-visibility change is authorized. This preparation does not claim deletion from GitHub retention or from other existing copies.
