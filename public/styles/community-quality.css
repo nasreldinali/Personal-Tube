@@ -1,0 +1,9 @@
+.community-entry { display:flex; align-items:center; justify-content:space-between; flex-wrap:wrap; gap:12px; margin-bottom:20px; }
+.community-entry h3 { margin:0; }
+.community-entry .d-btn { padding:10px 14px; font-size:12px; }
+.community-quality { min-width:0; border:0; padding:0; margin:24px 0 0; }
+.community-quality legend { font-weight:700; margin-bottom:12px; }
+.community-quality .discovery-form { margin:0; }
+.community-metrics { font-weight:700; }
+.community-guide { margin-top:24px; }
+#collect-cooldown { color:var(--secondary-ink); }

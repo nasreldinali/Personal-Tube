@@ -1,3 +1,4 @@
+import { readStylesheet } from './stylesheet-fixture.js';
 import test from 'node:test';
 import assert from 'node:assert/strict';
 import { readFile } from 'node:fs/promises';
@@ -21,7 +22,7 @@ test('rendering uses text nodes and safe DOM construction rather than HTML inter
 
 test('compact layout exposes an accessible sidebar toggle, sticky filters and discovery source controls', async () => {
   const html = await readFile(new URL('../public/index.html', import.meta.url), 'utf8');
-  const css = await readFile(new URL('../public/styles.css', import.meta.url), 'utf8');
+  const css = await readStylesheet();
   for (const id of ['sidebar-toggle', 'view-recommendations', 'view-community', 'recommendation-form', 'community-file', 'rec-language', 'rec-min-views', 'rec-min-likes', 'player-similar']) assert.ok(html.includes(`id="${id}"`), id);
   assert.doesNotMatch(html, /<a[^>]*class="d-brand"/);
   assert.match(css, /\.filters\s*\{[^}]*position:\s*sticky/);
@@ -72,7 +73,7 @@ test('channel loading is independent from background operations on every view',a
 test('community quality gates and ready-library entry are visible without manual batch controls',async()=>{
  const html=await readFile(new URL('../public/index.html',import.meta.url),'utf8');
  for(const id of ['collect-min-views','collect-min-likes','collect-language','collect-min-recommenders','collect-cooldown','community-browse-library','community-guide'])assert.ok(html.includes(`id="${id}"`),id);
- const css=await readFile(new URL('../public/styles.css',import.meta.url),'utf8');
+ const css=await readStylesheet();
  assert.match(css,/\.search:focus-within/);assert.match(css,/\.header-control:has\(select:focus-visible\)/);
  const feed=await readFile(new URL('../public/ui/community-feed.js',import.meta.url),'utf8');
  assert.match(feed,/verifyCommunityVideos/);assert.doesNotMatch(feed,/response=progress/);

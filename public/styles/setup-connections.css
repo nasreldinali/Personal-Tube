@@ -1,0 +1,45 @@
+/* Connections: two clear choices, with supporting detail available on demand. */
+#setup-dialog { width:min(680px,calc(100vw - 28px)); padding:0; max-height:90dvh; }
+#setup-dialog[open] { display:flex; flex-direction:column; overflow:hidden; }
+#setup-dialog .dialog-header { padding:24px 28px 16px; margin:0; flex-shrink:0; align-items:center; }
+#setup-dialog h2 { font-size:23px; margin:0; }
+.setup-eyebrow { font:700 10px var(--deeda-font-body); letter-spacing:.16em; color:var(--muted); margin:0 0 8px; }
+.setup-body { padding:0 28px 12px; overflow-y:auto; min-height:0; overscroll-behavior:contain; }
+.setup-intro { font-size:13px; color:var(--muted); margin:0 0 20px; }
+#setup-dialog h3 { font-size:15px; margin:0 0 6px; }
+#setup-dialog .help { font-size:12px; line-height:1.7; margin:6px 0 12px; }
+.connection-row { display:flex; align-items:center; gap:18px; justify-content:space-between; padding:16px; border:1px solid var(--line); border-radius:12px; margin-bottom:22px; }
+.connection-row p { font-size:12px; color:var(--muted); margin:0 0 4px; }
+.connection-row small { font-size:11px; color:var(--muted); }
+.connection-row .d-btn { flex-shrink:0; min-height:40px; font-size:12px; padding:8px 16px; }
+.provider-grid { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px; }
+.provider-card { border:1px solid var(--line); border-radius:12px; padding:16px; display:flex; flex-direction:column; }
+.provider-card[data-active=true] { border-color:var(--primary); background:var(--blue-soft); }
+.provider-heading { display:flex; align-items:center; justify-content:space-between; gap:6px; }
+.provider-heading h4 { font:700 16px var(--deeda-font-body); margin:0; }
+.connection-badge { color:var(--primary); font-size:10px; font-weight:700; }
+.provider-plan { color:var(--muted); margin:4px 0 12px; font-size:11px; }
+.provider-state { font-size:12px; line-height:1.65; margin:0 0 14px; color:var(--muted); flex:1; }
+.provider-card .d-btn { min-height:40px; padding:8px 10px; font-size:12px; width:100%; }
+.provider-card button[aria-pressed=true] { background:var(--deeda-cyan); border-color:var(--deeda-cyan); color:var(--deeda-navy); }
+#setup-message { font-size:12px; line-height:1.7; margin:12px 0; color:var(--ink); }
+#setup-message:empty { display:none; }
+.setup-details { border:0; border-top:1px solid var(--line); margin-top:0; padding:12px 0; font-size:12px; }
+.setup-details summary { cursor:pointer; font-weight:700; min-height:24px; }
+#setup-usage p, #setup-status { font-size:12px; line-height:1.8; }
+.installation-help { margin-top:12px; overflow-wrap:anywhere; }
+.setup-footer { display:flex; justify-content:space-between; align-items:center; gap:12px; border-top:1px solid var(--line); padding:14px 28px; flex-shrink:0; background:var(--surface); }
+.setup-footer .d-btn { min-height:40px; padding:8px 24px; font-size:13px; }
+#setup-dialog .text-button { min-height:40px; font-size:12px; }
+@media(max-width:480px) {
+  #setup-dialog .dialog-header { padding:18px 18px 14px; }
+  #setup-dialog h2 { font-size:18px; }
+  .setup-body { padding-inline:18px; }
+  .provider-grid { grid-template-columns:1fr; gap:10px; }
+  .provider-card { padding:12px; }
+  .provider-plan { margin-bottom:8px; }
+  .provider-state { margin-bottom:10px; }
+  .setup-footer { padding:12px 18px; }
+  .connection-row { padding:12px; gap:10px; }
+}
+

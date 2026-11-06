@@ -1,0 +1,36 @@
+.channel-row {
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:16px 0;
+  border-bottom:1px solid var(--line);
+}
+.avatar {
+  width:42px;
+  height:42px;
+  border-radius:50%;
+  background:var(--gray-soft);
+  object-fit:cover;
+}
+.channel-details {
+  flex:1;
+  min-width:0;
+}
+.channel-details strong {
+  display:block;
+  font-size:13px;
+  overflow-wrap:anywhere;
+}
+.channel-details input {
+  width:100%;
+  font-size:12px;
+  margin-top:7px;
+}
+.channel-row .text-button {
+  font-size:12px;
+  color:var(--danger-ink);
+}
+#update-time {
+  font-size:11px;
+  padding-bottom:10px;
+}

@@ -17,3 +17,7 @@ Extraction follows separate dependency preparation and literal move checkpoints.
 - `ui/library-feed.js` owns filters, feed rendering and pagination. Auxiliary panels are refreshed through a composition callback in their original order; selectors read current state on every action.
 - `ui/navigation-panel.js` owns route transitions, sidebar collapse, language/theme application and the search shortcut. App state remains owned by the composition root.
 - `data/feed-updates.js` owns the browser refresh schedule and metadata requests. It reads current revisions and refresh policies, meters requests and commits through the unchanged refresh service/result contracts.
+
+## Stylesheets
+
+`public/styles.css` is an ordered import entry. Its 23 fragments preserve the original rule and responsive-override sequence. Do not merge base and later overrides by selector without checking their cascade. Brand tokens load first and remain unchanged. Every fragment has an explicit static route and CSS MIME type. Tests read the composed stylesheet through `test/stylesheet-fixture.js`, which rejects missing imports, cycles and external paths.

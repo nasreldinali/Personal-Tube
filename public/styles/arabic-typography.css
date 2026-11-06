@@ -1,0 +1,23 @@
+html[lang=ar] .nav-label {
+  letter-spacing:0;
+  font-size:11px;
+}
+html[lang=ar] .d-hero h1 {
+  font-size:clamp(27px,2.7vw,38px);
+  letter-spacing:0;
+  line-height:1.6;
+}
+html[lang=ar] .stats strong {
+  font-family:var(--deeda-font-ar);
+  letter-spacing:0;
+}
+html[lang=ar] .card-title {
+  font-family:inherit;
+}
+html[lang=ar] .d-ctl select {
+  font-family:inherit;
+  font-size:12px;
+}
+html[lang=ar] .d-appname {
+  font-family:var(--deeda-font-body);
+}

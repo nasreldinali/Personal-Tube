@@ -1,0 +1,56 @@
+.discovery-form {
+  display:grid;
+  grid-template-columns:repeat(4,minmax(0,1fr));
+  gap:14px;
+  padding:20px;
+  margin-bottom:16px;
+  background:var(--surface);
+  border:1px solid var(--line);
+  border-radius:12px;
+}
+.discovery-form>.d-field {
+  margin:0;
+  min-width:0;
+}
+.discovery-form input {
+  width:100%;
+}
+.wide-field {
+  grid-column:1/-1;
+}
+.discovery-evidence {
+  padding:12px;
+  font-size:12px;
+  border-top:1px solid var(--line);
+}
+.discovery-evidence p {
+  margin:4px 0 10px;
+  overflow-wrap:anywhere;
+}
+.discovery-evidence summary {
+  min-height:36px;
+}
+.discovery-evidence details {
+  border:0;
+  padding:0;
+  margin:8px 0;
+}
+.discovery-evidence .d-btn {
+  min-height:38px;
+  padding:6px 10px;
+  font-size:12px;
+}
+.collection-row {
+  display:flex;
+  align-items:center;
+  gap:16px;
+  justify-content:space-between;
+  padding:12px 0;
+  border-bottom:1px solid var(--line);
+}
+.collection-list {
+  margin-bottom:20px;
+}
+#community-more {
+  margin:20px 0;
+}

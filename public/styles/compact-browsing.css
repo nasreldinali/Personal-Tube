@@ -1,0 +1,120 @@
+/* Compact browsing preserves the supplied brand tokens. */
+.d-shell {
+  grid-template-columns:228px minmax(0,1fr);
+}
+.d-side {
+  padding:16px 12px;
+  gap:8px;
+  overflow-y:auto;
+}
+.d-main {
+  max-width:none;
+  padding:20px 24px 48px;
+}
+.d-brand {
+  padding:4px 0 12px;
+  gap:8px;
+}
+.d-brand img {
+  width:38px;
+  height:38px;
+  margin-inline-start:4px;
+}
+.d-wordmark {
+  font-size:13px;
+}
+.d-nav button {
+  min-height:42px;
+  padding:8px;
+  gap:8px;
+}
+.nav-label {
+  margin:14px 8px 6px;
+}
+.nav-divider {
+  margin:14px 8px 8px;
+}
+.sidebar-toggle {
+  display:flex;
+  align-items:center;
+  gap:10px;
+  min-height:40px;
+  border:1px solid var(--deeda-side-line);
+  border-radius:8px;
+  background:transparent;
+  color:var(--deeda-side-muted);
+  padding:6px 12px;
+  font-size:12px;
+}
+.sidebar-toggle>span:first-child {
+  font-size:21px;
+}
+.d-ctls {
+  grid-template-columns:1fr;
+}
+.d-ctl {
+  display:flex;
+  align-items:center;
+  gap:10px;
+}
+.d-ctl>span {
+  min-width:66px;
+}
+.d-ctl select {
+  width:100%;
+}
+.d-hero {
+  padding:18px 24px;
+}
+.d-hero h1,html[lang=ar] .d-hero h1 {
+  font-size:clamp(22px,2vw,30px);
+  margin:10px 0;
+  line-height:1.5;
+  white-space:normal;
+  max-width:900px;
+}
+.d-hero .d-lead {
+  max-width:850px;
+  margin-bottom:12px;
+  font-size:13px;
+}
+.hero-actions .d-btn {
+  min-height:38px;
+  padding:8px 14px;
+}
+.d-eyebrow {
+  margin-bottom:6px;
+}
+.stats {
+  padding:15px 0;
+  margin-bottom:18px;
+}
+.topbar {
+  margin-bottom:18px;
+}
+.filters {
+  position:sticky;
+  top:0;
+  z-index:5;
+  background:var(--surface);
+  padding:12px;
+  border:1px solid var(--line);
+  border-radius:10px;
+  box-shadow:0 4px 12px #071d3a10;
+}
+#feed {
+  scroll-margin-top:12px;
+}
+.card-title {
+  font-size:18px;
+  min-height:56px;
+  line-height:1.55;
+}
+.video-card {
+  display:flex;
+  flex-direction:column;
+}
+.video-grid {
+  grid-template-columns:repeat(3,minmax(0,1fr));
+  gap:20px 16px;
+}

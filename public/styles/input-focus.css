@@ -1,0 +1,3 @@
+.search:focus-within, .header-control:has(select:focus-visible) { border-color:var(--focus); box-shadow:0 0 0 2px var(--focus); }
+.search input:focus-visible, .header-control select:focus-visible { outline:none; }
+.d-input:focus-visible, .d-select:focus-visible { outline:none; border-color:var(--focus); box-shadow:0 0 0 1px var(--focus); }

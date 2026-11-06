@@ -1,0 +1,14 @@
+.panel-tools { display:flex; flex-wrap:wrap; align-items:center; gap:1rem; margin-block:1rem; }
+.video-card { position:relative; }
+.channel-scroll { max-height:34vh; overflow-y:auto; overscroll-behavior:contain; padding-inline-end:.5rem; }
+#channels-dialog { max-height:92dvh; }
+.category-row { display:flex; justify-content:space-between; gap:1rem; padding:.5rem; }
+.category-management { margin-block-start:1rem; }
+#category-manager { max-height:16vh; overflow-y:auto; }
+#channels-dialog[open] { display:flex; flex-direction:column; height:min(850px,92dvh); overflow:hidden; }
+#channels-dialog .dialog-header, #channel-form, #channels-dialog > h3, .category-management { flex-shrink:0; }
+#channels-dialog .channel-scroll { flex:1; min-height:60px; max-height:none; }
+#channels-dialog .d-field { margin-block-end:10px; }
+#channels-dialog .error:empty { display:none; }
+@media(max-height:600px) { #channels-dialog[open] { overflow-y:auto; } #channels-dialog .channel-scroll { flex:none; height:180px; } }
+
