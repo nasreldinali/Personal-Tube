@@ -99,3 +99,26 @@ test('failed community deletion preserves personal data and reports a safe error
 }},async f=>{
   await f.$('clear-data').click();await f.$('confirm-yes').click();assert.equal(f.state().channels.length,1);assert.ok(f.$('settings-error').textContent);
 }));
+
+test('manual refresh uses the saved key only on request and meters attempted YouTube calls',()=>withApp({key:'AIza'+'x'.repeat(35),fetcher:async url=>{
+  if(String(url).includes('googleapis.com'))return {ok:true,json:async()=>({items:[]})};
+}},async f=>{
+  assert.equal(f.requests.filter(r=>r.url.includes('googleapis.com')).length,0);
+  await f.$('refresh').click();assert.equal(f.requests.filter(r=>r.url.includes('googleapis.com')).length,1);
+  assert.deepEqual(f.state().cache[CHANNEL.id].videos,[]);
+  assert.equal(JSON.parse(f.local.getItem('personaltube.youtube-usage.v1')).units,1);
+  await f.window.emit('online');assert.equal(f.requests.filter(r=>r.url.includes('googleapis.com')).length,1);
+}));
+
+test('a pending refresh never replaces a newer user state revision',async()=>{
+  let release,started;
+  const requested=new Promise(resolve=>{started=resolve;});
+  await withApp({key:'AIza'+'x'.repeat(35),fetcher:async url=>{
+    if(String(url).includes('googleapis.com')){started();return new Promise(resolve=>{release=resolve;});}
+  }},async f=>{
+    const pending=f.$('refresh').click();await requested;
+    f.$('expiry').value='2';await f.$('expiry').emit('change');
+    release({ok:true,json:async()=>({items:[]})});await pending;
+    assert.equal(f.state().days,2);assert.deepEqual(f.state().cache[CHANNEL.id].videos.map(v=>v.id),[VIDEO.id]);assert.equal(f.$('refresh').disabled,false);
+  });
+});

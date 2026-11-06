@@ -39,7 +39,6 @@ let busy = false;
 let usage;
 let storageBlocked = false;
 let staleTab = false;
-let lastRefreshAttempt = null;
 let mode = viewFromHash(location.hash);
 const text = (name, values) => t(preferences.language, name, values);
 const now = () => Date.now();
@@ -55,9 +54,6 @@ try {
   key = store.readKey();
 } catch { storageBlocked = true; }
 
-function youtubeClient() {
-  return new YouTubeClient(key, undefined, { onRequest: async resource => { await usage?.record(resource); renderUsage(); } });
-}
 function persist(action) {
   if (staleTab) throw new AppError('storageConflict');
   if (storageBlocked || !store) throw new AppError('storageRead');
@@ -75,28 +71,10 @@ function bind(id, event, action, errorTarget) {
 function saveDiscovery(next) {
   persist(() => store.writeDiscovery(next)); discovery = next;
 }
-async function refresh(force = false, channelId = null) {
-  if (busy || staleTab || storageBlocked || !key || !state.channels.length) return;
-  if (!force && !automaticRefreshDue(preferences, lastRefreshAttempt, now(), !document.hidden)) return;
-  const policy = refreshSettings(preferences);
-  const refreshPreferences = preferences;
-  lastRefreshAttempt = now(); busy = true; render(); renderChannels();
-  try {
-    const revision = stateRevision;
-    const next = structuredClone(state);
-    const errors = await refreshChannels(next, youtubeClient(), { force, channelId, now: now(), preferences: refreshPreferences, shouldContinue: () => revision === stateRevision && !staleTab && !storageBlocked && (force || (!document.hidden && refreshSettings(preferences).mode === 'auto' && refreshSettings(preferences).minutes === policy.minutes)) });
-    const result = applyRefreshResult(state, next, revision, stateRevision);
-    if (!result.applied) return;
-    commitState(result.state);
-    if (errors.length) notify(messages.en[errors[0].code] ? errors[0].code : 'unexpected', {}, true);
-    else notify(force ? 'refreshed' : '');
-  } catch (error) { showError(error); }
-  finally { busy = false; render(); renderChannels(); }
-}
 
 const { notify, renderNotice, showError, askConfirmation, renderConfirmation } = createFeedbackPanel({ text, isStale: () => staleTab, isStorageBlocked: () => storageBlocked, bind });
 const { renderPlayerButtons, play } = createVideoPlayer({ text, readLibrary: () => library, readMetadata: () => metadata, showError, bind, toggleSaved: (...args) => toggleSaved(...args), onSimilar: video => discoveryPanel.similar(video) });
-const { renderChannels, openChannels, renderAddState } = createChannelManager({ text, readState: () => state, readKey: () => key, isBusy: () => busy, isStale: () => staleTab, isStorageBlocked: () => storageBlocked, commitState, renderFilters: () => renderFilters(), render: () => render(), showError, notify, askConfirmation, bind, youtubeClient: () => youtubeClient(), refreshAdded: id => { lastRefreshAttempt = null; void refresh(false, id); } });
+const { renderChannels, openChannels, renderAddState } = createChannelManager({ text, readState: () => state, readKey: () => key, isBusy: () => busy, isStale: () => staleTab, isStorageBlocked: () => storageBlocked, commitState, renderFilters: () => renderFilters(), render: () => render(), showError, notify, askConfirmation, bind, youtubeClient: () => youtubeClient(), refreshAdded: id => { resetRefreshAttempt(); void refresh(false, id); } });
 const { renderUsage, openSettings } = createSettingsPanel({
   text, readPreferences: () => preferences, readUsage: () => usage?.snapshot(), hiddenCount: () => (library.hidden || []).length,
   readKey: () => key, remembersKey: () => store?.remembersKey() || false,
@@ -134,19 +112,6 @@ const { render, renderFilters, filteredVideos, getPageSize, resetPageSize } = cr
   renderPanels: () => { discoveryPanel?.render(); renderPanelTools(); setupPanel?.render(); renderAddState(); renderUsage(); },
   renderPanelTools, renderNotice, play, toggleSaved, confirmHide, selectVideo, isSelected: id => selectedVideos.has(id), bind, commitState,
 });
-bind('refresh', 'click', () => refresh(true));
-bind('fetch-durations', 'click', async () => {
-  if (!key) { openSettings(); return; }
-  if (busy) return;
-  metadata = store.readMetadata(now());
-  const ids = filteredVideos(true).slice(0, Math.min(getPageSize(), 200)).filter(v => !metadata[v.id]).map(v => v.id);
-  if (!ids.length) { notify('metadataLoaded'); return; }
-  busy = true; render();
-  try {
-    const fetched = await youtubeClient().metadata(ids, now());
-    const next = { ...metadata, ...fetched }; persist(() => store.writeMetadata(next)); metadata = next; notify('metadataLoaded');
-  } finally { busy = false; render(); }
-});
 window.addEventListener('offline', () => notify('offline'));
 window.addEventListener('storage', event => {
   if (event.key === USAGE_KEY || event.key === USAGE_FAILURE_KEY) { renderUsage(); return; }
@@ -154,14 +119,66 @@ window.addEventListener('storage', event => {
     staleTab = true; stateRevision++; notify('storageConflict', {}, true);
   }
 });
-window.addEventListener('online', () => { notify(); void refresh(); });
-document.addEventListener('visibilitychange', () => { if (!document.hidden) { render(); void refresh(); } });
-setInterval(() => { if (!document.hidden) { render(); void refresh(); } }, 60000);
 
 const { applyPreferences, changeMode } = createNavigationPanel({
   text, readPreferences: () => preferences, readDiscovery: () => discovery,
   savePreferences: next => { persist(() => store.writePreferences(next)); preferences = next; }, saveDiscovery,
   setMode: value => { mode = value; }, resetPageSize, resetSelection, renderFilters, render, renderChannels, renderPlayerButtons, renderConfirmation, bind,
+});
+function createFeedUpdates({
+  readKey, readState, readRevision, readPreferences, readMetadata, reloadMetadata, saveMetadata, recordUsage,
+  isBusy, setBusy, isStale, isStorageBlocked, now, render, renderChannels, renderUsage, notify, showError,
+  commitState, filteredVideos, getPageSize, openSettings, bind,
+  createClient = (key, onRequest) => new YouTubeClient(key, undefined, { onRequest }),
+}) {
+  let lastRefreshAttempt = null;
+  function youtubeClient() {
+    return createClient(readKey(), async resource => { await recordUsage(resource); renderUsage(); });
+  }
+  async function refresh(force = false, channelId = null) {
+    if (isBusy() || isStale() || isStorageBlocked() || !readKey() || !readState().channels.length) return;
+    if (!force && !automaticRefreshDue(readPreferences(), lastRefreshAttempt, now(), !document.hidden)) return;
+    const policy = refreshSettings(readPreferences());
+    const refreshPreferences = readPreferences();
+    lastRefreshAttempt = now(); setBusy(true); render(); renderChannels();
+    try {
+      const revision = readRevision();
+      const next = structuredClone(readState());
+      const errors = await refreshChannels(next, youtubeClient(), { force, channelId, now: now(), preferences: refreshPreferences, shouldContinue: () => revision === readRevision() && !isStale() && !isStorageBlocked() && (force || (!document.hidden && refreshSettings(readPreferences()).mode === 'auto' && refreshSettings(readPreferences()).minutes === policy.minutes)) });
+      const result = applyRefreshResult(readState(), next, revision, readRevision());
+      if (!result.applied) return;
+      commitState(result.state);
+      if (errors.length) notify(messages.en[errors[0].code] ? errors[0].code : 'unexpected', {}, true);
+      else notify(force ? 'refreshed' : '');
+    } catch (error) { showError(error); }
+    finally { setBusy(false); render(); renderChannels(); }
+  }
+  bind('refresh', 'click', () => refresh(true));
+  async function fetchDurations() {
+    if (!readKey()) { openSettings(); return; }
+    if (isBusy()) return;
+    reloadMetadata();
+    const ids = filteredVideos(true).slice(0, Math.min(getPageSize(), 200)).filter(v => !readMetadata()[v.id]).map(v => v.id);
+    if (!ids.length) { notify('metadataLoaded'); return; }
+    setBusy(true); render();
+    try {
+      const fetched = await youtubeClient().metadata(ids, now());
+      const next = { ...readMetadata(), ...fetched }; saveMetadata(next); notify('metadataLoaded');
+    } finally { setBusy(false); render(); }
+  }
+  window.addEventListener('online', () => { notify(); void refresh(); });
+  document.addEventListener('visibilitychange', () => { if (!document.hidden) { render(); void refresh(); } });
+  setInterval(() => { if (!document.hidden) { render(); void refresh(); } }, 60000);
+  bind('fetch-durations', 'click', fetchDurations);
+  function resetRefreshAttempt() { lastRefreshAttempt = null; }
+  return { youtubeClient, refresh, resetRefreshAttempt, fetchDurations };
+}
+
+const { youtubeClient, refresh, resetRefreshAttempt } = createFeedUpdates({
+  readKey: () => key, readState: () => state, readRevision: () => stateRevision, readPreferences: () => preferences, readMetadata: () => metadata,
+  reloadMetadata: () => { metadata = store.readMetadata(now()); }, saveMetadata: next => { persist(() => store.writeMetadata(next)); metadata = next; },
+  recordUsage: resource => usage?.record(resource), isBusy: () => busy, setBusy: value => { busy = value; }, isStale: () => staleTab, isStorageBlocked: () => storageBlocked,
+  now, render, renderChannels, renderUsage, notify, showError, commitState, filteredVideos, getPageSize, openSettings, bind,
 });
 discoveryPanel = createDiscoveryPanel({
   context: () => ({ language: preferences.language, mode, discovery, library, metadata, areas: catalog.areas, thumbnailStyle: preferences.thumbnail, onHide: confirmHide, onSelect: selectVideo, selectedVideos, query: $('search').value, busy, hasKey: Boolean(key), stale: staleTab || storageBlocked }),

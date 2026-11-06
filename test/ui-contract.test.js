@@ -49,10 +49,10 @@ test('main header owns preferences and selection is an explicit accessible mode'
 test('refresh settings are independent of key entry and only explicit refresh bypasses policy',async()=>{
  const html=await readFile(new URL('../public/index.html',import.meta.url),'utf8');
  for(const id of ['refresh-settings-form','refresh-mode','refresh-interval','refresh-settings-status'])assert.ok(html.includes(`id="${id}"`));
- const source=await readFile(new URL('../public/app.js',import.meta.url),'utf8');
+ const source=await frontendSource('data/feed-updates.js');
  assert.equal([...source.matchAll(/\brefresh\(true\)/g)].length,1);
  assert.match(source,/bind\('refresh', 'click', \(\) => refresh\(true\)\)/);
- assert.match(source,/automaticRefreshDue\(preferences, lastRefreshAttempt, now\(\), !document.hidden\)/);
+ assert.match(source,/automaticRefreshDue\(readPreferences\(\), lastRefreshAttempt, now\(\), !document.hidden\)/);
  assert.match(source,/preferences: refreshPreferences, shouldContinue:/);
 });
 
