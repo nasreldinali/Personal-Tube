@@ -41,8 +41,6 @@ let storageBlocked = false;
 let staleTab = false;
 let lastRefreshAttempt = null;
 let mode = viewFromHash(location.hash);
-const selectedVideos = new Set();
-let selectionMode = false;
 let pageSize = 18;
 const text = (name, values) => t(preferences.language, name, values);
 const now = () => Date.now();
@@ -185,60 +183,10 @@ function render() {
   renderPanelTools();
   renderNotice();
 }
-function panelVideos() {
-  return (['recommendations','community'].includes(mode) ? discoveryPanel.visibleVideos() : filteredVideos()).filter(v=>!(library.hidden||[]).includes(v.id));
-}
-function displayedVideoIds() { return [...new Set([...document.querySelectorAll('.video-card[data-video-id]')].filter(node=>node.getClientRects().length).map(node=>node.dataset.videoId))]; }
-function renderPanelTools() {
-  const lang=preferences.language;
-  const channelMode=mode==='channels';
-  const videos=panelVideos();
-  const available = new Set(videos.map(v=>v.id));
-  for(const id of selectedVideos) if(!available.has(id)) selectedVideos.delete(id);
-  $('delete-selected').disabled = !selectedVideos.size || busy || staleTab;
-  $('delete-selected').textContent = text('deleteSelected',{count:number(lang,selectedVideos.size)});
-  const displayed=displayedVideoIds();
-  document.documentElement.dataset.selecting = String(selectionMode);
-  $('select-toggle').hidden = selectionMode;
-  $('select-toggle').disabled = !displayed.length;
-  $('selection-actions').hidden = !selectionMode;
-  $('selection-count').textContent = text('selectionCount',{count:number(lang,selectedVideos.size)});
-  $('select-visible').textContent = text(displayed.length > 0 && displayed.every(id=>selectedVideos.has(id)) ? 'clearShownSelection' : 'selectAllShown');
-  $('select-visible').disabled = !displayed.length;
-  $('channel-refresh-help').hidden = !channelMode;
-  const refreshPolicy = refreshSettings(preferences);
-  $('channel-refresh-help').textContent = text(refreshPolicy.mode === 'manual' ? 'refreshManualHelp' : 'refreshAutoHelp', {interval:text(`refreshInterval${refreshPolicy.minutes}`)});
-  $('thumbnail-style').value = preferences.thumbnail || 'frame';
-  $('channel-sample-help').hidden = !channelMode || !Object.values(state.cache).some(entry=>entry.limited);
-  $('shorts-help').hidden = !channelMode || $('channel-kind').value === 'all';
-  }
 function changeMode(value) {
-  mode = value; history.replaceState(null,'',`#${value}`); pageSize = 18; selectedVideos.clear(); selectionMode = false;
+  mode = value; history.replaceState(null,'',`#${value}`); pageSize = 18; resetSelection();
   $('search').value = ''; $('area').value = ''; $('category').value = ''; $('duration').value = 'all'; $('hide-watched').checked = false;
   renderFilters(); render();
-}
-function selectVideo(id, selected) {
-  if (selected) selectedVideos.add(id); else selectedVideos.delete(id);
-  render();
-  [...document.querySelectorAll('.video-card[data-video-id]')].find(node=>node.dataset.videoId===id && node.getClientRects().length)?.querySelector('.card-select input')?.focus();
-}
-function confirmHide(ids) {
-  askConfirmation('confirmHideVideos', () => {
-    if (busy) throw new AppError('busy');
-    const next = hideVideos(library, ids); persist(()=>store.writeLibrary(next));library=next;selectedVideos.clear();render();notify('videosHidden');
-  });
-}
-function toggleSaved(field, id, video) {
-  try {
-    const next = toggleLibrary(library, field, id);
-    if (video && !library[field].includes(id)) {
-      const nextMetadata = { ...metadata, [id]: { ...metadata[id], title: video.title, channelTitle: video.channelTitle, duration: video.duration || '', embeddable: video.embeddable !== false, fetchedAt: now() } };
-      persist(() => store.writeMetadata(nextMetadata)); metadata = nextMetadata;
-    }
-    persist(() => store.writeLibrary(next)); library = next;
-    render(); renderPlayerButtons();
-    document.querySelector(`[data-video-id="${id}"][data-action="${field}"]`)?.focus();
-  } catch (error) { showError(error); }
 }
 async function refresh(force = false, channelId = null) {
   if (busy || staleTab || storageBlocked || !key || !state.channels.length) return;
@@ -288,6 +236,79 @@ createDataTransfer({
   },
   clearCommunity: () => discoveryPanel.clearCommunity(), now, bind, askConfirmation, applyPreferences: () => applyPreferences(), notify,
 });
+function createLibraryActions({ text, readPreferences, readLibrary, readMetadata, readState, readMode, isBusy, isStale, discoveryVideos, filteredVideos, saveLibrary, saveMetadata, savePreferences, now, render, renderPlayerButtons, askConfirmation, showError, notify, bind }) {
+  const selectedVideos = new Set();
+  let selectionMode = false;
+  function panelVideos() {
+    return (['recommendations','community'].includes(readMode()) ? discoveryVideos() : filteredVideos()).filter(v=>!(readLibrary().hidden||[]).includes(v.id));
+  }
+  function displayedVideoIds() { return [...new Set([...document.querySelectorAll('.video-card[data-video-id]')].filter(node=>node.getClientRects().length).map(node=>node.dataset.videoId))]; }
+  function renderPanelTools() {
+    const lang=readPreferences().language;
+    const channelMode=readMode()==='channels';
+    const videos=panelVideos();
+    const available = new Set(videos.map(v=>v.id));
+    for(const id of selectedVideos) if(!available.has(id)) selectedVideos.delete(id);
+    $('delete-selected').disabled = !selectedVideos.size || isBusy() || isStale();
+    $('delete-selected').textContent = text('deleteSelected',{count:number(lang,selectedVideos.size)});
+    const displayed=displayedVideoIds();
+    document.documentElement.dataset.selecting = String(selectionMode);
+    $('select-toggle').hidden = selectionMode;
+    $('select-toggle').disabled = !displayed.length;
+    $('selection-actions').hidden = !selectionMode;
+    $('selection-count').textContent = text('selectionCount',{count:number(lang,selectedVideos.size)});
+    $('select-visible').textContent = text(displayed.length > 0 && displayed.every(id=>selectedVideos.has(id)) ? 'clearShownSelection' : 'selectAllShown');
+    $('select-visible').disabled = !displayed.length;
+    $('channel-refresh-help').hidden = !channelMode;
+    const refreshPolicy = refreshSettings(readPreferences());
+    $('channel-refresh-help').textContent = text(refreshPolicy.mode === 'manual' ? 'refreshManualHelp' : 'refreshAutoHelp', {interval:text(`refreshInterval${refreshPolicy.minutes}`)});
+    $('thumbnail-style').value = readPreferences().thumbnail || 'frame';
+    $('channel-sample-help').hidden = !channelMode || !Object.values(readState().cache).some(entry=>entry.limited);
+    $('shorts-help').hidden = !channelMode || $('channel-kind').value === 'all';
+    }
+  function selectVideo(id, selected) {
+    if (selected) selectedVideos.add(id); else selectedVideos.delete(id);
+    render();
+    [...document.querySelectorAll('.video-card[data-video-id]')].find(node=>node.dataset.videoId===id && node.getClientRects().length)?.querySelector('.card-select input')?.focus();
+  }
+  function confirmHide(ids) {
+    askConfirmation('confirmHideVideos', () => {
+      if (isBusy()) throw new AppError('busy');
+      const next = hideVideos(readLibrary(), ids); saveLibrary(next);selectedVideos.clear();render();notify('videosHidden');
+    });
+  }
+  function toggleSaved(field, id, video) {
+    try {
+      const next = toggleLibrary(readLibrary(), field, id);
+      if (video && !readLibrary()[field].includes(id)) {
+        const nextMetadata = { ...readMetadata(), [id]: { ...readMetadata()[id], title: video.title, channelTitle: video.channelTitle, duration: video.duration || '', embeddable: video.embeddable !== false, fetchedAt: now() } };
+        saveMetadata(nextMetadata);
+      }
+      saveLibrary(next);
+      render(); renderPlayerButtons();
+      document.querySelector(`[data-video-id="${id}"][data-action="${field}"]`)?.focus();
+    } catch (error) { showError(error); }
+  }
+  bind('thumbnail-style','change',()=>{
+    const next={...readPreferences(),thumbnail:$('thumbnail-style').value};savePreferences(next);render();
+  });
+  bind('delete-selected','click',()=>confirmHide([...selectedVideos]));
+  bind('select-toggle','click',()=>{selectionMode=true;renderPanelTools();$('select-visible').focus();});
+  bind('selection-cancel','click',()=>{selectionMode=false;selectedVideos.clear();render();$('select-toggle').focus();});
+  bind('select-visible','click',()=>{const ids=displayedVideoIds();const clear=ids.every(id=>selectedVideos.has(id));for(const id of ids) {if(clear)selectedVideos.delete(id);else selectedVideos.add(id);}render();$('select-visible').focus();});
+  bind('restore-hidden','click',()=>{const next={...readLibrary(),hidden:[]};saveLibrary(next);render();notify('videosRestored');$('restore-hidden').disabled=true;});
+  function resetSelection() { selectedVideos.clear(); selectionMode = false; }
+  return { selectedVideos, renderPanelTools, selectVideo, confirmHide, toggleSaved, resetSelection };
+}
+
+const { selectedVideos, renderPanelTools, selectVideo, confirmHide, toggleSaved, resetSelection } = createLibraryActions({
+  text, readPreferences: () => preferences, readLibrary: () => library, readMetadata: () => metadata, readState: () => state, readMode: () => mode,
+  isBusy: () => busy, isStale: () => staleTab, discoveryVideos: () => discoveryPanel.visibleVideos(), filteredVideos: (...args) => filteredVideos(...args),
+  saveLibrary: next => { persist(() => store.writeLibrary(next)); library = next; },
+  saveMetadata: next => { persist(() => store.writeMetadata(next)); metadata = next; },
+  savePreferences: next => { persist(() => store.writePreferences(next)); preferences = next; },
+  now, render: () => render(), renderPlayerButtons, askConfirmation, showError, notify, bind,
+});
 for (const view of ['discover', 'channels', 'later', 'watched', 'recommendations', 'community']) bind(`view-${view}`, 'click', () => changeMode(view));
 bind('sidebar-toggle', 'click', () => { saveDiscovery({ ...discovery, collapsed: !discovery.collapsed }); applyLayout(); });
 bind('hero-explore', 'click', () => { changeMode('discover'); $('feed').scrollIntoView(); });
@@ -297,14 +318,6 @@ for (const id of ['area', 'category', 'duration', 'sort', 'hide-watched', 'chann
 bind('search', 'input', () => { pageSize = 18; render(); });
 bind('reset-filters', 'click', resetFilters);
 bind('show-more', 'click', () => { pageSize += 18; render(); });
-bind('thumbnail-style','change',()=>{
-  const next={...preferences,thumbnail:$('thumbnail-style').value};persist(()=>store.writePreferences(next));preferences=next;render();
-});
-bind('delete-selected','click',()=>confirmHide([...selectedVideos]));
-bind('select-toggle','click',()=>{selectionMode=true;renderPanelTools();$('select-visible').focus();});
-bind('selection-cancel','click',()=>{selectionMode=false;selectedVideos.clear();render();$('select-toggle').focus();});
-bind('select-visible','click',()=>{const ids=displayedVideoIds();const clear=ids.every(id=>selectedVideos.has(id));for(const id of ids) {if(clear)selectedVideos.delete(id);else selectedVideos.add(id);}render();$('select-visible').focus();});
-bind('restore-hidden','click',()=>{const next={...library,hidden:[]};persist(()=>store.writeLibrary(next));library=next;render();notify('videosRestored');$('restore-hidden').disabled=true;});
 window.addEventListener('hashchange',()=>{if(location.hash!=='#feed')changeMode(viewFromHash(location.hash));});
 bind('expiry', 'change', () => { const next = { ...state, days: Number($('expiry').value) }; commitState(next); render(); });
 bind('refresh', 'click', () => refresh(true));
