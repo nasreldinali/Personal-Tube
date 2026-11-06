@@ -48,10 +48,6 @@ html[data-collapsed=true] .d-nav button {
     flex-basis:40px;
     width:40px;
   }
-  .d-ctls {
-    display:flex;
-    flex-direction:row;
-  }
   .d-main {
     padding:16px;
   }
@@ -77,9 +73,6 @@ html[data-collapsed=true] .d-nav button {
   }
   .hero-actions {
     gap:8px;
-  }
-  .d-ctls {
-    flex-direction:column;
   }
   .card-title {
     font-size:17px;

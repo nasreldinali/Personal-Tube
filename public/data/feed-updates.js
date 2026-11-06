@@ -3,7 +3,6 @@ import { automaticRefreshDue, refreshSettings } from '../domain/preferences.js';
 import { refreshChannels } from '../services/refresh.js';
 import { applyRefreshResult } from '../services/refresh-result.js';
 import { messages } from '../locale.js';
-import { byId as $ } from '../ui/dom.js';
 
 export function createFeedUpdates({
   readKey, readState, readRevision, readPreferences, readMetadata, reloadMetadata, saveMetadata, recordUsage,

@@ -49,20 +49,6 @@
 .sidebar-toggle>span:first-child {
   font-size:21px;
 }
-.d-ctls {
-  grid-template-columns:1fr;
-}
-.d-ctl {
-  display:flex;
-  align-items:center;
-  gap:10px;
-}
-.d-ctl>span {
-  min-width:66px;
-}
-.d-ctl select {
-  width:100%;
-}
 .d-hero {
   padding:18px 24px;
 }

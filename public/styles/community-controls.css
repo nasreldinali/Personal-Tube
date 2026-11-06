@@ -7,7 +7,6 @@
   overflow-wrap:anywhere;
 }
 
-.community-live-filters { display:flex; gap:16px; align-items:end; flex-wrap:wrap; margin:20px 0; }
 .community-import-details { margin-top:36px; }
 .evidence-label { font-weight:700; }
 #community-live blockquote { margin-inline:0; overflow-wrap:anywhere; }

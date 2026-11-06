@@ -60,20 +60,6 @@
   .d-side-foot {
     padding-top:10px;
   }
-  .d-ctls {
-    display:flex;
-    gap:20px;
-  }
-  .d-ctl {
-    flex:1;
-    flex-direction:row;
-    align-items:center;
-    gap:10px;
-  }
-  .d-ctl select {
-    width:auto;
-    flex:1;
-  }
   .d-main {
     padding-top:22px;
   }
@@ -146,16 +132,6 @@
   }
   .feed-meta {
     align-items:flex-start;
-  }
-  .d-ctls {
-    flex-direction:column;
-    gap:8px;
-  }
-  .d-ctl>span {
-    width:90px;
-  }
-  .d-ctl select {
-    max-width:220px;
   }
   dialog {
     padding:20px;

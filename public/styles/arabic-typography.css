@@ -14,10 +14,6 @@ html[lang=ar] .stats strong {
 html[lang=ar] .card-title {
   font-family:inherit;
 }
-html[lang=ar] .d-ctl select {
-  font-family:inherit;
-  font-size:12px;
-}
 html[lang=ar] .d-appname {
   font-family:var(--deeda-font-body);
 }

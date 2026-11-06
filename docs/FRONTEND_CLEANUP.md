@@ -25,3 +25,7 @@ Extraction follows separate dependency preparation and literal move checkpoints.
 ## Static markup
 
 The HTML remains a static document. Formatting changes preserve parsed element order, attributes and text-bearing inline contents; no runtime templates or HTML interpolation are introduced. DOM workflow tests and real-browser layout comparisons cover the formatted document.
+
+## Confirmed unused rules
+
+After literal extraction, 14 application-only rules (50 lines) for `.d-ctl`, `.d-ctls` and `.community-live-filters` were removed with owner approval. Current HTML/JavaScript has no producers, and all six rendered views plus dialogs contained no matching elements. Supplied brand tokens remain untouched. An unused DOM import introduced in the refresh adapter extraction was also removed; that adapter depends on injected UI callbacks.
