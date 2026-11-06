@@ -16,7 +16,7 @@ You can browse the included library without an analysis account. Automatic comme
 Follow the official instructions for your operating system:
 
 - [Codex CLI installation](https://learn.chatgpt.com/docs/codex/cli). With npm, the reviewed version can be installed using `npm install -g @openai/codex@0.155.1`.
-- [Claude Code installation](https://code.claude.com/docs/en/setup), including its **Install a specific version** section. Select `2.1.281` for this integration.
+- [Claude Code installation: install a specific version](https://code.claude.com/docs/en/setup#install-a-specific-version). Select your operating system's command and replace the example version with `2.1.281` for this integration.
 
 Check with `codex --version` or `claude --version`. Reopen your terminal after installation, then restart PersonalTube from that terminal so it can find the new tool. PersonalTube does not install or downgrade these tools for you. If you already depend on another version, keep it and request compatibility support rather than changing it blindly.
 
@@ -74,3 +74,5 @@ This implementation runs the user's installed official CLI; it does not implemen
 ## What has been verified
 
 Automated tests cover missing tools, unsupported versions, signed-out and API-only states, official login arguments, failures, pending login, successful status transitions and completed-analysis counts for both providers. These use controlled synthetic fixtures. They are **not** a completed browser login with a brand-new account on a clean machine. Existing local credentials were not removed or replaced. A real first-time user must still complete the provider's own authentication and an explicit analysis request to validate their environment.
+
+A separate [clean-download check on 2026-11-07](FIRST_RUN_VERIFICATION.md) ran the GitHub application without installation/build steps and completed one real, synthetic-comment analysis through each provider using already-connected subscriptions. It verifies that the downloaded integration works with those existing accounts; it does not replace the first-login check above.

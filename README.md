@@ -57,6 +57,8 @@ cd Personal-Tube
 
 For a ZIP download, open a terminal inside the extracted folder.
 
+If GitHub shows **404 / Repository not found**, check that the repository is public or that your signed-in account has access to this private repository. Downloading a private repository requires access; installing Node does not resolve that message.
+
 ### 3. Start it
 
 ```sh
@@ -66,6 +68,10 @@ npm start
 Open **[http://127.0.0.1:4173](http://127.0.0.1:4173)** and keep that terminal open. Stop with **Ctrl+C**. There is no `npm install` step, build step, database or cloud hosting to configure.
 
 Optional: `npm run open` starts the server and opens a browser; on macOS it tries Chrome. macOS also has **Start PersonalTube.command**. Do not open `index.html` directly.
+
+If the terminal says **port 4173 is already in use**, first open the address above: PersonalTube may already be running. Otherwise stop the conflicting local server before retrying. If `npm` is not found, install Node with npm and reopen the terminal; if `package.json` is not found, open the terminal in the extracted project folder.
+
+See the [clean-download verification](docs/FIRST_RUN_VERIFICATION.md) for measured startup and provider-analysis results, including the limits of first-time login testing.
 
 ## What does it cost?
 
