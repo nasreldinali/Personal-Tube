@@ -1,0 +1,42 @@
+name: Bug report
+description: Report a reproducible problem in PersonalTube.
+labels: [bug]
+body:
+  - type: markdown
+    attributes:
+      value: "For security issues, follow SECURITY.md. Never attach API keys, tokens, browser backups, personal channel lists or unredacted logs."
+  - type: textarea
+    id: problem
+    attributes:
+      label: What happened?
+      description: Describe the actual result and what you expected instead.
+    validations:
+      required: true
+  - type: textarea
+    id: reproduce
+    attributes:
+      label: Steps to reproduce
+      placeholder: "1. Open My channels
+2. Choose ...
+3. Observe ..."
+    validations:
+      required: true
+  - type: input
+    id: environment
+    attributes:
+      label: Environment
+      description: OS, browser/version, Node version and PersonalTube version or commit.
+    validations:
+      required: true
+  - type: textarea
+    id: evidence
+    attributes:
+      label: Optional screenshot or error message
+      description: Remove account names, credentials, private URLs and personal content first.
+  - type: checkboxes
+    id: privacy
+    attributes:
+      label: Before submitting
+      options:
+        - label: I checked that this report contains no secrets or personal exports.
+          required: true

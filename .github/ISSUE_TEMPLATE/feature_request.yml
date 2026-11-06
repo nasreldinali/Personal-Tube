@@ -1,0 +1,23 @@
+name: Feature request
+description: Suggest a focused improvement to intentional viewing.
+labels: [enhancement]
+body:
+  - type: textarea
+    id: problem
+    attributes:
+      label: What problem would this solve?
+      description: Describe the user situation, not just a proposed button.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Suggested behavior
+      description: Include alternatives and how we would know the improvement works.
+    validations:
+      required: true
+  - type: textarea
+    id: considerations
+    attributes:
+      label: Optional considerations
+      description: Arabic/RTL, accessibility, API usage, local data or compatibility concerns. Do not include private data.

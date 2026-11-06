@@ -13,3 +13,11 @@ PersonalTube is a local, dependency-free Node.js application. Use Node.js 20 or 
 Never commit API keys, browser backups, environment files, screenshots with personal content or raw local logs. `.local/` is ignored and can hold private development evidence. Checks create `.local/reports/defect-plants.json` automatically. Test credentials are synthetic.
 
 Retained source data and brand assets are verified against `data/integrity.json`. Do not silently change their content or hashes. Preserve upstream attribution and font licenses. See [NOTICE](NOTICE.md) and [architecture](docs/ARCHITECTURE.md).
+
+## Find a first contribution
+
+Look for [good first issues](https://github.com/nasreldinali/Personal-Tube/labels/good%20first%20issue). Comment on the issue before a larger change so the scope is clear. Small documentation corrections can go straight to a pull request. Use the bug/feature templates; private security findings belong in the reporting path in SECURITY.md, not public issues.
+
+Fork the repository, create a focused branch, and describe the user-visible problem and validation in your pull request. The Checks workflow runs `npm run check` on Node.js 22 and 24 with public/synthetic fixtures only. No real YouTube key, provider login or model call is needed. Do not add credentials to make a test pass, and do not run an untrusted contribution with your personal credentials or elevated permissions.
+
+Preserve both README entry points when changing setup or feature requirements. Use public catalog content or synthetic data in screenshots. Original contributions are provided under this repository's MIT license; third-party data, fonts and branding keep the terms listed in NOTICE.md.

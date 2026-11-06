@@ -1,5 +1,11 @@
 # Changelog
 
+## 1.8.2 — 2026-11-06
+
+- Rewrite English and Arabic project introductions with real screenshots, setup requirements, a detailed user guide and explicit HackerTube/Karpathy attribution.
+- License original application code/documentation under MIT while preserving third-party data, fonts and brand terms.
+- Add contribution templates and pinned, read-only Node.js 22/24 checks on GitHub; verify the CI credential boundaries with deliberate defects.
+
 ## 1.8.1 — 2026-11-06
 
 - Channel-name choices follow the selected category and clear incompatible selections before rendering the feed.

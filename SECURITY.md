@@ -12,7 +12,7 @@ Report a suspected vulnerability privately to the repository owner through an ex
 
 ## Verification and limitations
 
-`npm run check` includes security-focused validation and 31 deliberately introduced defects in isolated scratch copies. The review target is applicable OWASP ASVS Level 1 controls for this local architecture, not formal certification. No guarantee of complete vulnerability or secret detection is made. Live-key API behavior and Premium playback require separate manual verification.
+`npm run check` includes security-focused validation and 33 deliberately introduced defects in isolated scratch copies. The review target is applicable OWASP ASVS Level 1 controls for this local architecture, not formal certification. No guarantee of complete vulnerability or secret detection is made. Live-key API behavior and Premium playback require separate manual verification.
 
 Before changing repository visibility, review all reachable history, author metadata, branches, tags, attachments and artifacts, plus data and brand licensing. Removing a file in a later commit does not remove earlier copies. History rewrites require explicit owner approval and coordination with existing clones.
 
@@ -29,3 +29,5 @@ Setup adds a guarded same-origin control route for fixed provider status/login/s
 The YouTube usage meter stores only daily aggregate counts and an incomplete-day marker. It never stores request URLs, keys or content, is excluded from portable backups, and is removed with personal data. Counter failure does not grant or change API access; it suppresses unreliable balances. Channel additions recheck pending channel and credential changes before saving. See [usage/loading review](docs/API_USAGE_PLAN.md).
 
 Live community recommendations require multiple distinct known endorsing accounts, positive-over-critical evidence and explicit browser-side popularity/language checks. Failed or cancelled verification never falls back to raw community mentions. Source cooldowns remain server-enforced; only bounded retry seconds reach the UI. Exact-quote validation and restrictions on classifier tools remain unchanged. See [community quality review](docs/COMMUNITY_QUALITY.md).
+
+The contribution workflow runs untrusted pull-request code only on GitHub-hosted runners, with a read-only contents token, no persisted checkout credentials, no repository secrets, pinned official actions and a ten-minute job limit. It does not use pull_request_target or a self-hosted runner. Two deliberate-defect checks verify token and checkout restrictions. Action updates must retain those boundaries. This is not network isolation or a full supply-chain certification.

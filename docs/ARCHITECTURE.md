@@ -23,7 +23,7 @@ INFERRED: a functional core with explicit adapters suits this local app without 
 |---|---|
 | GET/HEAD /health | JSON version 1, app=PersonalTube, status=ready; launcher rejects unknown service/version. |
 | GET/HEAD /catalog.json | JSON version 1, videos and areas arrays; frontend refuses unknown versions. Video IDs are 11-character identifiers. Dates/durations absent from the source are not fabricated. |
-| Asset manifest | Static same-origin modules/styles/fonts/images, package release 1.8.0; not an extension API. |
+| Asset manifest | Static same-origin modules/styles/fonts/images, package release 1.8.2; not an extension API. |
 | YouTube | External Data API v3; channels, playlistItems, videos, search and commentThreads only. X-Goog-Api-Key header, never URL. |
 
 ## Storage and input rules

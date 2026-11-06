@@ -16,4 +16,4 @@ Bundled fonts retain their accompanying notices in `public/assets/fonts/OFL.txt`
 
 ## Application code
 
-No open-source license has yet been selected for the application code. Repository visibility alone does not grant an open-source license. The owner must choose the intended licensing and brand/data distribution scope before a public release.
+Original PersonalTube application code and documentation are licensed under MIT; see [LICENSE](LICENSE). This grant does not replace the separate terms for the HackerTube/open-index data, third-party excerpts, bundled fonts, videos, or DEEDA marks/design assets described above. Screenshots illustrate the application and may contain third-party video imagery; they do not grant rights to reuse that video content or branding. Preserve the applicable notices when distributing a fork.

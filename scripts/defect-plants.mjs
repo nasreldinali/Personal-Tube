@@ -4,6 +4,8 @@ import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const cases = [
+  { name: 'ci-read-only-token', file: '.github/workflows/check.yml', from: 'contents: read', to: 'contents: write', test: 'test/repository-package.test.js' },
+  { name: 'ci-no-persisted-credentials', file: '.github/workflows/check.yml', from: 'persist-credentials: false', to: 'persist-credentials: true', test: 'test/repository-package.test.js' },
   { name: 'community-independent-endorsements', file: 'server/community-controller.js', from: 'video.independentRecommenders >= 2', to: 'video.independentRecommenders >= 1', test: 'test/community-flow.test.js' },
   { name: 'community-popularity-thresholds', file: 'public/services/community-quality.js', from: 'candidateVideos(response.items, settings)', to: 'candidateVideos(response.items, {...settings,minViews:0,minLikes:0})', test: 'test/community-quality.test.js' },
   { name: 'community-unverified-progress', file: 'public/ui/community-feed.js', from: "error=caught instanceof AppError?", to: "if(progress)response=progress;error=caught instanceof AppError?", test: 'test/community-ui.test.js' },
@@ -41,7 +43,7 @@ const results = [];
 for (const plant of cases) {
   const scratch = await mkdtemp(join(tmpdir(), 'personaltube-plant-'));
   try {
-    for (const name of ['public', 'server', 'test', 'package.json']) await cp(name, join(scratch, name), { recursive: true });
+    for (const name of ['public', 'server', 'test', '.github', 'package.json']) await cp(name, join(scratch, name), { recursive: true });
     const file = join(scratch, plant.file);
     const before = await readFile(file, 'utf8');
     if (!before.includes(plant.from)) throw new Error(`Plant target changed: ${plant.name}`);

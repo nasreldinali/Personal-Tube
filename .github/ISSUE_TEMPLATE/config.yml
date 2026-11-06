@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: User guide
+    url: https://github.com/nasreldinali/Personal-Tube/blob/main/docs/USER_GUIDE.md
+    about: Setup, accounts, API usage and feature limits.
+  - name: Security policy
+    url: https://github.com/nasreldinali/Personal-Tube/blob/main/SECURITY.md
+    about: Read this before reporting a potential vulnerability; do not use a public issue.
