@@ -15,3 +15,4 @@ Extraction follows separate dependency preparation and literal move checkpoints.
 - `ui/data-transfer.js` owns validated backup import/export and reset confirmations. Transactional persistence stays in BrowserStore; temporary community deletion still completes before personal data is cleared.
 - `ui/library-actions.js` owns selection, hide/restore and watch-later/watched actions. Saved metadata is written before library flags; selection restores keyboard focus.
 - `ui/library-feed.js` owns filters, feed rendering and pagination. Auxiliary panels are refreshed through a composition callback in their original order; selectors read current state on every action.
+- `ui/navigation-panel.js` owns route transitions, sidebar collapse, language/theme application and the search shortcut. App state remains owned by the composition root.

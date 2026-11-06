@@ -1,3 +1,4 @@
+import { createNavigationPanel } from './ui/navigation-panel.js';
 import { createLibraryFeed } from './ui/library-feed.js';
 import { createLibraryActions } from './ui/library-actions.js';
 import { createDataTransfer } from './ui/data-transfer.js';
@@ -8,7 +9,7 @@ import { createFeedbackPanel } from './ui/feedback-panel.js';
 import { videoPattern } from './config.js';
 import { emptyState } from './domain/feed.js';
 import { emptyLibrary } from './domain/library.js';
-import { parsePreferences, preferenceAttributes, refreshSettings, automaticRefreshDue } from './domain/preferences.js';
+import { parsePreferences, refreshSettings, automaticRefreshDue } from './domain/preferences.js';
 import { AppError } from './domain/errors.js';
 import { BrowserStore } from './data/browser-store.js';
 import { YouTubeUsage, USAGE_KEY, USAGE_FAILURE_KEY } from './data/youtube-usage.js';
@@ -16,7 +17,7 @@ import { YouTubeClient } from './data/youtube.js';
 import { refreshChannels } from './services/refresh.js';
 import { applyRefreshResult } from './services/refresh-result.js';
 import { t, messages } from './locale.js';
-import { byId as $, translatePage } from './ui/dom.js';
+import { byId as $ } from './ui/dom.js';
 import { parseDiscovery } from './domain/discovery.js';
 import { createDiscoveryPanel } from './ui/discovery-panel.js';
 import { viewFromHash } from './domain/panel-actions.js';
@@ -156,50 +157,6 @@ window.addEventListener('storage', event => {
 window.addEventListener('online', () => { notify(); void refresh(); });
 document.addEventListener('visibilitychange', () => { if (!document.hidden) { render(); void refresh(); } });
 setInterval(() => { if (!document.hidden) { render(); void refresh(); } }, 60000);
-
-function createNavigationPanel({
-  text, readPreferences, readDiscovery, savePreferences, saveDiscovery, setMode, resetPageSize, resetSelection,
-  renderFilters, render, renderChannels, renderPlayerButtons, renderConfirmation, bind,
-}) {
-  function applyLayout() {
-    document.documentElement.dataset.collapsed = String(readDiscovery().collapsed);
-    const label = text(readDiscovery().collapsed ? 'expandSidebar' : 'collapseSidebar');
-    $('sidebar-toggle').setAttribute('aria-expanded', String(!readDiscovery().collapsed));
-    $('sidebar-toggle').setAttribute('aria-label', label); $('sidebar-toggle').title = label;
-    $('sidebar-toggle').lastElementChild.textContent = label;
-    document.querySelectorAll('.d-nav button').forEach(button => {
-      const key = button.querySelector('[data-i18n]')?.dataset.i18n;
-      if (key) { button.setAttribute('aria-label', text(key)); button.title = text(key); }
-    });
-  }
-  function applyPreferences() {
-    const attrs = preferenceAttributes(readPreferences());
-    document.documentElement.lang = attrs.lang;
-    document.documentElement.dir = attrs.dir;
-    if (attrs.theme) document.documentElement.dataset.theme = attrs.theme;
-    else delete document.documentElement.dataset.theme;
-    translatePage(readPreferences().language);
-    $('language').value = readPreferences().language;
-    $('theme').value = readPreferences().theme;
-    applyLayout(); renderFilters(); render(); renderChannels(); renderPlayerButtons();
-    renderConfirmation();
-  }
-  function changeMode(value) {
-    setMode(value); history.replaceState(null,'',`#${value}`); resetPageSize(); resetSelection();
-    $('search').value = ''; $('area').value = ''; $('category').value = ''; $('duration').value = 'all'; $('hide-watched').checked = false;
-    renderFilters(); render();
-  }
-  for (const view of ['discover', 'channels', 'later', 'watched', 'recommendations', 'community']) bind(`view-${view}`, 'click', () => changeMode(view));
-  bind('sidebar-toggle', 'click', () => { saveDiscovery({ ...readDiscovery(), collapsed: !readDiscovery().collapsed }); applyLayout(); });
-  bind('hero-explore', 'click', () => { changeMode('discover'); $('feed').scrollIntoView(); });
-  bind('language', 'change', () => { const next = { ...readPreferences(), language: $('language').value }; savePreferences(next); applyPreferences(); });
-  bind('theme', 'change', () => { const next = { ...readPreferences(), theme: $('theme').value }; savePreferences(next); applyPreferences(); });
-  window.addEventListener('hashchange',()=>{if(location.hash!=='#feed')changeMode(viewFromHash(location.hash));});
-  document.addEventListener('keydown', event => {
-    if (event.key === '/' && !document.querySelector('dialog[open]') && !['INPUT', 'TEXTAREA', 'SELECT'].includes(document.activeElement?.tagName)) { event.preventDefault(); $('search').focus(); }
-  });
-  return { applyPreferences, applyLayout, changeMode };
-}
 
 const { applyPreferences, changeMode } = createNavigationPanel({
   text, readPreferences: () => preferences, readDiscovery: () => discovery,
