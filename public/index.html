@@ -384,6 +384,27 @@
             </article>
           </div>
           <p class="help" data-i18n="subscriptionMethodHelp"></p>
+          <details id="minimax-panel" class="minimax-connection setup-details">
+            <summary><span data-i18n="minimaxTitle"></span><span id="minimax-badge" class="connection-badge"></span></summary>
+            <div class="minimax-body">
+              <p class="help" data-i18n="minimaxSteps"></p>
+              <a href="https://platform.minimax.io/console/plan" target="_blank" rel="noopener noreferrer" data-i18n="minimaxAccount"></a>
+              <form id="minimax-form">
+                <label class="d-field"><span data-i18n="minimaxKey"></span><input id="minimax-key" class="d-input" type="password" maxlength="2048" required autocomplete="off" spellcheck="false" dir="ltr" placeholder="sk-cp-…" aria-describedby="minimax-limits"></label>
+                <label class="check api-consent"><input id="minimax-consent" type="checkbox" required><span data-i18n="minimaxConsent"></span></label>
+                <button id="minimax-save" class="d-btn d-btn-secondary" data-i18n="minimaxSave"></button>
+              </form>
+              <p class="help" data-i18n="minimaxTestHelp"></p>
+              <p id="minimax-state" class="provider-state" role="status"></p>
+              <div class="minimax-actions">
+                <button type="button" id="minimax-test" class="d-btn d-btn-secondary" data-i18n="apiTest"></button>
+                <button type="button" id="minimax-use" class="d-btn d-btn-primary" data-i18n="minimaxUse" hidden></button>
+                <button type="button" id="minimax-forget" class="text-button" data-i18n="apiRemove"></button>
+              </div>
+              <p id="minimax-limits" class="help" data-i18n="minimaxLimits"></p>
+            </div>
+          </details>
+
           <details class="setup-details">
             <summary data-i18n="setupStepsTitle"></summary>
             <ol><li data-i18n="setupStepInstall"></li><li data-i18n="setupStepLogin"></li><li data-i18n="setupStepVerify"></li></ol>

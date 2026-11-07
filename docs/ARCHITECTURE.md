@@ -87,3 +87,7 @@ Community result version 1 adds independentRecommenders, positiveComments and cr
 ## Additional analysis adapters
 
 `public/domain/analysis-providers.js` validates provider/model/key/consent values. `server/analysis-request.js` owns fixed-destination bounded HTTP requests; `server/api-analysis.js` owns session configurations and protocol formatting; `server/classification-prompt.js` shares the existing comment instructions across CLI and API adapters. `ui/api-connections.js` owns the API form, secret-field lifetime and explicit test/removal controls. The provider manager serializes these with subscription operations and validates evidence before recording success. No dependencies or storage formats were added.
+
+## Direct MiniMax subscription
+
+`domain/minimax-subscription.js` owns pure subscription-key/consent validation and the fixed model. `server/minimax-subscription.js` owns ephemeral credentials, the Anthropic-compatible request and final-text validation; shared `analysis-request.js` pins the global endpoint and bounds transport. `ui/minimax-connection.js` owns the separate save/test/use form. The manager can test MiniMax without changing the selected provider; normal classification still uses the explicit selection. CLI process policies are unchanged. [Version 1 request fields](ANALYSIS_PROVIDERS.md#local-setup-interface-version-1) and [billing boundaries](MINIMAX_SUBSCRIPTION.md) are documented. No dependency, credential-file or persistent-storage changes.

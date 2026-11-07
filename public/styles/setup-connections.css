@@ -72,3 +72,13 @@
   .api-connections { padding:12px; }
   .setup-active { font-size:12px; }
 }
+
+.minimax-connection { border:1px solid var(--line); border-radius:12px; padding:14px; margin-block:16px; }
+.minimax-connection summary .connection-badge { margin-inline-start:12px; }
+.minimax-body { display:grid; gap:12px; padding-top:16px; }
+.minimax-body > p, .minimax-body .provider-state { margin:0; }
+#minimax-form { display:grid; gap:14px; }
+#minimax-form .d-btn { justify-self:start; }
+.minimax-actions { display:flex; flex-wrap:wrap; align-items:center; gap:12px; }
+.minimax-body .d-btn { font-size:12px; min-height:40px; padding:8px 14px; }
+#setup-dialog #minimax-key { min-height:42px; font-size:13px; }

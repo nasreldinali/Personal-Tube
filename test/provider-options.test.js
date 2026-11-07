@@ -54,3 +54,17 @@ test('subscription sample tests require confirmation and selection, stay subscri
  const wrongAuth=createProviderManager({inspect:async()=>({installed:true,supported:true,connected:true,method:'other'}),classifiers:{codex:async()=>{throw Error('must not run');}},now:()=>100000});
  await assert.rejects(wrongAuth.control({version:1,action:'test',provider:'codex',confirm:true}),{code:'analysisConnectionRequired'});
 });
+
+test('MiniMax configuration and isolated tests preserve selection and both CLI connections',async()=>{
+ let saved=false,calls=0;const untouched=[];
+ const minimax={configure(){saved=true;},forget(){saved=false;},inspect:()=>({installed:true,supported:true,connected:saved,method:'subscription'}),classify:async()=>{calls++;return result;}};
+ const manager=createProviderManager({inspect:async p=>({installed:true,supported:true,connected:true,method:'subscription'}),login:async p=>untouched.push(p),logout:async p=>untouched.push(p),classifiers:{codex:async()=>result,claude:async()=>result},minimax,now:()=>100000});
+ await manager.control({version:1,action:'select',provider:'claude'});
+ const state=await manager.control({version:1,action:'configure',provider:'minimax',configuration:{provider:'minimax',key:'sk-cp-fixture',confirmSubscription:true}});assert.equal(state.selected,'claude');assert.equal(calls,0);
+ await assert.rejects(manager.control({version:1,action:'test',provider:'minimax'}),{code:'invalidSetup'});
+ const tested=await manager.control({version:1,action:'test',provider:'minimax',confirm:true});assert.equal(tested.selected,'claude');assert.equal(tested.providers.minimax.tested,true);assert.equal(tested.providers.codex.connected,true);assert.equal(tested.providers.claude.connected,true);assert.equal(calls,1);
+ await assert.rejects(manager.control({version:1,action:'test',provider:'minimax',confirm:true}),{code:'connectionCooldown'});
+ await assert.rejects(manager.control({version:1,action:'logout',provider:'minimax',confirm:true}),{code:'invalidSetup'});
+ await manager.control({version:1,action:'connect',provider:'minimax'});assert.equal((await manager.control({version:1,action:'status'})).selected,'minimax');
+ await manager.control({version:1,action:'forget',provider:'minimax',confirm:true});await assert.rejects(manager.classify(rows),{code:'analysisConnectionRequired'});assert.equal(calls,1);assert.deepEqual(untouched,[]);
+});

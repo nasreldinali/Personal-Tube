@@ -20,3 +20,11 @@ export function setupDocumentFixture() {
   const node=()=>({value:'codex',children:[],dataset:{},attributes:{},setAttribute(key,value){this.attributes[key]=value;},removeAttribute(key){delete this.attributes[key];},scrollIntoView(){},listeners:{},addEventListener(event,handler){this.listeners[event]=handler;},replaceChildren(...children){this.children=children;},append(...children){this.children.push(...children);},showModal(){this.open=true;},close(){this.open=false;}});
   return {nodes,document:{getElementById(id){if(!nodes.has(id))nodes.set(id,node());return nodes.get(id);},createElement:node}};
 }
+export function setupFetchFixture(handler) {
+  return async (url, options, origin = 'http://127.0.0.1:4173') => {
+    let status, reply;
+    const request = { url, method: options.method, headers: { host: '127.0.0.1:4173', origin, 'content-type': 'application/json' }, async *[Symbol.asyncIterator]() { yield Buffer.from(options.body); } };
+    await handler(request, { writeHead: code => { status = code; }, end: body => { reply = JSON.parse(body); } });
+    return { ok: status === 200, status, json: async () => reply };
+  };
+}

@@ -140,3 +140,11 @@ Follow-up live Chrome verification returned eight recommendations from 48 candid
 ## Automatic YouTube analysis, 1.3.0
 
 MEASURED: deterministic tests cover search-to-analysis integration, exact quote binding, dissent counts, two-positive minimum, fail-closed output, creator/author/text deduplication, version/size/field limits, same-origin route checks, cooldown and shared classifier policy. The prior manual sample path is replaced by automatic analysis. Independent security review found no blocker and verified boundaries with synthetic probes; no real keys or author identifiers enter the analysis payload. Live verification is recorded in [the analysis record](YOUTUBE_ANALYSIS.md).
+
+## MiniMax M Plan connection — 2026-11-07
+
+MEASURED: `npm run check` passes **231 deterministic tests and 52 deliberate-defect checks**, plus syntax, formatting, import/layer and source/asset integrity checks. New fixtures cover strict subscription credentials, acknowledgement, fixed destination/model, memory-only key handling, exact-quote evidence, rejected output, preserved selection, concurrency and no fallback. The full UI → same-origin HTTP → manager → MiniMax-adapter path runs with an injected response, never a paid service.
+
+MEASURED: isolated browser setup/save/confirmed-test succeeded while Codex remained selected. The real restarted local server still detected both Codex and Claude subscriptions, with Codex selected; no login/logout or model calls were made during this change. Desktop Arabic, 390-pixel phone and 768-pixel tablet layouts were inspected, with no dialog horizontal overflow or browser warning/error logs in these checks. Session counters reset on server restart; earlier real Codex/Claude test evidence remains in the preceding record.
+
+LIMIT: no real MiniMax subscription key was supplied or consumed. Actual MiniMax account/model compatibility must be verified using **Test with one sample** after entering an eligible M Plan key in the app. The key-prefix gate cannot independently verify provider billing; MiniMax's possible use of existing credit packs is disclosed before saving and testing. This is not security certification or a guarantee of quota-only billing.

@@ -2,12 +2,13 @@
 
 [Setup guide](ANALYSIS_SETUP.md) · [README](../README.md)
 
-PersonalTube supports two subscription CLIs, three cloud API services and two local model servers. Choose one explicitly in **Setup & connections**. It never changes services to work around an error or an exhausted allowance.
+PersonalTube supports two subscription CLIs, a direct MiniMax M Plan connection, three cloud API services and two local model servers. Choose one explicitly in **Setup & connections**. It never changes services to work around an error or an exhausted allowance.
 
 | Connection | What you supply | Where analysis runs | Billing |
 |---|---|---|---|
 | Codex | Supported official CLI and your ChatGPT login | OpenAI | Your eligible plan and allowance |
 | Claude Code | Supported official CLI and your Claude login | Anthropic | Your eligible plan and allowance |
+| MiniMax M Plan | Your global subscription key (`sk-cp-…`) | MiniMax | Included quota, then existing credit packs; no pay-as-you-go fallback |
 | OpenAI API | Your API key and exact model ID | OpenAI | Separate API billing |
 | Anthropic API | Your API key and exact model ID | Anthropic | Separate API billing |
 | OpenRouter | Your API key and exact model ID | The service/model provider you select | Your OpenRouter account; model-dependent |
@@ -23,6 +24,10 @@ Install a supported CLI using [the account guide](ANALYSIS_SETUP.md). A signed-o
 **Test with one sample** also works for the selected connected subscription. It sends one synthetic comment through the same classifier, uses your plan allowance, requires confirmation and has a one-minute per-service cooldown. It does not log out, fetch YouTube data or fall back to a paid API.
 
 Tests use synthetic accounts for logout. Existing personal credentials are never removed for an automated test.
+
+## MiniMax subscription setup
+
+Choose **Subscription → MiniMax · M Plan subscription**. Save your M Plan key, then test one sample. Saving and testing do not change the selected provider or Codex/Claude sign-ins. Choose **Use MiniMax** explicitly when ready. See the [step-by-step guide and credit-pack caveat](MINIMAX_SUBSCRIPTION.md).
 
 ## Cloud API setup
 
@@ -56,9 +61,10 @@ API-key rejection, rate limits, unavailable servers and invalid model output are
 `POST /api/setup` requires same-origin JSON and a body of at most 6,000 bytes. Existing status/select/connect actions remain. New actions:
 
 - `logout`: subscription `provider`, `confirm: true`.
+- `configure` for MiniMax: `provider: "minimax"`, `configuration` containing exactly `provider: "minimax"`, `key` starting with `sk-cp-`, and `confirmSubscription: true`. Saves without selection or network access.
 - `configure`: API/local `provider`, `configuration` containing exactly `provider`, `model`, `key`, `acknowledgeCost`. Cloud options require a nonempty key and `true`; local options require an empty key and `false`.
-- `forget`: API/local `provider`, `confirm: true`.
-- `test`: selected subscription/API/local `provider`, `confirm: true`.
+- `forget`: MiniMax/API/local `provider`, `confirm: true`.
+- `test`: selected subscription/API/local `provider`, `confirm: true`. MiniMax may also be tested while inactive; its isolated test preserves selection.
 
 Every request includes `version: 1`; unknown versions, providers and additional input fields are refused. Status returns availability, method, model ID, tested state and aggregate usage, never keys. Login, analysis and configuration mutations cannot race. The server is for one local user, not a publicly hosted account service.
 
@@ -74,10 +80,8 @@ Reference protocols: [OpenAI Chat Completions](https://developers.openai.com/api
 
 For LM Studio, load your model and start its local server on port 1234, then select LM Studio and its model ID. Model size, hardware, context and JSON support determine whether the test succeeds. PersonalTube does not install models. [Ollama's Gemma 4 listing](https://registry.ollama.com/library/gemma4) documents available variants; cloud variants are not local inference.
 
-## MiniMax and Kimi subscriptions
+## Kimi subscriptions
 
-These are **not direct PersonalTube subscription connectors**. Do not paste their subscription keys into OpenAI, Anthropic or OpenRouter fields: a credential belongs to its issuing service. Selecting a compatible model through OpenRouter uses OpenRouter billing, not an existing MiniMax/Kimi subscription.
-
-MiniMax's [plan documentation](https://platform.minimax.io/subscribe/token-plan) describes subscription keys for compatible tools, distinct from ordinary pay-as-you-go keys. Supporting that plan here would require a dedicated, verified connector with its own endpoint and account semantics; the present UI does not implement it.
+Kimi is not a direct PersonalTube subscription connector. Do not paste its subscription key into another service’s field. OpenRouter models use OpenRouter billing, not a Kimi subscription.
 
 Kimi Code's [current usage guidelines](https://www.kimi.com/en/help/kimi-code/community-guidelines) distinguish interactive personal use from non-interactive scripted batches/data annotation. That makes it unsuitable to present as a drop-in subscription for this automatic comment-analysis flow without provider clarification. This is a product-support limitation, not a claim that Kimi models cannot analyze comments. Separately billed model API access is a different product.

@@ -45,7 +45,7 @@ PersonalTube adds a workflow for ongoing personal use:
 | Four interface languages | English, Arabic, German and Spanish controls; Arabic right-to-left layout, light/dark/system themes and responsive cards. Source titles and quotes keep their original language; catalog topic/category labels currently have English and Arabic translations. |
 | Live community discovery | Choose a topic and source; collect and analyze the selected comments automatically, with progress and supporting quotes. |
 | Visible recommendation requirements | Adjust minimum views/likes, declared audio language and endorsement count. Unverified results are withheld. |
-| Your choice of analysis provider | Sign in/out of Codex or Claude Code; configure OpenAI, Anthropic or OpenRouter API access; or connect a local Ollama/LM Studio model. Each user supplies their own access. |
+| Your choice of analysis provider | Sign in/out of Codex or Claude Code; connect your MiniMax M Plan subscription; configure OpenAI, Anthropic or OpenRouter API access; or connect a local Ollama/LM Studio model. Each user supplies their own access. |
 | Refresh and usage controls | Manual or scheduled channel refresh, selectable intervals and an explicitly estimated daily YouTube API counter. |
 | Personal library controls | Watch later, watched history, confirmed single/bulk hiding, restore, category management and portable backups. |
 | A choice of video images | Original thumbnail or a video-frame image; sticky filters and a collapsible sidebar. |
@@ -91,7 +91,7 @@ See the [clean-download verification](docs/FIRST_RUN_VERIFICATION.md) for measur
 
 This can comfortably fit moderate personal channel-following, but is not an unlimited-use promise. For illustration, 20 channels refreshed four times a day at two data requests per channel would use about 160 units; additional upload pages, searches, comments, retries and other apps using the same project add usage. Select manual refresh or a longer interval to reduce requests. Playing a video does not consume Data API quota. Reaching the limit stops new requests until quota is available; the app does not buy extra quota automatically.
 
-**Comment analysis is separate and optional.** Choose your own eligible Codex/ChatGPT or Claude Code subscription, an explicitly configured cloud API, or a local model. API billing is separate from subscriptions and requires acknowledgement before configuration; connection tests can incur charges. Local models require your own hardware and setup. There is no automatic provider switch, shared allowance or unlimited analysis promise. The original library needs none of these connections.
+**Comment analysis is separate and optional.** Choose your own eligible Codex/ChatGPT, Claude Code or MiniMax M Plan subscription, an explicitly configured cloud API, or a local model. API billing is separate from subscriptions and requires acknowledgement before configuration; connection tests can incur charges. Local models require your own hardware and setup. There is no automatic provider switch, shared allowance or unlimited analysis promise. The original library needs none of these connections.
 
 ## What do I need for each feature?
 
@@ -112,9 +112,12 @@ For live features, open **Setup & connections**. Create a key with **YouTube Dat
 | You prefer… | Choose… | You need… |
 |---|---|---|
 | Your existing eligible subscription | Codex or Claude Code | Supported CLI and your own login |
+| Direct MiniMax subscription | MiniMax M Plan | Global subscription key; included quota, then existing credit packs. [Setup and test](docs/MINIMAX_SUBSCRIPTION.md) |
 | Direct cloud API access | OpenAI or Anthropic API | API key, model ID and explicit billing acknowledgement |
 | A wider choice of hosted closed/open-weight models | OpenRouter | Its API key and a compatible model ID |
 | Running a model on your own computer | Ollama or LM Studio | Local model server and installed model; enough hardware |
+
+MiniMax has a separate **save → test → use** flow. Saving/testing keeps your selected provider and Codex/Claude logins unchanged. It accepts M Plan keys only, without pay-as-you-go fallback; MiniMax may consume existing credit packs after plan quota. Actual MiniMax account compatibility still needs your explicit sample test.
 
 **Configured** is not the same as **tested**. An explicit one-sample test verifies the selected subscription, API or local model; it uses subscription allowance or may cost money for cloud APIs. Keys stay only in the local server's memory until removed or the server stops. Sign-out confirms its effect on the official CLI before acting. [Setup steps, supported endpoints and limits →](docs/ANALYSIS_PROVIDERS.md)
 

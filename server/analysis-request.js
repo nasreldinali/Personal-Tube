@@ -1,6 +1,7 @@
 import { AppError } from '../public/domain/errors.js';
 
 const endpoints = {
+  minimax: 'https://api.minimax.io/anthropic/v1/messages',
   openai: 'https://api.openai.com/v1/chat/completions',
   anthropic: 'https://api.anthropic.com/v1/messages',
   openrouter: 'https://openrouter.ai/api/v1/chat/completions',

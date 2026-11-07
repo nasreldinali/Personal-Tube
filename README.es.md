@@ -10,6 +10,9 @@ PersonalTube es un panel local de YouTube basado en la [idea de HackerTube de An
 
 *Selección ilustrativa de vídeos de distintas fechas. El uso normal muestra el periodo elegido de 1–7 días.*
 
+
+**MiniMax M Plan:** En **Setup & connections → Subscription → MiniMax**, guarda tu clave de suscripción (`sk-cp-…`) y prueba una muestra. Guardar/probar no cambia el proveedor seleccionado ni las sesiones de Codex/Claude. **Use MiniMax** lo selecciona explícitamente. Sin alternativa de pago por uso; MiniMax puede consumir paquetes de créditos existentes al agotar la cuota. Falta verificar una cuenta real. [Configuración y límites](docs/MINIMAX_SUBSCRIPTION.md).
+
 ## Empezar
 
 1. Instala [Node.js 22 o 24](https://nodejs.org/en/download) con npm.

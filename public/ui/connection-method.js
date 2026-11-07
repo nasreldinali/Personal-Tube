@@ -16,7 +16,7 @@ export function createConnectionMethod({ setMethod, clearSecret = () => {} }) {
     render(provider) {
       if (initialized || !provider) return;
       initialized=true;
-      show(subscriptionProviders.includes(provider) ? 'subscription' : isLocalProvider(provider) ? 'local' : 'api');
+      show((provider === 'minimax' || subscriptionProviders.includes(provider)) ? 'subscription' : isLocalProvider(provider) ? 'local' : 'api');
     },
   };
 }

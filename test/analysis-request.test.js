@@ -8,6 +8,7 @@ test('analysis transport pins destinations, refuses redirects and never echoes u
  assert.equal(url,'https://api.openai.com/v1/chat/completions');assert.equal(options.redirect,'error');assert.equal(options.method,'POST');
  await assert.rejects(requestAnalysis('https://evil.test',{body:{}},fetcher),{code:'invalidSetup'});
  for(const status of [301,401,403,429,500])await assert.rejects(requestAnalysis('openai',{body:{}},async()=>new Response('secret fixture',{status})),error=>!error.message.includes('secret fixture'));
+ await requestAnalysis('minimax',{body:{}},fetcher);assert.equal(url,'https://api.minimax.io/anthropic/v1/messages');assert.equal(options.redirect,'error');
  await requestAnalysis('ollama',{body:{}},fetcher);assert.equal(url,'http://127.0.0.1:11434/api/chat');
 });
 test('analysis transport caps response bytes and stops a stalled response body',async()=>{

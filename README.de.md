@@ -10,6 +10,9 @@ PersonalTube ist ein lokales YouTube-Dashboard auf Grundlage von Andrej Karpathy
 
 *Illustrative Auswahl aus unterschiedlichen Veröffentlichungszeiträumen. Im normalen Betrieb zeigt der Feed das gewählte Fenster von 1–7 Tagen.*
 
+
+**MiniMax M Plan:** Unter **Setup & connections → Subscription → MiniMax** den eigenen Aboschlüssel (`sk-cp-…`) speichern und ein Beispiel testen. Speichern/Testen ändern weder die Dienstauswahl noch Codex-/Claude-Anmeldungen. Erst **Use MiniMax** wählt den Dienst. Kein Pay-as-you-go-Ausweichdienst; MiniMax kann nach Verbrauch des Kontingents vorhandene Credit-Pakete nutzen. Ein echter Kontotest steht noch aus. [Einrichtung und Grenzen](docs/MINIMAX_SUBSCRIPTION.md).
+
 ## Starten
 
 1. [Node.js 22 oder 24](https://nodejs.org/en/download) mit npm installieren.

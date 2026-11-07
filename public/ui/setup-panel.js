@@ -1,3 +1,4 @@
+import { createMiniMaxConnection } from './minimax-connection.js';
 import { createConnectionMethod } from './connection-method.js';
 import { createApiConnections } from './api-connections.js';
 import { providerIds, providerNames } from '../domain/analysis-providers.js';
@@ -18,7 +19,9 @@ export function createSetupPanel({ context, finish, openYouTube, onError, schedu
   const name = provider => provider === 'claude' ? 'Claude' : providerNames[provider];
   const text = (key, values) => t(context().language, key, values);
   const apiPanel = createApiConnections({text,request,confirm});
-  const methods = createConnectionMethod({setMethod:apiPanel.setMethod,clearSecret:apiPanel.clearSecret});
+  const minimaxPanel = createMiniMaxConnection({text,request,confirm});
+  const clearSecrets = () => { apiPanel.clearSecret(); minimaxPanel.clearSecret(); };
+  const methods = createConnectionMethod({setMethod:apiPanel.setMethod,clearSecret:clearSecrets});
   function stopPolling() { if (timer !== null) cancel(timer); timer = null; }
   function render() {
     $('setup-check').disabled = running;
@@ -46,7 +49,9 @@ export function createSetupPanel({ context, finish, openYouTube, onError, schedu
     $('setup-status').replaceChildren(...['setupRuntime', context().storageReady ? 'setupStorageReady' : 'setupStorageBlocked'].map(key => element('li', '', text(key))));
     $('setup-message').textContent = running ? text(message === 'analysisTesting' ? 'analysisTesting' : 'setupChecking') : message ? text(message, messageValues) : '';
     $('setup-usage').replaceChildren();
-    apiPanel.render(result, running || context().busy || Boolean(result?.busy) || Boolean(result && providers.some(p=>result.providers[p]?.connection==='pending' && !result.providers[p]?.connected)));
+    const connectionBusy = running || context().busy || Boolean(result?.busy) || Boolean(result && providers.some(p=>result.providers[p]?.connection==='pending' && !result.providers[p]?.connected));
+    apiPanel.render(result, connectionBusy);
+    minimaxPanel.render(result, connectionBusy);
     methods.render(result?.selected);
     if (result) for (const provider of providerIds.filter(p=>result.usage[p])) {
       const usage = result.usage[provider];
@@ -78,7 +83,7 @@ export function createSetupPanel({ context, finish, openYouTube, onError, schedu
       result = data; succeeded = true; message = action === 'test' ? 'analysisTested' : '';
       if (action === 'connect') { pollUntil = now() + 185000; message = data.providers[provider].connected ? 'providerSelected' : 'loginAutoCheck'; messageValues = { provider: name(provider) }; }
     } catch (error) {
-      const allowed = ['busy', 'providerMissing', 'classifierVersion', 'connectionCooldown', 'connectionFailed', 'invalidSetup', 'analysisConnectionRequired', 'analysisKeyRequired', 'analysisCostRequired', 'analysisModelRequired', 'analysisAuthFailed', 'analysisRateLimit', 'analysisUnavailable', 'invalidClassification'];
+      const allowed = ['busy', 'providerMissing', 'classifierVersion', 'connectionCooldown', 'connectionFailed', 'invalidSetup', 'analysisConnectionRequired', 'analysisKeyRequired', 'analysisCostRequired', 'analysisModelRequired', 'analysisAuthFailed', 'analysisRateLimit', 'analysisUnavailable', 'invalidClassification', 'minimaxSubscriptionKeyRequired', 'minimaxSubscriptionConsent'];
       message = allowed.includes(error.code) ? error.code : 'setupCheckFailed';
     } finally { running = false; render(); if (succeeded) poll(); }
   }
@@ -96,7 +101,7 @@ export function createSetupPanel({ context, finish, openYouTube, onError, schedu
   });
   $('setup-open').addEventListener('click', open);
   $('setup-check').addEventListener('click', () => { pollUntil = 0; void request('status'); });
-  $('setup-dialog').addEventListener('close', () => { opened = false; stopPolling(); apiPanel.clearSecret(); });
+  $('setup-dialog').addEventListener('close', () => { opened = false; stopPolling(); clearSecrets(); });
   $('setup-youtube').addEventListener('click', () => { returningFromYouTube = true; $('settings-back').hidden = false; opened = false; stopPolling(); $('setup-dialog').close(); openYouTube(); });
   $('settings-back').addEventListener('click', () => $('settings-dialog').close());
   $('settings-dialog').addEventListener('close', () => {

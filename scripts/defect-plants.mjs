@@ -4,7 +4,13 @@ import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const cases = [
-  { name: 'sample-test-selected-provider', file: 'server/provider-manager.js', from: "if (selected !== provider)", to: 'if (false)', test: 'test/provider-options.test.js' },
+  { name: 'minimax-key-type', file: 'public/domain/minimax-subscription.js', from: '!/^sk-cp-[A-Za-z0-9_-]+$/.test(value.key)', to: 'false', test: 'test/minimax-policy.test.js' },
+  { name: 'minimax-plan-consent', file: 'public/domain/minimax-subscription.js', from: 'value.confirmSubscription !== true', to: 'false', test: 'test/minimax-policy.test.js' },
+  { name: 'minimax-save-preserves-selection', file: 'server/provider-manager.js', from: 'minimax.configure(input.configuration);', to: 'minimax.configure(input.configuration); selected=provider;', test: 'test/provider-options.test.js' },
+  { name: 'minimax-test-preserves-selection', file: 'server/provider-manager.js', from: "if (input.action === 'test') {", to: "if (input.action === 'test') { if (provider === 'minimax') selected=provider;", test: 'test/provider-options.test.js' },
+  { name: 'minimax-fixed-endpoint', file: 'server/analysis-request.js', from: 'https://api.minimax.io/anthropic/v1/messages', to: 'https://api.openai.com/v1/chat/completions', test: 'test/analysis-request.test.js' },
+  { name: 'minimax-evidence-validation', file: 'server/minimax-subscription.js', from: 'applyClassifications(rows,result);', to: '', test: 'test/minimax-subscription.test.js' },
+  { name: 'sample-test-selected-provider', file: 'server/provider-manager.js', from: "if (selected !== provider && provider !== 'minimax')", to: 'if (false)', test: 'test/provider-options.test.js' },
   { name: 'sample-test-cooldown', file: 'server/provider-manager.js', from: 'now() - (lastTest[provider] ?? -Infinity) < 60000', to: 'false', test: 'test/provider-options.test.js' },
   { name: 'local-cloud-tag-refusal', file: 'public/domain/analysis-providers.js', from: 'model)))', to: "'local')))" , test: 'test/analysis-providers.test.js' },
   { name: 'api-explicit-cost-consent', file: 'public/domain/analysis-providers.js', from: 'acknowledgeCost !== true', to: 'false', test: 'test/analysis-providers.test.js' },

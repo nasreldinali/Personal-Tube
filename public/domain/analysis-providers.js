@@ -2,8 +2,8 @@ import { AppError } from './errors.js';
 
 export const subscriptionProviders = ['codex', 'claude'];
 export const apiProviderIds = ['openai', 'anthropic', 'openrouter', 'ollama', 'lmstudio'];
-export const providerIds = [...subscriptionProviders, ...apiProviderIds];
-export const providerNames = { codex:'Codex', claude:'Claude Code', openai:'OpenAI API', anthropic:'Anthropic API', openrouter:'OpenRouter', ollama:'Ollama', lmstudio:'LM Studio' };
+export const providerIds = [...subscriptionProviders, ...apiProviderIds, 'minimax'];
+export const providerNames = { minimax:'MiniMax', codex:'Codex', claude:'Claude Code', openai:'OpenAI API', anthropic:'Anthropic API', openrouter:'OpenRouter', ollama:'Ollama', lmstudio:'LM Studio' };
 export const isLocalProvider = provider => ['ollama', 'lmstudio'].includes(provider);
 export function validateApiConfiguration(value) {
   if (!value || Object.keys(value).sort().join(',') !== 'acknowledgeCost,key,model,provider' || !apiProviderIds.includes(value.provider)) throw new AppError('invalidSetup');
