@@ -136,7 +136,7 @@ discoveryPanel = createDiscoveryPanel({
   onFollow: video => { openChannels(); $('channel-input').value = video.channelId; $('channel-category').value = discovery.recommendations.query.slice(0,60); },
   onError: showError, confirm: askConfirmation, changeMode,
 });
-setupPanel = createSetupPanel({context:()=>({language:preferences.language,hasKey:Boolean(key),storageReady:!storageBlocked&&!staleTab,busy}),openYouTube:openSettings,onError:showError,finish:()=>{if(preferences.setupDone)return;const next={...preferences,setupDone:true};persist(()=>store.writePreferences(next));preferences=next;}});
+setupPanel = createSetupPanel({confirm:askConfirmation,context:()=>({language:preferences.language,hasKey:Boolean(key),storageReady:!storageBlocked&&!staleTab,busy}),openYouTube:openSettings,onError:showError,finish:()=>{if(preferences.setupDone)return;const next={...preferences,setupDone:true};persist(()=>store.writePreferences(next));preferences=next;}});
 discoveryPanel.hydrate();
 applyPreferences();
 try {

@@ -316,9 +316,14 @@
               <span id="update-time" class="muted"></span>
             </div>
           </div>
-          <p id="channel-refresh-help" class="help" hidden></p>
-          <p id="channel-sample-help" class="help" hidden data-i18n="channelSampleHelp"></p>
-          <p id="shorts-help" class="help" hidden data-i18n="shortsHelp"></p>
+          <aside id="channel-help" class="channel-guidance" hidden>
+            <p id="channel-refresh-help" class="help" hidden></p>
+            <details id="channel-details">
+              <summary data-i18n="channelDetails"></summary>
+              <p id="channel-sample-help" class="help" hidden data-i18n="channelSampleHelp"></p>
+              <p id="shorts-help" class="help" hidden data-i18n="shortsHelp"></p>
+            </details>
+          </aside>
           <div class="feed-meta">
             <span id="feed-count" role="status"></span>
             <label class="check"><input id="hide-watched" type="checkbox"><span data-i18n="hideWatched">Hide watched</span></label>
@@ -357,14 +362,38 @@
               <p class="provider-plan">ChatGPT</p>
               <p id="setup-state-codex" class="provider-state"></p>
               <button id="setup-codex" class="d-btn d-btn-secondary"></button>
+              <button id="setup-logout-codex" class="text-button provider-logout" data-i18n="signOut" hidden></button>
             </article>
             <article class="provider-card" id="setup-card-claude">
               <div class="provider-heading"><h4>Claude Code</h4><span id="setup-badge-claude" class="connection-badge"></span></div>
               <p class="provider-plan">Claude</p>
               <p id="setup-state-claude" class="provider-state"></p>
               <button id="setup-claude" class="d-btn d-btn-secondary"></button>
+              <button id="setup-logout-claude" class="text-button provider-logout" data-i18n="signOut" hidden></button>
             </article>
           </div>
+          <details class="setup-details api-connections">
+            <summary><span data-i18n="apiConnections"></span> <span id="api-active" class="connection-badge"></span></summary>
+            <p class="help" data-i18n="apiConnectionsIntro"></p>
+            <form id="api-connection-form">
+              <div class="api-model-fields">
+                <label class="d-field"><span data-i18n="apiProvider"></span><select id="api-provider" class="d-select"><option value="openai">OpenAI API</option><option value="anthropic">Anthropic API</option><option value="openrouter">OpenRouter</option><option value="ollama">Ollama · Local</option><option value="lmstudio">LM Studio · Local</option></select></label>
+                <label class="d-field"><span data-i18n="apiModel"></span><input class="d-input" id="api-model" type="text" maxlength="200" required autocomplete="off" spellcheck="false" dir="ltr" aria-describedby="api-model-help"></label>
+              </div>
+              <p id="api-model-help" class="help" data-i18n="apiModelHelp"></p>
+              <label class="d-field" id="api-key-field"><span data-i18n="analysisKey"></span><input class="d-input" id="analysis-key" type="password" maxlength="2048" autocomplete="off" spellcheck="false" dir="ltr"></label>
+              <label class="check api-consent" id="api-cost-label"><input type="checkbox" id="api-cost-consent"><span data-i18n="apiConsent"></span></label>
+              <p id="api-local-help" class="help" data-i18n="apiLocalHelp" hidden></p>
+              <p class="help" data-i18n="apiSessionHelp"></p>
+              <button id="api-save" class="d-btn d-btn-primary" data-i18n="apiSave"></button>
+            </form>
+            <p id="api-state" class="help" role="status"></p>
+            <div class="api-connection-actions">
+              <button id="api-use" type="button" class="d-btn d-btn-secondary" data-i18n="apiUseSaved" hidden></button>
+              <button id="api-test" type="button" class="d-btn d-btn-secondary" data-i18n="apiTest" disabled></button>
+              <button id="api-forget" type="button" class="text-button" data-i18n="apiRemove" disabled></button>
+            </div>
+          </details>
           <p id="setup-message" role="status"></p>
           <p class="help" data-i18n="connectionBrief"></p>
           <p class="help" data-i18n="analysisCost"></p>

@@ -2,6 +2,14 @@
 
 Reviewed: 2026-11-07.
 
+## Analysis connections and channel guidance (2026-11-07)
+
+MEASURED: 221 deterministic tests and all 43 deliberate defects pass through `npm run check`. New coverage exercises confirmed subscription logout, explicit API billing consent, memory-only configuration/removal, fixed destinations, redirect refusal, response/time bounds, exact evidence, no fallback, test cooldown and concurrent-operation refusal. The existing classification instructions were extracted unchanged for reuse by the new adapters. No runtime dependencies were added.
+
+An isolated browser fixture exercised signed-in/signed-out cards, fast-login completion, rejection without API cost acknowledgement, configuration, a confirmed synthetic analysis test, local model selection and confirmed connection removal. A fast-login UI state that left API controls disabled was reproduced and corrected with a regression test. English desktop and Arabic RTL at 390px showed aligned fields and no horizontal overflow or warning/error logs. Channel explanations are grouped behind one concise refresh line; empty detail sections are hidden.
+
+LIMITS: subscription logout and new API/local analyses were tested with synthetic accounts and injected responses, not by logging out the owner's real accounts or charging a live API key. Real cloud/model compatibility and a first-ever subscription sign-in remain user-dependent checks. Use the explicit one-sample connection test; configuration alone does not establish successful analysis. ASVS Level 1 remains a review target, not certification.
+
 ## Frontend responsibility cleanup
 
 MEASURED (2026-11-06 to 2026-11-07): 207 deterministic tests and all 37 deliberate defects pass. The prior 183 tests and 35 defects remain covered, with added application workflow, module boundary and stylesheet-delivery checks. Each of nine prepared JavaScript factories was moved byte-for-byte with locally recorded SHA-256 proof and separate preparation/move commits. The composition root is 150 lines (previously 531).

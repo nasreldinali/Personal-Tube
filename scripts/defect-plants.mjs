@@ -4,6 +4,13 @@ import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const cases = [
+  { name: 'api-explicit-cost-consent', file: 'public/domain/analysis-providers.js', from: 'acknowledgeCost !== true', to: 'false', test: 'test/analysis-providers.test.js' },
+  { name: 'api-status-secret-exclusion', file: 'server/api-analysis.js', from: 'model:config?.model', to: 'key:config?.key, model:config?.model', test: 'test/api-analysis.test.js' },
+  { name: 'api-transport-redirect-refusal', file: 'server/analysis-request.js', from: "redirect:'error'", to: "redirect:'follow'", test: 'test/analysis-request.test.js' },
+  { name: 'api-transport-byte-budget', file: 'server/analysis-request.js', from: 'if (size > 1000000)', to: 'if (false)', test: 'test/analysis-request.test.js' },
+  { name: 'account-logout-confirmation', file: 'server/provider-manager.js', from: "['logout','forget','test'].includes(input.action) && input.confirm !== true", to: 'false', test: 'test/provider-options.test.js' },
+  { name: 'api-model-output-evidence', file: 'server/api-analysis.js', from: 'applyClassifications(rows,result);', to: '', test: 'test/api-analysis.test.js' },
+
   { name: 'player-unloads-on-close', file: 'public/ui/video-player.js', from: "$('player-container').replaceChildren(); activeVideo = null;", to: 'activeVideo = null;', test: 'test/frontend-workflows.test.js' },
   { name: 'application-stale-write-refusal', file: 'public/app.js', from: "if (staleTab) throw new AppError('storageConflict');", to: '', test: 'test/frontend-workflows.test.js' },
   { name: 'reject-unsupported-interface-language', file: 'public/domain/preferences.js', from: "!['en', 'ar', 'de', 'es'].includes(value.language)", to: 'false', test: 'test/preferences.test.js' },

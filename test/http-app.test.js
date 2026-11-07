@@ -40,6 +40,6 @@ test('setup mutation route inherits same-origin and body limits before invoking 
   await handler(req,{writeHead:value=>{status=value;},end:()=>{}});return status;
  }
  assert.equal(await post('https://outside.example','{"version":1,"action":"connect","provider":"codex"}'),403);
- assert.equal(await post('http://127.0.0.1:4173','x'.repeat(1001)),413);assert.equal(calls,0);
+ assert.equal(await post('http://127.0.0.1:4173','x'.repeat(6001)),413);assert.equal(calls,0);
  assert.equal(await post('http://127.0.0.1:4173','{"version":1,"action":"status"}'),200);assert.equal(calls,1);
 });

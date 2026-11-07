@@ -41,3 +41,12 @@ test('fresh, incompatible and failed-login installations never look connected',a
   }
  }
 });
+
+test('logout uses the same credential store and fixed official commands without a shell',async()=>{
+ const calls=[];const p=createProviderProcesses({environment:{},run:async(file,args,options)=>{calls.push({file,args,options});return {stdout:'',stderr:''};}});
+ await p.logout('codex');await p.logout('claude');
+ assert.deepEqual(calls.map(c=>c.args),[['-c','cli_auth_credentials_store="file"','logout'],['auth','logout']]);
+ assert.ok(calls.every(c=>c.options.timeout===10000&&c.options.maxBuffer===16000));
+ await assert.rejects(p.logout('other'),{code:'invalidSetup'});
+ const failing=createProviderProcesses({run:async()=>{throw Error('private details');}});await assert.rejects(failing.logout('claude'),{code:'connectionFailed'});
+});

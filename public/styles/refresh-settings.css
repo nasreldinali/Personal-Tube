@@ -9,3 +9,8 @@
 .refresh-usage { margin-top:14px; padding:10px 0 0; border-bottom:0; }
 .refresh-usage summary { min-height:24px; font-size:12px; }
 
+.channel-guidance { padding:12px 16px; margin-block:8px 18px; border-inline-start:3px solid var(--line); color:var(--muted); }
+.channel-guidance .help { font-size:12px; line-height:1.7; margin:0; }
+.channel-guidance details { margin:6px 0 0; padding:0; border:0; }
+.channel-guidance summary { font-size:12px; cursor:pointer; min-height:28px; padding-block:4px; }
+.channel-guidance details .help { margin-top:8px; }

@@ -14,6 +14,8 @@ test('library actions read current state and persist metadata before saved flags
     panel.confirmHide([VIDEO.id]);busy=true;assert.throws(pending,e=>e.code==='busy');assert.equal(library.hidden,undefined);
     busy=false;pending();assert.deepEqual(library.hidden,[VIDEO.id]);assert.equal(panel.selectedVideos.size,0);
     panel.selectVideo(VIDEO.id,true);panel.resetSelection();assert.equal(panel.selectedVideos.size,0);panel.renderPanelTools();assert.equal(globalThis.document.documentElement.dataset.selecting,'false');
+    f.document.getElementById('channel-kind').value='all';panel.renderPanelTools();assert.equal(f.document.getElementById('channel-details').hidden,true);
+    f.document.getElementById('channel-kind').value='videos';panel.renderPanelTools();assert.equal(f.document.getElementById('channel-details').hidden,false);
     assert.equal(error,undefined);
   } finally {globalThis.document=previous;}
 });

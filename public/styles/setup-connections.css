@@ -43,3 +43,12 @@
   .connection-row { padding:12px; gap:10px; }
 }
 
+.provider-logout { align-self:flex-start; margin-top:6px; }
+.api-connections { margin-top:18px; }
+.api-model-fields { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px; }
+.api-model-fields .d-field { min-width:0; }
+.api-consent { align-items:start; margin-block:14px; font-size:12px; line-height:1.6; }
+.api-connection-actions { display:flex; flex-wrap:wrap; align-items:center; gap:10px; }
+.api-connections .d-btn { font-size:12px; min-height:40px; padding:8px 14px; }
+#api-state { overflow-wrap:anywhere; }
+@media(max-width:480px) { .api-model-fields { grid-template-columns:1fr; } }

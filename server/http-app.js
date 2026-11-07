@@ -17,7 +17,7 @@ export function createHandler({ readAsset, catalog, community, youtubeAnalysis, 
     };
     if (![`127.0.0.1:${port}`, `localhost:${port}`].includes(request.headers.host)) { send(403, 'Local access only'); return; }
     if (request.url === '/api/setup' && setup) {
-      const result = await handleCommunityRequest(request, setup, 1000);
+      const result = await handleCommunityRequest(request, setup, 6000);
       send(result.status, JSON.stringify(result.body), 'application/json'); return;
     }
     if (request.url === '/api/youtube-analysis' && youtubeAnalysis) {

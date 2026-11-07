@@ -28,12 +28,14 @@ export function createLibraryActions({ text, readPreferences, readLibrary, readM
     $('selection-count').textContent = text('selectionCount',{count:number(lang,selectedVideos.size)});
     $('select-visible').textContent = text(displayed.length > 0 && displayed.every(id=>selectedVideos.has(id)) ? 'clearShownSelection' : 'selectAllShown');
     $('select-visible').disabled = !displayed.length;
+    $('channel-help').hidden = !channelMode;
     $('channel-refresh-help').hidden = !channelMode;
     const refreshPolicy = refreshSettings(readPreferences());
     $('channel-refresh-help').textContent = text(refreshPolicy.mode === 'manual' ? 'refreshManualHelp' : 'refreshAutoHelp', {interval:text(`refreshInterval${refreshPolicy.minutes}`)});
     $('thumbnail-style').value = readPreferences().thumbnail || 'frame';
     $('channel-sample-help').hidden = !channelMode || !Object.values(readState().cache).some(entry=>entry.limited);
     $('shorts-help').hidden = !channelMode || $('channel-kind').value === 'all';
+    $('channel-details').hidden = $('channel-sample-help').hidden && $('shorts-help').hidden;
     }
   function selectVideo(id, selected) {
     if (selected) selectedVideos.add(id); else selectedVideos.delete(id);

@@ -59,3 +59,17 @@ test('signed-in status distinguishes an untested account from a completed analys
   f.state.usage.codex.completed=1;f.click('setup-check');await tick();assert.match(f.fixture.nodes.get('setup-state-codex').textContent,/completed.*session/i);
  }finally{f.restore();}
 });
+
+test('subscription logout controls require a deliberate confirmation before sending the request',async()=>{
+ const f=setup();try{
+  f.panel.open();await tick();assert.equal(f.fixture.nodes.get('setup-logout-codex').hidden,false);
+  f.click('setup-logout-codex');await tick();assert.equal(f.requests.some(x=>x.action==='logout'),false);
+ }finally{f.restore();}
+});
+
+test('a recognized login releases API controls even when the login process is finishing',async()=>{
+ const f=setup();try{
+  f.state.providers.claude.connection='pending';f.state.providers.claude.connected=true;
+  f.panel.open();await tick();assert.equal(f.fixture.nodes.get('api-model').disabled,false);
+ }finally{f.restore();}
+});

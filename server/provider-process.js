@@ -27,6 +27,11 @@ export function createProviderProcesses({environment=process.env,run=exec,launch
       }catch{connected=false;}
       return {installed:true,supported,connected,method};
     },
+    async logout(provider) {
+      const file=executable(provider);
+      try { await run(file,provider==='codex'?['-c','cli_auth_credentials_store="file"','logout']:['auth','logout'],{env,cwd:tmpdir(),timeout:10000,maxBuffer:16000}); }
+      catch { throw new AppError('connectionFailed'); }
+    },
     async login(provider) {
       const file=executable(provider);
       return new Promise((resolve,reject)=>{
