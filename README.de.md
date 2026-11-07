@@ -49,8 +49,8 @@ Kein `npm install`, Build oder Datenbankserver ist erforderlich. `index.html` ni
 | Neue Kanaldaten und Live-Suche | Eigener YouTube-Data-API-Schlüssel |
 | MiniMax-M-Plan-Abonnement | Eigener globaler Aboschlüssel; kein CLI nötig. Kontingent, danach eventuell vorhandene Credit-Pakete. |
 | Analyse per Codex-/Claude-Abonnement | Unterstützte Codex- oder Claude-Code-CLI und eigenes berechtigtes Konto |
-| Cloud-Analyse | Eigener OpenAI-, Anthropic- oder OpenRouter-Schlüssel und kompatible Modell-ID |
-| Lokale Analyse | Laufendes Ollama oder LM Studio mit einem geeigneten lokalen Modell |
+| Cloud-Analyse | Eigener OpenAI-, Anthropic-, OpenRouter-, Gemini-, DeepSeek-, Mistral- oder Groq-Schlüssel und kompatible Modell-ID |
+| Lokale Analyse | Laufendes Ollama, LM Studio oder einen kompatiblen lokalen Server mit einem geeigneten lokalen Modell |
 
 In **Setup & connections** zwischen Abonnement, Cloud-API und lokalem Modell wählen. Die Auswahl der Ansicht allein wechselt den aktiven Dienst nicht. **Mit einem Beispiel testen** prüft die gewählte Verbindung nach Bestätigung.
 
@@ -65,3 +65,5 @@ Analyse-API-Schlüssel bleiben nur im Arbeitsspeicher des lokalen Servers. Ein S
 Automatische Empfehlungen können falsch sein. Shorts werden anhand der Dauer geschätzt. YouTube Premium wird im eingebetteten Player nicht garantiert. Der Server ist für einen lokalen Nutzer gedacht und darf ohne zusätzliche Sicherheitsarchitektur nicht öffentlich bereitgestellt werden.
 
 PersonalTube-Code und Dokumentation: [MIT](LICENSE). Der HackerTube/open-index-Katalog behält seine ODC-By-1.0-Bedingungen; Schriften und DEEDA-Markenmaterial haben eigene Hinweise. Siehe [NOTICE](NOTICE.md). PersonalTube ist ein unabhängiges Projekt, kein offizielles Produkt von Karpathy oder YouTube.
+
+Die neue Ansicht **Connections** trennt Abonnement, Cloud-API, lokales Modell, YouTube sowie Verbrauch/Hilfe. MiniMax ist optional unter **Add another subscription**. **Find available models** liest die Modellliste des lokalen Servers, ohne Analyse oder Download. LLMs und kleine SLMs benötigen geeignete JSON-Ausgabe. Nicht jedes Chat-Abonnement ist integrierbar; Gemini CLI und Copilot sind noch nicht integriert, Kimi Code wird für diesen automatischen Ablauf nicht angeboten. [Kompatibilität und Grenzen](docs/CONNECTION_CATALOG.md).

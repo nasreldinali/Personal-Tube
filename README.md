@@ -45,7 +45,7 @@ PersonalTube adds a workflow for ongoing personal use:
 | Four interface languages | English, Arabic, German and Spanish controls; Arabic right-to-left layout, light/dark/system themes and responsive cards. Source titles and quotes keep their original language; catalog topic/category labels currently have English and Arabic translations. |
 | Live community discovery | Choose a topic and source; collect and analyze the selected comments automatically, with progress and supporting quotes. |
 | Visible recommendation requirements | Adjust minimum views/likes, declared audio language and endorsement count. Unverified results are withheld. |
-| Your choice of analysis provider | Sign in/out of Codex or Claude Code; connect your MiniMax M Plan subscription; configure OpenAI, Anthropic or OpenRouter API access; or connect a local Ollama/LM Studio model. Each user supplies their own access. |
+| Your choice of analysis provider | Sign in/out of Codex or Claude Code; connect your MiniMax M Plan subscription; choose among seven cloud API services; or connect Ollama, LM Studio or a compatible local model server. Each user supplies their own access. |
 | Refresh and usage controls | Manual or scheduled channel refresh, selectable intervals and an explicitly estimated daily YouTube API counter. |
 | Personal library controls | Watch later, watched history, confirmed single/bulk hiding, restore, category management and portable backups. |
 | A choice of video images | Original thumbnail or a video-frame image; sticky filters and a collapsible sidebar. |
@@ -105,7 +105,7 @@ This can comfortably fit moderate personal channel-following, but is not an unli
 
 **Downloading this repository never gives someone access to the maintainer’s API key or subscription.** Each installation supplies its own YouTube key and analysis access. Subscription analysis uses that account’s allowance; cloud API analysis uses its separate billing; the app does not sell credits, bundle a model, or provide a shared analysis service. Public comments go to the selected analysis service. A truly local model can keep analysis on your computer, while YouTube and community requests still use the internet.
 
-For live features, open **Setup & connections**. Create a key with **YouTube Data API v3** enabled, restrict it to that API and the local website origin, then enter it in **Settings & data**. Install/sign in to your chosen analysis CLI separately if needed; PersonalTube does not install it for you. The app currently accepts **Codex CLI 0.155.1** and **Claude Code 2.1.281** only; other versions are refused until their execution policies are reviewed. A paid account alone does not replace the local CLI requirement. Follow the [first-time account setup guide](docs/ANALYSIS_SETUP.md), or choose **Cloud API** or **Local model** using the [provider guide](docs/ANALYSIS_PROVIDERS.md). Connection detection and a successful analysis are shown separately; the guide explains what has been tested and how to complete your own first-use check.
+For live features, open **Connections**. Create a key with **YouTube Data API v3** enabled, restrict it to that API and the local website origin, then enter it in **Settings & data**. Install/sign in to your chosen analysis CLI separately if needed; PersonalTube does not install it for you. The app currently accepts **Codex CLI 0.155.1** and **Claude Code 2.1.281** only; other versions are refused until their execution policies are reviewed. A paid account alone does not replace the local CLI requirement. Follow the [first-time account setup guide](docs/ANALYSIS_SETUP.md), or choose **Cloud API** or **Local model** using the [provider guide](docs/ANALYSIS_PROVIDERS.md). Connection detection and a successful analysis are shown separately; the guide explains what has been tested and how to complete your own first-use check.
 
 ## Choose your analysis connection
 
@@ -113,9 +113,13 @@ For live features, open **Setup & connections**. Create a key with **YouTube Dat
 |---|---|---|
 | Your existing eligible subscription | Codex or Claude Code | Supported CLI and your own login |
 | Direct MiniMax subscription | MiniMax M Plan | Global subscription key; included quota, then existing credit packs. [Setup and test](docs/MINIMAX_SUBSCRIPTION.md) |
-| Direct cloud API access | OpenAI or Anthropic API | API key, model ID and explicit billing acknowledgement |
+| Direct cloud API access | OpenAI, Anthropic, Google Gemini, DeepSeek, Mistral or Groq | API key, model ID and explicit billing acknowledgement |
 | A wider choice of hosted closed/open-weight models | OpenRouter | Its API key and a compatible model ID |
-| Running a model on your own computer | Ollama or LM Studio | Local model server and installed model; enough hardware |
+| Running an LLM or smaller SLM on your computer | Ollama, LM Studio or OpenAI-compatible · Local | Local server, suitable model and hardware; discover available model IDs from the app |
+
+Connections now has five separate sections: **Subscription, Cloud API, Local model, YouTube, Usage & help**. The active analysis service stays visible. MiniMax is optional under **Add another subscription**; no MiniMax account is required.
+
+**Not every chat subscription is an integration.** Gemini CLI and Copilot are not integrated; Kimi Code is not offered for this automated batch flow. API access is separate. See the [connection compatibility catalog](docs/CONNECTION_CATALOG.md).
 
 MiniMax has a separate **save → test → use** flow. Saving/testing keeps your selected provider and Codex/Claude logins unchanged. It accepts M Plan keys only, without pay-as-you-go fallback; MiniMax may consume existing credit packs after plan quota. Actual MiniMax account compatibility still needs your explicit sample test.
 

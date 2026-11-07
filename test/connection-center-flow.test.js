@@ -1,0 +1,22 @@
+import test from 'node:test';
+import assert from 'node:assert/strict';
+import { createHandler } from '../server/http-app.js';
+import { createProviderManager } from '../server/provider-manager.js';
+import { createApiAnalysis } from '../server/api-analysis.js';
+import { createLocalModels } from '../server/local-models.js';
+import { requestAnalysis } from '../server/analysis-request.js';
+import { setupFetchFixture } from './fixtures.js';
+test('local model listing and analysis traverse bounded routes without switching or paid requests during discovery',async()=>{
+ const calls=[];let reply={data:[{id:'small-model'}]};
+ const request=(provider,input)=>requestAnalysis(provider,input,async(url,options)=>{calls.push({url,options});return new Response(JSON.stringify(reply));});
+ const manager=createProviderManager({inspect:async()=>({installed:true,supported:true,connected:true,method:'subscription'}),classifiers:{},now:()=>100000,api:createApiAnalysis({request}),localModels:createLocalModels({request})});
+ const fetcher=setupFetchFixture(createHandler({setup:manager.control}));
+ const post=async body=>{const r=await fetcher('/api/setup',{method:'POST',body:JSON.stringify({version:1,...body})});return {status:r.status,...await r.json()};};
+ const listed=await post({action:'models',provider:'local-openai',port:8080});assert.equal(listed.selected,'codex');assert.deepEqual(listed.models,['small-model']);assert.equal(calls.length,1);assert.equal(calls[0].options.method,'GET');assert.equal(calls[0].options.body,undefined);assert.equal(calls[0].url,'http://127.0.0.1:8080/v1/models');assert.equal(listed.usage['local-openai'].attempted,0);
+ for(const input of [{provider:'openai'},{provider:'local-openai',port:22},{provider:'local-openai',port:8080,url:'https://evil.test'}])assert.equal((await post({action:'models',...input})).status,400);
+ assert.equal(calls.length,1);
+ await post({action:'configure',provider:'local-openai',configuration:{provider:'local-openai',model:'small-model',key:'',acknowledgeCost:false,port:8080}});
+ reply={choices:[{finish_reason:'stop',message:{content:JSON.stringify({version:1,items:[{key:'0:abcdefghijk',stance:'rec',quote:'Recommended explanation'}]})}}]};
+ const tested=await post({action:'test',provider:'local-openai',confirm:true});assert.equal(tested.status,200);assert.equal(calls[1].url,'http://127.0.0.1:8080/v1/chat/completions');assert.equal(tested.usage['local-openai'].completed,1);assert.equal(tested.providers.codex.connected,true);assert.equal(tested.providers.claude.connected,true);
+ const foreign=await fetcher('/api/setup',{method:'POST',body:JSON.stringify({version:1,action:'models',provider:'ollama'})},'https://foreign.test');assert.equal(foreign.status,403);assert.equal(calls.length,2);
+});

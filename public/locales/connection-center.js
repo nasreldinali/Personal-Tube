@@ -1,0 +1,99 @@
+const entries = {
+  "setupTitle": [
+    "Connections",
+    "الاتصالات",
+    "Verbindungen",
+    "Conexiones"
+  ],
+  "connectionHelp": [
+    "Usage & help",
+    "الاستهلاك والمساعدة",
+    "Nutzung & Hilfe",
+    "Uso y ayuda"
+  ],
+  "connectionCenterIntro": [
+    "Choose how to analyze comments. Only the selected connection is used.",
+    "اختار طريقة تحليل التعليقات. التطبيق بيستخدم الاتصال المختار فقط.",
+    "Wähle, wie Kommentare analysiert werden. Nur die ausgewählte Verbindung wird genutzt.",
+    "Elige cómo analizar comentarios. Solo se usa la conexión seleccionada."
+  ],
+  "otherSubscription": [
+    "Add another subscription",
+    "إضافة اشتراك آخر",
+    "Weiteres Abonnement hinzufügen",
+    "Añadir otra suscripción"
+  ],
+  "otherSubscriptionHelp": [
+    "Where is my other subscription?",
+    "اشتراكي التاني مش موجود؟",
+    "Wo ist mein anderes Abonnement?",
+    "¿Dónde está mi otra suscripción?"
+  ],
+  "subscriptionCompatibility": [
+    "Subscriptions need a supported official connection. Gemini CLI and Copilot subscriptions are not integrated here yet; Kimi Code is not offered for automatic comment batches. API access has separate billing. See supported routes before adding a key.",
+    "كل اشتراك محتاج طريقة ربط رسمية مدعومة. اشتراكات Gemini CLI وCopilot لسه مش مدمجة هنا، وKimi Code مش متاح لدفعات تحليل التعليقات التلقائية. الـAPI بفواتير منفصلة. راجع الطرق المدعومة قبل إضافة مفتاح.",
+    "Abonnements benötigen eine unterstützte offizielle Anbindung. Gemini CLI und Copilot sind hier noch nicht integriert; Kimi Code wird nicht für automatische Kommentarstapel angeboten. APIs haben separate Abrechnung. Prüfe zuerst die unterstützten Wege.",
+    "Cada suscripción necesita una conexión oficial compatible. Gemini CLI y Copilot aún no están integrados; Kimi Code no se ofrece para lotes automáticos de comentarios. Las API tienen facturación separada. Revisa las vías compatibles antes de añadir una clave."
+  ],
+  "connectionCatalog": [
+    "View connection compatibility",
+    "شوف طرق الربط المدعومة",
+    "Unterstützte Verbindungen ansehen",
+    "Ver conexiones compatibles"
+  ],
+  "localServerPort": [
+    "Local server port",
+    "منفذ الخادم المحلي",
+    "Lokaler Serverport",
+    "Puerto del servidor local"
+  ],
+  "localCompatibleHelp": [
+    "For an OpenAI-compatible server on this computer, such as llama.cpp, vLLM or MLX. Use its port; no model is installed or started for you. Only unauthenticated loopback servers are supported.",
+    "لخادم متوافق مع OpenAI على جهازك، زي llama.cpp أو vLLM أو MLX. اكتب المنفذ اللي شغّال عليه؛ مش بنثبّت أو بنشغّل نموذج تلقائيًا. مدعوم خادم محلي من غير مفتاح دخول فقط.",
+    "Für einen OpenAI-kompatiblen Server auf diesem Computer, etwa llama.cpp, vLLM oder MLX. Seinen Port verwenden; kein Modell wird installiert oder gestartet. Nur Loopback-Server ohne Authentifizierung werden unterstützt.",
+    "Para un servidor compatible con OpenAI en este equipo, como llama.cpp, vLLM o MLX. Introduce su puerto; no se instala ni inicia ningún modelo. Solo se admiten servidores de bucle local sin autenticación."
+  ],
+  "loadInstalledModels": [
+    "Find available models",
+    "اعرض النماذج المتاحة",
+    "Verfügbare Modelle suchen",
+    "Buscar modelos disponibles"
+  ],
+  "chooseInstalledModel": [
+    "Available models",
+    "النماذج المتاحة",
+    "Verfügbare Modelle",
+    "Modelos disponibles"
+  ],
+  "modelsLoading": [
+    "Checking this local server…",
+    "جاري فحص الخادم المحلي ده…",
+    "Lokalen Server prüfen…",
+    "Comprobando este servidor local…"
+  ],
+  "modelsFound": [
+    "Choose a model above, or enter its exact ID. This list does not test its analysis quality.",
+    "اختار نموذج من القائمة أو اكتب معرّفه بالضبط. ظهوره في القائمة مش اختبار لجودة تحليله.",
+    "Modell auswählen oder exakte ID eingeben. Diese Liste prüft nicht die Analysequalität.",
+    "Elige un modelo o introduce su ID exacto. Esta lista no comprueba la calidad del análisis."
+  ],
+  "modelsEmpty": [
+    "No supported model IDs returned. Load a text model in your local server, then check again.",
+    "الخادم مرجّعش أسماء نماذج مدعومة. حمّل نموذج نصي في برنامجك المحلي وافحص تاني.",
+    "Keine unterstützten Modell-IDs erhalten. Textmodell im lokalen Server laden und erneut prüfen.",
+    "No se recibieron IDs compatibles. Carga un modelo de texto en tu servidor local y vuelve a comprobar."
+  ],
+  "modelsFailed": [
+    "Could not list models. Start the selected server and check its port. You can still enter a model ID manually.",
+    "تعذّر عرض النماذج. شغّل الخادم المختار وراجع المنفذ. تقدر تكتب معرّف النموذج يدويًا.",
+    "Modelle konnten nicht aufgelistet werden. Server starten und Port prüfen. Die Modell-ID kann manuell eingegeben werden.",
+    "No se pudieron listar modelos. Inicia el servidor y comprueba el puerto. Puedes introducir el ID manualmente."
+  ],
+  "apiLocalHelp": [
+    "Start Ollama on port 11434, LM Studio on port 1234, or another OpenAI-compatible local server on its chosen port. Find available models, or enter an exact model ID. LLMs and SLMs must produce valid JSON. No downloads or background scans. Local servers requiring authentication are not supported.",
+    "شغّل Ollama على منفذ 11434، أو LM Studio على 1234، أو خادم محلي متوافق على المنفذ اللي اخترته. اعرض النماذج أو اكتب المعرّف. النماذج الكبيرة والصغيرة لازم تنتج JSON صالح. مفيش تنزيل أو فحص تلقائي للخدمات. الخوادم اللي بتطلب مفتاح دخول مش مدعومة.",
+    "Ollama auf Port 11434, LM Studio auf 1234 oder einen kompatiblen lokalen Server starten. Verfügbare Modelle suchen oder exakte ID eingeben. LLMs und SLMs müssen gültiges JSON liefern. Keine Downloads oder Hintergrundsuche. Server mit Authentifizierung werden nicht unterstützt.",
+    "Inicia Ollama en 11434, LM Studio en 1234 u otro servidor local compatible en su puerto. Busca modelos o introduce el ID. Los LLM y SLM deben producir JSON válido. Sin descargas ni búsquedas en segundo plano. No se admiten servidores con autenticación."
+  ]
+};
+export const centerMessages = Object.fromEntries(['en','ar','de','es'].map((language,index)=>[language,Object.fromEntries(Object.entries(entries).map(([key,values])=>[key,values[index]]))]));

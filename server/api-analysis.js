@@ -12,7 +12,7 @@ export function createApiAnalysis({ request = requestAnalysis } = {}) {
     forget(provider) { if (!apiProviderIds.includes(provider)) throw new AppError('invalidSetup'); configurations.delete(provider); },
     inspect(provider) {
       const config = configurations.get(provider);
-      return { installed:true, supported:true, connected:Boolean(config), method:isLocalProvider(provider)?'local':'api', model:config?.model || '' };
+      return { installed:true, supported:true, connected:Boolean(config), method:isLocalProvider(provider)?'local':'api', model:config?.model || '', ...(config?.port?{port:config.port}:{}) };
     },
     async classify(provider, rows, mode='community') {
       const config = configurations.get(provider);
@@ -35,7 +35,8 @@ export function createApiAnalysis({ request = requestAnalysis } = {}) {
         if (provider === 'openai') body.store = false;
         if (provider === 'openrouter') body.provider = {require_parameters:true,allow_fallbacks:false};
       }
-      const output = await request(provider, {headers,body});
+      if (['deepseek','local-openai'].includes(provider)) body.response_format={type:'json_object'};
+      const output = await request(provider, {headers,body,...(config.port?{port:config.port}:{})});
       let text;
       if (provider === 'anthropic') {
         if (output.stop_reason !== 'end_turn' || !Array.isArray(output.content) || output.content.some(item=>item.type!=='text')) throw new AppError('invalidClassification');

@@ -49,8 +49,8 @@ No requiere `npm install`, compilación ni base de datos. No abras `index.html` 
 | Nuevos datos de canales y búsqueda en directo | Tu propia clave de YouTube Data API |
 | Suscripción MiniMax M Plan | Tu clave global de suscripción; sin CLI. Cuota y después posibles paquetes de créditos existentes. |
 | Suscripción Codex/Claude | CLI compatible de Codex o Claude Code y tu cuenta elegible |
-| Análisis en la nube | Tu clave de OpenAI, Anthropic u OpenRouter y un ID de modelo compatible |
-| Análisis local | Ollama o LM Studio ejecutándose con un modelo local adecuado |
+| Análisis en la nube | Tu clave de OpenAI, Anthropic, OpenRouter, Gemini, DeepSeek, Mistral o Groq y un ID de modelo compatible |
+| Análisis local | Ollama, LM Studio o un servidor local compatible ejecutándose con un modelo local adecuado |
 
 En **Setup & connections**, elige suscripción, API en la nube o modelo local. Cambiar de sección no cambia por sí solo el servicio activo. **Probar con una muestra** comprueba la conexión seleccionada tras confirmarlo.
 
@@ -65,3 +65,5 @@ Las claves de análisis solo permanecen en la memoria del servidor local. Al rei
 El análisis automático puede equivocarse. Los Shorts se estiman por duración. YouTube Premium no está garantizado dentro del reproductor integrado. El servidor es para un usuario local y no debe publicarse en internet sin un diseño de seguridad adicional.
 
 Código y documentación de PersonalTube: [MIT](LICENSE). El catálogo HackerTube/open-index conserva sus condiciones ODC-By 1.0; las fuentes y la marca DEEDA tienen avisos propios. Consulta [NOTICE](NOTICE.md). PersonalTube es independiente y no es un producto oficial de Karpathy ni de YouTube.
+
+La nueva vista **Connections** separa suscripción, API en la nube, modelo local, YouTube y uso/ayuda. MiniMax es opcional en **Add another subscription**. **Find available models** lee la lista del servidor local sin analizar ni descargar modelos. Los LLM y SLM pequeños necesitan una salida JSON adecuada. No toda suscripción de chat permite integración: Gemini CLI y Copilot aún no están integrados, y Kimi Code no se ofrece para este flujo automático. [Compatibilidad y límites](docs/CONNECTION_CATALOG.md).

@@ -1,5 +1,13 @@
 # Verification
 
+## Connection center and broader model support — 2026-11-07
+
+MEASURED: the complete check passes **239 deterministic tests and 58 deliberate-defect checks**, including syntax, formatting, import/layer and asset integrity gates. New coverage includes four fixed cloud API protocols, explicit local-only GET discovery, port/list limits, strict configuration fields, stale-result refusal, an origin-guarded full HTTP flow and returning from YouTube settings to its connection section, and reopening the active model configuration. Existing tests and defect checks remain.
+
+MEASURED: isolated browser fixture at desktop 1280×720, mobile 390×844 and tablet 768×1024. Verified all five sections, seven API choices, three local choices, explicit fixture model discovery/selection and unchanged Codex selection, plus the YouTube settings return path. English/light and Arabic/dark screenshots inspected; German and Spanish controls inspected on tablet. The scrolling content had no horizontal overflow at the measured mobile/tablet sizes. Console warning/error capture was empty. Fixture credentials and model IDs were synthetic; no real account login/logout or paid API call occurred.
+
+LIMIT: Gemini, DeepSeek, Mistral, Groq and generic local model generation have deterministic adapter coverage, not live account/server compatibility certification. No installed model server was assumed or started. Each user's model must pass their explicit sample test. The UI offers three specific subscription integrations; it does not claim universal access to every chat subscription. No accessibility conformance certification is claimed.
+
 ## Repository documentation and download check — 2026-11-07
 
 MEASURED: reviewed all 35 tracked Markdown files for internal links/assets: 167 relative references resolved, including checked Markdown heading anchors. Reconciled current language/provider guidance, GitHub About/topics and contribution templates; retained dated historical evidence. `npm run check` passed 231 tests and 52 deliberate-defect checks. No runtime source or account configuration changed in this documentation update.

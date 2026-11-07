@@ -12,3 +12,11 @@ test('method navigation reveals only relevant setup without changing the active 
   ui.reset();ui.render('openrouter');assert.equal(methods.at(-1),'api');assert.equal(n('method-api').attributes['aria-pressed'],'true');
  }finally{globalThis.document=before;}
 });
+test('YouTube and help have dedicated sections while navigation leaves provider choice alone',()=>{
+ const before=globalThis.document,f=setupDocumentFixture();globalThis.document=f.document;const methods=[];
+ try {
+  const ui=createConnectionMethod({setMethod:p=>methods.push(p)}),n=id=>f.document.getElementById(id);ui.render('codex');
+  n('method-youtube').listeners.click();assert.equal(n('connection-youtube').hidden,false);assert.equal(n('subscription-connections').hidden,true);assert.equal(n('model-connections').hidden,true);assert.deepEqual(methods,[]);
+  n('method-help').listeners.click();assert.equal(n('connection-help').hidden,false);assert.equal(n('connection-youtube').hidden,true);
+ }finally{globalThis.document=before;}
+});

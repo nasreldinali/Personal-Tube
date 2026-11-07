@@ -346,24 +346,17 @@
         <div><p class="setup-eyebrow">PERSONALTUBE</p><h2 id="setup-title" data-i18n="setupTitle"></h2></div>
         <button class="close" data-close="setup-dialog" data-i18n-label="close" aria-label="Close">×</button>
       </div>
-      <div class="setup-body">
-        <p id="setup-active" class="setup-active" role="status"></p>
-        <details class="setup-details setup-youtube-details">
-          <summary>YouTube <span id="setup-youtube-state" class="connection-badge"></span></summary>
-        <section class="connection-row">
-          <div><h3>YouTube</h3><p data-i18n="youtubeConnectionBrief"></p></div>
-          <button id="setup-youtube" class="d-btn d-btn-secondary"></button>
-        </section>
-        <p class="help" data-i18n="youtubeFree"></p>
-        </details>
-        <section class="analysis-section">
-          <h3 data-i18n="analysisAccount"></h3>
-          <p class="help" data-i18n="analysisBrief"></p>
-          <div class="connection-methods" role="group" data-i18n-label="connectionMethod">
-            <button type="button" id="method-subscription" aria-pressed="true" data-i18n="methodSubscription"></button>
-            <button type="button" id="method-api" aria-pressed="false" data-i18n="methodApi"></button>
-            <button type="button" id="method-local" aria-pressed="false" data-i18n="methodLocal"></button>
-          </div>
+      <p id="setup-active" class="setup-active" role="status"></p>
+      <div class="connection-workspace">
+        <nav class="connection-methods" data-i18n-label="connectionMethod">
+          <button type="button" id="method-subscription" aria-pressed="true" data-i18n="methodSubscription"></button>
+          <button type="button" id="method-api" aria-pressed="false" data-i18n="methodApi"></button>
+          <button type="button" id="method-local" aria-pressed="false" data-i18n="methodLocal"></button>
+          <button type="button" id="method-youtube" aria-pressed="false">YouTube</button>
+          <button type="button" id="method-help" aria-pressed="false" data-i18n="connectionHelp"></button>
+        </nav>
+        <div class="setup-body">
+          <div id="connection-analysis-intro"><h3 data-i18n="analysisAccount"></h3><p class="help" data-i18n="connectionCenterIntro"></p></div>
           <section id="subscription-connections">
           <div id="setup-provider" class="provider-grid">
             <article class="provider-card" id="setup-card-codex">
@@ -385,8 +378,9 @@
           </div>
           <p class="help" data-i18n="subscriptionMethodHelp"></p>
           <details id="minimax-panel" class="minimax-connection setup-details">
-            <summary><span data-i18n="minimaxTitle"></span><span id="minimax-badge" class="connection-badge"></span></summary>
+            <summary><span data-i18n="otherSubscription"></span><span id="minimax-badge" class="connection-badge"></span></summary>
             <div class="minimax-body">
+              <h4 data-i18n="minimaxTitle"></h4>
               <p class="help" data-i18n="minimaxSteps"></p>
               <a href="https://platform.minimax.io/console/plan" target="_blank" rel="noopener noreferrer" data-i18n="minimaxAccount"></a>
               <form id="minimax-form">
@@ -410,6 +404,10 @@
             <ol><li data-i18n="setupStepInstall"></li><li data-i18n="setupStepLogin"></li><li data-i18n="setupStepVerify"></li></ol>
             <a href="https://github.com/nasreldinali/Personal-Tube/blob/main/docs/ANALYSIS_SETUP.md" target="_blank" rel="noopener noreferrer" data-i18n="setupFullGuide"></a>
           </details>
+          <details class="setup-details"><summary data-i18n="otherSubscriptionHelp"></summary>
+            <p class="help" data-i18n="subscriptionCompatibility"></p>
+            <a href="https://github.com/nasreldinali/Personal-Tube/blob/main/docs/CONNECTION_CATALOG.md" target="_blank" rel="noopener noreferrer" data-i18n="connectionCatalog"></a>
+          </details>
           </section>
           <section id="model-connections" class="api-connections" hidden>
             <span id="api-active" class="connection-badge"></span>
@@ -418,6 +416,12 @@
               <div class="api-model-fields">
                 <label class="d-field"><span data-i18n="apiProvider"></span><select id="api-provider" class="d-select"><option value="openai">OpenAI API</option><option value="anthropic">Anthropic API</option><option value="openrouter">OpenRouter</option><option value="ollama">Ollama · Local</option><option value="lmstudio">LM Studio · Local</option></select></label>
                 <label class="d-field"><span data-i18n="apiModel"></span><input class="d-input" id="api-model" type="text" maxlength="200" required autocomplete="off" spellcheck="false" dir="ltr" aria-describedby="api-model-help"></label>
+              </div>
+              <div id="local-port-field" hidden><label class="d-field"><span data-i18n="localServerPort"></span><input id="local-port" class="d-input" type="number" min="1024" max="65535" value="8080" dir="ltr"></label><p class="help" data-i18n="localCompatibleHelp"></p></div>
+              <div id="local-model-picker" class="local-model-picker" hidden>
+                <button type="button" id="local-model-load" class="d-btn d-btn-secondary" data-i18n="loadInstalledModels"></button>
+                <label class="d-field"><span data-i18n="chooseInstalledModel"></span><select id="local-model-list" class="d-select" disabled></select></label>
+                <p id="local-model-status" class="help" role="status"></p>
               </div>
               <p id="api-model-help" class="help" data-i18n="apiModelHelp"></p>
               <label class="d-field" id="api-key-field"><span data-i18n="analysisKey"></span><input class="d-input" id="analysis-key" type="password" maxlength="2048" autocomplete="off" spellcheck="false" dir="ltr"></label>
@@ -433,8 +437,14 @@
             </div>
             <details class="setup-details connection-storage"><summary data-i18n="connectionStorage"></summary><p class="help" data-i18n="apiSessionHelp"></p></details>
           </section>
-          <p id="setup-message" role="status"></p>
+          <section id="connection-youtube" hidden><p id="setup-youtube-state" class="connection-badge"></p>
+        <section class="connection-row">
+          <div><h3>YouTube</h3><p data-i18n="youtubeConnectionBrief"></p></div>
+          <button id="setup-youtube" class="d-btn d-btn-secondary"></button>
         </section>
+        <p class="help" data-i18n="youtubeFree"></p>
+          </section>
+          <section id="connection-help" hidden>
         <details class="setup-details">
           <summary data-i18n="analysisUsage"></summary>
           <div id="setup-usage"></div>
@@ -453,6 +463,9 @@
             <p>Claude: <code>claude auth login --claudeai</code> · <a href="https://code.claude.com/docs/en/setup" target="_blank" rel="noopener noreferrer" data-i18n="installGuide"></a></p>
           </details>
         </details>
+          </section>
+          <p id="setup-message" role="status"></p>
+        </div>
       </div>
       <div class="setup-footer"><button id="setup-check" class="text-button" data-i18n="checkRequirements"></button><button id="setup-finish" class="d-btn d-btn-primary" data-i18n="done"></button></div>
     </dialog>

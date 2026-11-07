@@ -18,7 +18,17 @@ test('changing method clears credentials and limits the provider list without a 
  try {
   const n=id=>f.document.getElementById(id),ui=createApiConnections({text:key=>key,request:(...args)=>calls.push(args),confirm(){}});
   n('api-provider').value='openai';n('analysis-key').value='fixture';n('api-cost-consent').checked=true;
-  ui.setMethod('local');assert.equal(n('api-provider').value,'ollama');assert.deepEqual(n('api-provider').children.map(x=>x.value),['ollama','lmstudio']);assert.equal(n('analysis-key').value,'');assert.equal(n('api-cost-consent').checked,false);assert.equal(n('api-key-field').hidden,true);
-  ui.setMethod('api');assert.deepEqual(n('api-provider').children.map(x=>x.value),['openai','anthropic','openrouter']);assert.equal(calls.length,0);
+  ui.setMethod('local');assert.equal(n('api-provider').value,'ollama');assert.deepEqual(n('api-provider').children.map(x=>x.value),['ollama','lmstudio','local-openai']);assert.equal(n('analysis-key').value,'');assert.equal(n('api-cost-consent').checked,false);assert.equal(n('api-key-field').hidden,true);
+  ui.setMethod('api');assert.deepEqual(n('api-provider').children.map(x=>x.value),['openai','anthropic','openrouter','gemini','deepseek','mistral','groq']);assert.equal(calls.length,0);
+ }finally{globalThis.document=before;}
+});
+test('reopening setup shows the selected service and saved local model without submitting credentials',()=>{
+ const before=globalThis.document,f=setupDocumentFixture();globalThis.document=f.document;const calls=[];
+ try {
+  const n=id=>f.document.getElementById(id),ui=createApiConnections({text:key=>key,request:(...args)=>calls.push(args),confirm(){}});
+  n('api-provider').value='ollama';
+  ui.render({selected:'local-openai',providers:{'local-openai':{connected:true,model:'small-model',port:8088}}},false);
+  ui.setMethod('local','local-openai');
+  assert.equal(n('api-provider').value,'local-openai');assert.equal(n('api-model').value,'small-model');assert.equal(n('local-port').value,8088);assert.equal(calls.length,0);
  }finally{globalThis.document=before;}
 });

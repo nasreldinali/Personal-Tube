@@ -1,7 +1,9 @@
+import { createLocalModelPicker } from './local-models.js';
 import { byId as $, element } from './dom.js';
 import { isLocalProvider, providerNames, apiProviderIds } from '../domain/analysis-providers.js';
 
 export function createApiConnections({ text, request, confirm }) {
+  const modelPicker=createLocalModelPicker({text,request});
   let result = null;
   let busy = false;
   const provider = () => $('api-provider').value;
@@ -14,6 +16,10 @@ export function createApiConnections({ text, request, confirm }) {
     const connection = result?.providers[id];
     const configured = Boolean(connection?.connected);
     const active = result?.selected === id;
+    $('local-model-picker').hidden = !local;
+    $('local-port-field').hidden = id!=='local-openai';
+    $('local-model-load').disabled = busy || !result;
+    $('local-port').disabled = busy;
     $('api-key-field').hidden = local;
     $('api-cost-label').hidden = local;
     $('api-local-help').hidden = !local;
@@ -26,7 +32,7 @@ export function createApiConnections({ text, request, confirm }) {
     $('api-use').disabled = busy;
   }
   $('api-provider').addEventListener('change', () => {
-    clearSecret(); $('api-cost-consent').checked = false;
+    clearSecret(); modelPicker.reset(); $('local-port').value=result?.providers[provider()]?.port || 8080; $('api-cost-consent').checked = false;
     $('api-model').value = result?.providers[provider()]?.model || '';
     render();
   });
@@ -34,6 +40,7 @@ export function createApiConnections({ text, request, confirm }) {
     event.preventDefault();
     const id = provider();
     const configuration = {provider:id,model:$('api-model').value.trim(),key:$('analysis-key').value.trim(),acknowledgeCost:isLocalProvider(id)?false:$('api-cost-consent').checked};
+    if(id==='local-openai')configuration.port=Number($('local-port').value);
     clearSecret();
     await request('configure', id, {configuration});
   });
@@ -44,10 +51,10 @@ export function createApiConnections({ text, request, confirm }) {
   $('api-forget').addEventListener('click', () => {
     const id=provider(); confirm('apiRemoveConfirm',()=>request('forget',id,{confirm:true}));
   });
-  function setMethod(method) {
+  function setMethod(method, preferred) {
     const ids = apiProviderIds.filter(id => isLocalProvider(id) === (method === 'local'));
-    const selected = ids.includes(provider()) ? provider() : ids[0];
-    clearSecret(); $('api-cost-consent').checked=false;
+    const selected = ids.includes(preferred) ? preferred : ids.includes(provider()) ? provider() : ids[0];
+    clearSecret(); modelPicker.reset(); $('local-port').value=result?.providers[selected]?.port || 8080; $('api-cost-consent').checked=false;
     $('api-provider').replaceChildren(...ids.map(id => { const option=element('option','',providerNames[id]); option.value=id; return option; }));
     $('api-provider').value=selected;
     $('api-model').value=result?.providers[selected]?.model || '';

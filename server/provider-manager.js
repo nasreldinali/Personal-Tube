@@ -2,7 +2,7 @@ import { subscriptionProviders, apiProviderIds, providerIds } from '../public/do
 import { AppError } from '../public/domain/errors.js';
 import { classificationInputs, applyClassifications } from '../public/domain/community-evidence.js';
 
-export function createProviderManager({ inspect, login, classifiers, now, logout, api, minimax }) {
+export function createProviderManager({ inspect, login, classifiers, now, logout, api, minimax, localModels }) {
   const providers = [...(api ? providerIds.filter(p=>p!=='minimax') : subscriptionProviders), ...(minimax ? ['minimax'] : [])];
   const tested = {};
   const lastTest = {};
@@ -21,13 +21,18 @@ export function createProviderManager({ inspect, login, classifiers, now, logout
   }
   return {
     async control(input) {
-      if (input?.version !== 1 || !['status','select','connect','logout','configure','forget','test'].includes(input.action) || (input.action !== 'status' && !providers.includes(input.provider))) throw new AppError('invalidSetup');
-      const fields = {status:['version','action','provider'],select:['version','action','provider'],connect:['version','action','provider'],logout:['version','action','provider','confirm'],configure:['version','action','provider','configuration'],forget:['version','action','provider','confirm'],test:['version','action','provider','confirm']};
+      if (input?.version !== 1 || !['status','select','connect','logout','configure','forget','test','models'].includes(input.action) || (input.action !== 'status' && !providers.includes(input.provider))) throw new AppError('invalidSetup');
+      const fields = {models:['version','action','provider','port'],status:['version','action','provider'],select:['version','action','provider'],connect:['version','action','provider'],logout:['version','action','provider','confirm'],configure:['version','action','provider','configuration'],forget:['version','action','provider','confirm'],test:['version','action','provider','confirm']};
       if (Object.keys(input).some(key=>!fields[input.action].includes(key))) throw new AppError('invalidSetup');
       if (['logout','forget','test'].includes(input.action) && input.confirm !== true) throw new AppError('invalidSetup');
       if (checking || ((busy || pendingLogin()) && input.action !== 'status')) throw new AppError('busy');
       checking = true;
       try {
+        if (input.action === 'models') {
+          if (!localModels) throw new AppError('invalidSetup');
+          const models=await localModels(input.provider,input.port);
+          return {...await status(),models};
+        }
         if (input.action === 'select') selected = input.provider;
         const provider = input.provider;
         if (input.action === 'configure') {

@@ -7,6 +7,7 @@
 - Organize setup into Subscription, Cloud API and Local model; add explicit sample tests, confirmed Codex/Claude sign-out, and OpenAI/Anthropic/OpenRouter/Ollama/LM Studio connections.
 - Add independent MiniMax M Plan save/test/use controls. Saving/testing preserves the selected provider and CLI sign-ins; disclose possible credit-pack usage and no pay-as-you-go fallback. Real MiniMax account compatibility remains unverified pending a user-supplied key and test.
 - Add an illustrative My channels preview, four-language entry points and current provider, setup and privacy guidance. Reconcile GitHub About/topics with the shipped capabilities.
+- Redesign Connections with persistent five-section navigation, compact account rows, optional MiniMax setup and a compatibility catalog. Add Gemini/DeepSeek/Mistral/Groq APIs, explicit local model discovery and a loopback OpenAI-compatible server option for LLMs/SLMs. Discovery never selects a provider or starts analysis. New cloud adapters remain live-account unverified.
 - Verification: see [current results and limits](docs/VERIFICATION.md). Earlier release entries below remain historical; no new tagged release has been published.
 
 ## 1.8.2 — 2026-11-06

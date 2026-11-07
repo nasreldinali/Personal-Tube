@@ -45,7 +45,7 @@ test('YouTube settings has a return path while ordinary settings close does not 
  const f=setup();try{
   f.fixture.document.getElementById('settings-dialog').listeners.close();assert.notEqual(f.fixture.nodes.get('setup-dialog').open,true);
   f.panel.open();await tick();f.click('setup-youtube');assert.equal(f.fixture.nodes.get('settings-back').hidden,false);
-  f.fixture.nodes.get('settings-dialog').listeners.close();await tick();assert.equal(f.fixture.nodes.get('setup-dialog').open,true);assert.equal(f.fixture.nodes.get('settings-back').hidden,true);
+  f.fixture.nodes.get('settings-dialog').listeners.close();await tick();assert.equal(f.fixture.nodes.get('setup-dialog').open,true);assert.equal(f.fixture.nodes.get('settings-back').hidden,true);assert.equal(f.fixture.nodes.get('method-youtube').attributes['aria-pressed'],'true');
  }finally{f.restore();}
 });
 

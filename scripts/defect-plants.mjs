@@ -4,6 +4,12 @@ import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const cases = [
+  { name: 'local-port-boundary', file: 'public/domain/local-models.js', from: 'port<1024', to: 'port<1', test: 'test/local-models.test.js' },
+  { name: 'local-model-list-budget', file: 'public/domain/local-models.js', from: 'rows.length>500', to: 'false', test: 'test/local-models.test.js' },
+  { name: 'local-model-cloud-exclusion', file: 'public/domain/local-models.js', from: '!/(?:[:-])cloud$/i.test(id)', to: 'true', test: 'test/local-models.test.js' },
+  { name: 'local-discovery-read-only', file: 'server/local-models.js', from: "method:'GET'", to: "method:'POST'", test: 'test/local-models.test.js' },
+  { name: 'local-picker-stale-result', file: 'public/ui/local-models.js', from: "if(started!==revision || provider!==$('api-provider').value || (provider==='local-openai'&&port!==Number($('local-port').value)))return;", to: '', test: 'test/local-model-picker.test.js' },
+  { name: 'expanded-api-fixed-destination', file: 'server/analysis-request.js', from: 'https://api.deepseek.com/chat/completions', to: 'https://api.openai.com/v1/chat/completions', test: 'test/expanded-api.test.js' },
   { name: 'minimax-key-type', file: 'public/domain/minimax-subscription.js', from: '!/^sk-cp-[A-Za-z0-9_-]+$/.test(value.key)', to: 'false', test: 'test/minimax-policy.test.js' },
   { name: 'minimax-plan-consent', file: 'public/domain/minimax-subscription.js', from: 'value.confirmSubscription !== true', to: 'false', test: 'test/minimax-policy.test.js' },
   { name: 'minimax-save-preserves-selection', file: 'server/provider-manager.js', from: 'minimax.configure(input.configuration);', to: 'minimax.configure(input.configuration); selected=provider;', test: 'test/provider-options.test.js' },

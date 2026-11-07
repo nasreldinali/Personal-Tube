@@ -1,3 +1,4 @@
+import { centerMessages } from './locales/connection-center.js';
 import { connectionMessages } from './locales/connections.js';
 import { extraMessages } from './locales/extra.js';
 const pairs = {
@@ -431,7 +432,7 @@ const pairs = {
 };
 
 const baseMessages = { ...extraMessages, en: Object.fromEntries(Object.entries(pairs).map(([key, value]) => [key, value[0]])), ar: Object.fromEntries(Object.entries(pairs).map(([key, value]) => [key, value[1]])) };
-export const messages = Object.freeze(Object.fromEntries(['en','ar','de','es'].map(language=>[language,{...baseMessages[language],...connectionMessages[language]}])));
+export const messages = Object.freeze(Object.fromEntries(['en','ar','de','es'].map(language=>[language,{...baseMessages[language],...connectionMessages[language],...centerMessages[language]}])));
 
 export function t(language, key, values = {}) {
   const text = messages[language]?.[key];

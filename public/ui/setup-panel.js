@@ -74,23 +74,25 @@ export function createSetupPanel({ context, finish, openYouTube, onError, schedu
     if (running) return;
     stopPolling(); running = true; message = action === 'test' ? 'analysisTesting' : ''; render();
     let succeeded = false;
+    let responseData = null;
     try {
       const response = await fetch('/api/setup', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ version: 1, action, provider, ...extras }), signal: AbortSignal.timeout(action === 'test' ? 130000 : 25000) });
       const data = await response.json();
       if (!response.ok) throw new AppError(data.error || 'connectionFailed');
       if (data.version !== 1 || !providerIds.includes(data.selected) || !data.providers || !data.usage) throw new AppError('invalidSetup');
       for (const p of providers) if (!data.providers[p] || !data.usage[p] || ['attempted', 'completed', 'failed', 'inputs'].some(k => !Number.isSafeInteger(data.usage[p][k]) || data.usage[p][k] < 0)) throw new AppError('invalidSetup');
-      result = data; succeeded = true; message = action === 'test' ? 'analysisTested' : '';
+      result = data; responseData=data; succeeded = true; message = action === 'test' ? 'analysisTested' : '';
       if (action === 'connect') { pollUntil = now() + 185000; message = data.providers[provider].connected ? 'providerSelected' : 'loginAutoCheck'; messageValues = { provider: name(provider) }; }
     } catch (error) {
       const allowed = ['busy', 'providerMissing', 'classifierVersion', 'connectionCooldown', 'connectionFailed', 'invalidSetup', 'analysisConnectionRequired', 'analysisKeyRequired', 'analysisCostRequired', 'analysisModelRequired', 'analysisAuthFailed', 'analysisRateLimit', 'analysisUnavailable', 'invalidClassification', 'minimaxSubscriptionKeyRequired', 'minimaxSubscriptionConsent'];
       message = allowed.includes(error.code) ? error.code : 'setupCheckFailed';
     } finally { running = false; render(); if (succeeded) poll(); }
+    return responseData;
   }
   for (const provider of providers) $(`setup-${provider}`).addEventListener('click', () => {
     const state = result?.providers[provider];
     if (!state) return;
-    if (!state.installed || !state.supported) { $('setup-requirements').open = true; $('setup-help').open = true; $('setup-help').scrollIntoView({ block: 'nearest' }); return; }
+    if (!state.installed || !state.supported) { methods.show('help'); $('setup-requirements').open = true; $('setup-help').open = true; $('setup-help').scrollIntoView({ block: 'nearest' }); return; }
     void request('connect', provider);
   });
   for (const provider of providers) $(`setup-test-${provider}`).addEventListener('click', () => {
@@ -106,7 +108,7 @@ export function createSetupPanel({ context, finish, openYouTube, onError, schedu
   $('settings-back').addEventListener('click', () => $('settings-dialog').close());
   $('settings-dialog').addEventListener('close', () => {
     if (!returningFromYouTube) return;
-    returningFromYouTube = false; $('settings-back').hidden = true; open();
+    returningFromYouTube = false; $('settings-back').hidden = true; open(); methods.show('youtube');
   });
   $('setup-finish').addEventListener('click', () => { opened = false; stopPolling(); $('setup-dialog').close(); });
   function open() {
