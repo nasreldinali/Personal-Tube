@@ -144,6 +144,8 @@ MiniMax has a separate **save → test → use** flow. Saving/testing keeps your
 - **My channels:** build your own list and choose a 1–7 day publication window. Videos over three minutes are the default. Category changes narrow the channel selector automatically.
 - **Recommendations / Communities:** search for a topic using public YouTube comments or live Hacker News, Stack Exchange, or authorized Reddit access. The community flow defaults to 100,000 views, 1,000 likes and two distinct endorsing accounts; these controls are editable. The original library remains accessible without a new analysis run.
 
+**YouTube recommendations now check your actual search topic.** The analyzer receives the topic plus bounded public video context and sampled comments. A positive result must fit the requested subject/level and have specific learning evidence or a subject-specific viewing recommendation; generic praise, creator flattery and adjacent-topic mentions do not qualify. At least two qualifying comments and more support than criticism are still required. This can return fewer or no videos; it is a model judgment, not a guarantee. [Analysis rules and verification →](docs/YOUTUBE_ANALYSIS.md)
+
 An original community score measures community recommendation evidence—not a YouTube rating, view count or guarantee of quality. Automatic analysis can be wrong; popularity and multiple accounts do not prove authenticity. Small samples and strict filters may produce no results. [How collection and analysis work →](docs/USER_GUIDE.md#recommendations-and-communities)
 
 ## Practical limits and privacy

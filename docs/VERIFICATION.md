@@ -1,5 +1,17 @@
 # Verification
 
+## Topic-aware YouTube recommendations — 2026-11-07
+
+MEASURED: **259 deterministic tests and 69 deliberate-defect checks** pass. New regressions cover mandatory topic/version/context fields, redaction, description bounds, end-to-end search-to-classifier topic delivery, and the stricter multilingual evidence policy. RED failures showed the previous request omitted the topic and used version 1. Three added defects (dropped topic, missing-topic acceptance and missing description bound) are detected. No dependency was added.
+
+MEASURED: both real subscription adapters were exercised through the production same-origin analysis route with the same **42 public comment excerpts from 7 videos**, deduplicated by original comment ID and retained from the earlier live YouTube test. These are real source excerpts, not synthetic praise fixtures. They are not full comments, a fresh YouTube search or an unbiased evaluation dataset; prior selection favors previously positive evidence. No new YouTube request was needed for this replay.
+
+An initial policy run still accepted two overly general displayed extracts. After requiring the quotation itself to name a concept or describe a specific mechanism/example, both final runs retained **2 videos**: *Transformers, the tech behind LLMs* and *Large Language Models explained briefly*. Both excluded the general AI, RAG and agent-course candidates; both also excluded the Karpathy and IBM LLM candidates for insufficient qualifying evidence in this reduced excerpt sample. This is not a judgment that those videos are poor. Reviewed every final positive label: retained evidence identifies embeddings, vector arithmetic, transformer computation, word prediction or LLM limitations. Previously displayed color-choice praise, generic engagement/clarity compliments and an unspecified “great foundation” did not qualify. No broad accuracy percentage is claimed.
+
+Both accounts completed one 42-input run with zero failures on the final server session, remained connected, and Codex was restored as selected. All cloud API counters remained zero. One earlier 42-input iteration per account also consumed subscription allowance before the stricter final run; no paid API or logout was used in either iteration. Counters reset when the local server restarts.
+
+LIMIT: the old browser tab containing the session-only YouTube key became inaccessible to automation. The updated UI was loaded and its new disclosure verified with no browser warnings/errors, but a fresh end-to-end YouTube search on this revision remains pending direct key entry in the new tab. Deterministic full-flow tests and real subscription replay cover different parts of the path and must not be described as that missing fresh browser search. Semantic decisions remain fallible; the policy deliberately favors fewer results over vague evidence.
+
 ## Focused Connections navigation — 2026-11-07
 
 MEASURED: **257 deterministic tests and 66 deliberate-defect checks** pass. New coverage verifies one visible subscription service, safe fallback, preserved browsing during status updates, Help navigation and secret/consent clearing. A UI → same-origin setup route → provider manager test proves browsing sends status requests only, keeps Codex/Claude connected and makes no analysis request. A deliberate secret-lifetime defect is detected.

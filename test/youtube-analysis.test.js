@@ -3,7 +3,7 @@ import assert from 'node:assert/strict';
 import { createYouTubeAnalysis } from '../server/youtube-analysis.js';
 import { VIDEO } from './fixtures.js';
 
-const input = { version: 1, videos: [{ id: VIDEO.id, title: 'Fixture', comments: [{id:'one',text:'Recommended tutorial',likes:1}] }] };
+const input = { version: 2, topic: 'Fixture', videos: [{ id: VIDEO.id, title: 'Fixture', description: '', comments: [{id:'one',text:'Recommended tutorial',likes:1}] }] };
 test('YouTube analysis refuses unknown input before execution and validates model output', async () => {
   let calls = 0;
   const analyze = createYouTubeAnalysis({ classify: async () => { calls++; return {version:1,items:[]}; }, now: () => 1000 });

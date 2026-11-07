@@ -11,6 +11,8 @@ PersonalTube ist ein lokales YouTube-Dashboard auf Grundlage von Andrej Karpathy
 *Illustrative Auswahl aus unterschiedlichen Veröffentlichungszeiträumen. Im normalen Betrieb zeigt der Feed das gewählte Fenster von 1–7 Tagen.*
 
 
+YouTube-Empfehlungen prüfen jetzt das konkrete Suchthema und das gewünschte Niveau anhand begrenzter öffentlicher Videobeschreibungen und Kommentare. Pauschales Lob und nur benachbarte Themen reichen nicht: erforderlich sind konkrete Lernbelege oder begründete, themenbezogene Sehempfehlungen. Mindestens zwei positive Kommentare und mehr Zustimmung als Kritik bleiben nötig. Weniger oder keine Ergebnisse sind möglich; Modellurteile können falsch sein. [Regeln und Prüfungen](docs/YOUTUBE_ANALYSIS.md).
+
 ## Starten
 
 1. [Node.js 22 oder 24](https://nodejs.org/en/download) mit npm installieren.

@@ -66,7 +66,7 @@ MEASURED: `public/domain/community-evidence.js` owns pure extraction, stance val
 
 ## YouTube comment analysis extension
 
-MEASURED: `public/domain/youtube-evidence.js` validates the version-1 public-comment payload and filters exact-quote classifications; `server/youtube-analysis.js` controls cooldown and server-side validation through the shared classifier. `public/data/youtube-analysis.js` sends same-origin requests; the recommendation service coordinates the injected analysis adapter. `POST /api/youtube-analysis` accepts at most eight videos with twenty comments each, under 600,000 bytes. Its versioned request/response and selection rules are documented in [automatic analysis](YOUTUBE_ANALYSIS.md). No analysis result is persisted in application storage. Old version-1 `includeComments` settings remain readable for backup compatibility; new searches always analyze comments.
+MEASURED: `public/domain/youtube-evidence.js` validates the version-2 public-comment payload with required topic and bounded public description and filters exact-quote classifications; `server/youtube-analysis.js` controls cooldown and server-side validation through the shared classifier. `public/data/youtube-analysis.js` sends same-origin requests; the recommendation service coordinates the injected analysis adapter. `POST /api/youtube-analysis` accepts at most eight videos with twenty comments each, under 600,000 bytes. Its versioned request/response and selection rules are documented in [automatic analysis](YOUTUBE_ANALYSIS.md). No analysis result is persisted in application storage. Old version-1 `includeComments` settings remain readable for backup compatibility; new searches always analyze comments.
 
 ## Automatic community discovery
 

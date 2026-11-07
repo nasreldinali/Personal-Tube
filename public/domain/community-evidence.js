@@ -39,7 +39,7 @@ export function normalizeComment(row, trusted = false) {
   return { id: row.id, source: row.source, videoIds: [...new Set(ids)], text, title: plainText(row.title).slice(0,200), author: typeof row.author === 'string' ? row.author.slice(0,100) : '', date: date.toISOString(), month: date.toISOString().slice(0,7), sourceUrl: url.href, stance: trusted && stances.includes(row.stance) ? row.stance : 'pending', labels: trusted && row.labels ? row.labels : {} };
 }
 export function classificationInputs(rows) {
-  return rows.flatMap((row, i) => row.videoIds.map(id => ({ key: `${i}:${id}`, video: id, context: row.title, topic: typeof row.topic === 'string' ? plainText(row.topic).slice(0,120) : '', text: row.text })));
+  return rows.flatMap((row, i) => row.videoIds.map(id => ({ key: `${i}:${id}`, video: id, context: row.title, topic: typeof row.topic === 'string' ? plainText(row.topic).slice(0,200) : '', text: row.text })));
 }
 export function applyClassifications(rows, result) {
   const inputs = classificationInputs(rows);

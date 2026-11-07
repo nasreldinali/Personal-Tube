@@ -25,6 +25,6 @@ export async function recommendVideos(client, input, analyze, onProgress = () =>
   if (!analyzedComments) return { videos: [], inspected: ids.length, commentsUnavailable, analyzedComments, reviewed: videos.length };
   if (typeof analyze !== 'function') throw new AppError('classificationUnavailable');
   onProgress('analyzingYouTubeComments');
-  const result = await analyze(youtubeAnalysisInput(videos));
-  return { videos: positiveYouTubeVideos(videos, result), inspected: ids.length, commentsUnavailable, analyzedComments, reviewed: videos.length };
+  const result = await analyze(youtubeAnalysisInput(videos, settings.query));
+  return { videos: positiveYouTubeVideos(videos, result, settings.query), inspected: ids.length, commentsUnavailable, analyzedComments, reviewed: videos.length };
 }

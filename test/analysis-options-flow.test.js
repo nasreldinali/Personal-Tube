@@ -18,7 +18,7 @@ test('same-origin API setup to YouTube comment analysis preserves consent, crede
  config.configuration.acknowledgeCost=true;
  assert.equal((await post('/api/setup',config,'https://foreign.test')).status,403);assert.equal(requests.length,0);
  const connected=await post('/api/setup',config);assert.equal(connected.status,200);assert.ok(!JSON.stringify(connected).includes(config.configuration.key));assert.equal(requests.length,0);
- const answer=await post('/api/youtube-analysis',{version:1,videos:[{id:'abcdefghijk',title:'Fixture',comments:[{id:'one',text:'Recommended explanation',likes:1}]}]});
+ const answer=await post('/api/youtube-analysis',{version:2,topic:'Fixture',videos:[{id:'abcdefghijk',title:'Fixture',description:'',comments:[{id:'one',text:'Recommended explanation',likes:1}]}]});
  assert.equal(answer.status,200);assert.equal(requests.length,1);assert.equal(requests[0].headers.Authorization,`Bearer ${config.configuration.key}`);assert.ok(!JSON.stringify(requests[0].body).includes(config.configuration.key));
  const refused=await post('/api/setup',{version:1,action:'forget',provider:'openai'});assert.equal(refused.status,400);
  const forgotten=await post('/api/setup',{version:1,action:'forget',provider:'openai',confirm:true});assert.equal(forgotten.reply.providers.openai.connected,false);assert.equal(forgotten.reply.selected,'openai');

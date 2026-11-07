@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Require the requested topic in YouTube comment analysis, add bounded public video context, and tighten positive evidence to reject adjacent-topic results and generic praise. Keep existing provider connections, comment budgets and no-fallback billing behavior.
+
 - Simplify Connections to method → service → controls. Show one subscription account at a time, move compatibility guidance to Usage & help, distinguish API billing, and preserve active accounts while browsing. Include four-language copy and responsive navigation.
 
 - Add official GitHub Copilot CLI subscription login, an isolated sample test and explicit provider selection, without changing Codex/Claude sign-ins or falling back to BYOK APIs. Pin reviewed CLI/protocol versions and disclose GitHub allowance/overage and live-account verification limits.

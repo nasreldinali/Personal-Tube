@@ -51,7 +51,7 @@ test('classification receives the requested topic as bounded data alongside the 
  const {classificationInputs}=await import('../public/domain/community-evidence.js');
  const row={...comment('1','2026-01'),topic:'AI agents'};
  assert.equal(classificationInputs([row])[0].topic,'AI agents');
- assert.equal(classificationInputs([{...row,topic:'x'.repeat(500)}])[0].topic.length,120);
+ assert.equal(classificationInputs([{...row,topic:'x'.repeat(500)}])[0].topic.length,200);
 });
 
 test('bounded evidence retains late independent endorsements and criticism',()=>{

@@ -4,6 +4,9 @@ import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const cases = [
+  { name: 'youtube-topic-preservation', file: 'public/domain/youtube-evidence.js', from: 'topic: plainText(input.topic)', to: "topic: ''", test: 'test/youtube-evidence.test.js' },
+  { name: 'youtube-description-bound', file: 'public/domain/youtube-evidence.js', from: 'video.description.length > 1000', to: 'false', test: 'test/youtube-evidence.test.js' },
+  { name: 'youtube-topic-required', file: 'public/domain/youtube-evidence.js', from: '!plainText(input.topic)', to: 'false', test: 'test/youtube-evidence.test.js' },
   { name: 'connection-service-secret-lifetime', file: 'public/ui/connection-method.js', from: "clearSecret();\n    showSubscription", to: 'showSubscription', test: 'test/connection-navigation-flow.test.js' },
 
   { name: 'copilot-oauth-only', file: 'server/copilot-policy.js', from: "value.authType === 'user'", to: 'true', test: 'test/copilot-policy.test.js' },
@@ -64,7 +67,7 @@ const cases = [
   { name: 'community-automatic-call-budget', file: 'server/community-controller.js', from: 'session.automatic && session.analysisSteps >= COMMUNITY_AUTO_CALLS', to: 'false', test: 'test/community-flow.test.js' },
   { name: 'community-cancel-stops-next-call', file: 'public/services/community-discovery.js', from: 'if (isCancelled()) return', to: 'if (false) return', test: 'test/community-discovery.test.js' },
   { name: 'youtube-positive-threshold', file: 'public/domain/youtube-evidence.js', from: 'video.evidence.positive >= 2', to: 'video.evidence.positive >= 0', test: 'test/youtube-evidence.test.js' },
-  { name: 'youtube-unknown-input', file: 'public/domain/youtube-evidence.js', from: "!exact(input,'version,videos') || ", to: '', test: 'test/youtube-analysis.test.js' },
+  { name: 'youtube-unknown-input', file: 'public/domain/youtube-evidence.js', from: "!exact(input,'topic,version,videos') || ", to: '', test: 'test/youtube-analysis.test.js' },
   { name: 'reject-malformed-youtube-key', file: 'public/data/browser-store.js', from: 'const key = validateYouTubeKey(value);', to: 'const key = value;', test: 'test/browser-store.test.js' },
   { name: 'community-origin-check', file: 'server/community-route.js', from: 'request.headers.origin !==', to: 'false && request.headers.origin !==', test: 'test/community-route.test.js' },
   { name: 'classification-quote-evidence', file: 'public/domain/community-evidence.js', from: ' || !input.text.includes(item.quote)', to: '', test: 'test/community-evidence.test.js' },

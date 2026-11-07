@@ -30,7 +30,7 @@ export function candidateVideos(rows, input) {
     const language = typeof snippet.defaultAudioLanguage === 'string' ? snippet.defaultAudioLanguage.toLowerCase() : '';
     if (settings.language !== 'any' && language.split('-')[0] !== settings.language) continue;
     seen.add(row.id);
-    videos.push({ id: row.id, title: snippet.title, channelId: snippet.channelId, channelTitle: typeof snippet.channelTitle === 'string' ? snippet.channelTitle.slice(0,250) : 'YouTube', views, likes, audioLanguage: language, embeddable: row.status.embeddable !== false, duration: typeof row.contentDetails?.duration === 'string' ? row.contentDetails.duration : '', categories: [], tags: [], summary: '', channelCategory: settings.query, evidence: null });
+    videos.push({ id: row.id, title: snippet.title, description: typeof snippet.description === 'string' ? snippet.description.slice(0,1000) : '', channelId: snippet.channelId, channelTitle: typeof snippet.channelTitle === 'string' ? snippet.channelTitle.slice(0,250) : 'YouTube', views, likes, audioLanguage: language, embeddable: row.status.embeddable !== false, duration: typeof row.contentDetails?.duration === 'string' ? row.contentDetails.duration : '', categories: [], tags: [], summary: '', channelCategory: settings.query, evidence: null });
   }
   return videos.sort((a, b) => b[settings.sort] - a[settings.sort] || a.id.localeCompare(b.id));
 }
