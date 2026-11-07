@@ -7,10 +7,10 @@ export function createApiConnections({ text, request, confirm }) {
   let result = null;
   let busy = false;
   const provider = () => $('api-provider').value;
-  const clearSecret = () => { $('analysis-key').value = ''; };
+  const clearSecret = () => { $('analysis-key').value = ''; $('api-cost-consent').checked = false; };
   function render(state = result, running = busy) {
     result = state; busy = running;
-    $('api-active').textContent = apiProviderIds.includes(result?.selected) ? providerNames[result.selected] : '';
+    $('api-active').textContent = '';
     const id = provider();
     const local = isLocalProvider(id);
     const connection = result?.providers[id];
@@ -59,7 +59,7 @@ export function createApiConnections({ text, request, confirm }) {
     $('api-provider').value=selected;
     $('api-model').value=result?.providers[selected]?.model || '';
     $('api-model').placeholder=method==='local'?'gemma4:e4b':'';
-    $('api-method-help').textContent=text(method==='local'?'localMethodHelp':'cloudMethodHelp');
+    $('api-method-help').textContent='';
     render();
   }
   return { render, clearSecret, setMethod };

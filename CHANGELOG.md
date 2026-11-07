@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Simplify Connections to method → service → controls. Show one subscription account at a time, move compatibility guidance to Usage & help, distinguish API billing, and preserve active accounts while browsing. Include four-language copy and responsive navigation.
+
 - Add official GitHub Copilot CLI subscription login, an isolated sample test and explicit provider selection, without changing Codex/Claude sign-ins or falling back to BYOK APIs. Pin reviewed CLI/protocol versions and disclose GitHub allowance/overage and live-account verification limits.
 - Align Settings & data with Connections: fixed navigation and close controls, four focused sections, preserved drafts and the existing return path. — changes on main since 1.8.2
 

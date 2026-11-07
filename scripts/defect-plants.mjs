@@ -4,6 +4,8 @@ import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const cases = [
+  { name: 'connection-service-secret-lifetime', file: 'public/ui/connection-method.js', from: "clearSecret();\n    showSubscription", to: 'showSubscription', test: 'test/connection-navigation-flow.test.js' },
+
   { name: 'copilot-oauth-only', file: 'server/copilot-policy.js', from: "value.authType === 'user'", to: 'true', test: 'test/copilot-policy.test.js' },
   { name: 'copilot-no-tools', file: 'server/copilot-policy.js', from: 'availableTools:[]', to: "availableTools:['shell']", test: 'test/copilot-policy.test.js' },
   { name: 'copilot-no-inherited-api-key', file: 'server/copilot-policy.js', from: "['PATH','HOME','USER','TMPDIR']", to: "['PATH','HOME','USER','TMPDIR','OPENAI_API_KEY']", test: 'test/copilot-policy.test.js' },

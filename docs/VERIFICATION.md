@@ -1,5 +1,11 @@
 # Verification
 
+## Focused Connections navigation — 2026-11-07
+
+MEASURED: **257 deterministic tests and 66 deliberate-defect checks** pass. New coverage verifies one visible subscription service, safe fallback, preserved browsing during status updates, Help navigation and secret/consent clearing. A UI → same-origin setup route → provider manager test proves browsing sends status requests only, keeps Codex/Claude connected and makes no analysis request. A deliberate secret-lifetime defect is detected.
+
+Browser review covers the actual local app at desktop and 390px mobile widths, Arabic RTL, German, Spanish and English, and light/dark themes. Subscription, API and local forms remain separate; the active account does not change during navigation. This is a navigation/layout verification, not a new live authentication or paid API test. Existing provider verification limits below still apply.
+
 ## Copilot connection and settings layout — 2026-11-07
 
 MEASURED: the full check passes **254 deterministic tests and 65 deliberate-defect checks**. New coverage exercises isolated Copilot login/test selection, official fixed login arguments, OAuth-only auth, version/protocol refusal, disabled tools/config discovery, bounded frames and process lifetime, exact evidence and the UI → same-origin HTTP → manager → classifier → protocol path with synthetic responses. Existing Codex/Claude tests remain unchanged. No runtime dependency was added.

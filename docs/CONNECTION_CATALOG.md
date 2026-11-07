@@ -4,7 +4,7 @@
 
 Open **Connections** and choose **Subscription**, **Cloud API** or **Local model**. **YouTube** and **Usage & help** have their own sections. Moving between sections does not change the selected analysis service. The selected service stays visible above the form.
 
-In **Subscription → Find my account or subscription**, choose the service you already have. The guide explains its route and opens existing connection controls or API/local setup only when you press a button. Choosing a name does not authenticate, change the active provider or run analysis. The same guide is available in all four interface languages.
+In **Usage & help → Find my account or subscription**, choose the service you already have. The guide explains its route and opens existing connection controls or API/local setup only when you press a button. Choosing a name does not authenticate, change the active provider or run analysis. The same guide is available in all four interface languages.
 
 ## Existing subscriptions
 
@@ -12,7 +12,7 @@ In **Subscription → Find my account or subscription**, choose the service you 
 |---|---|---|
 | ChatGPT with eligible Codex access | Supported through the reviewed Codex CLI | Install the supported CLI, sign in, select it, then test one sample. |
 | Claude with eligible Claude Code access | Supported through the reviewed Claude Code CLI | Install the supported CLI, sign in, select it, then test one sample. |
-| Global MiniMax M Plan | Optional direct subscription connector | Expand **Add another subscription**. Save, test, then explicitly select it. Existing credit packs may be consumed after quota. No account is assumed or required. |
+| Global MiniMax M Plan | Optional direct subscription connector | Choose **Subscription → Choose a service → MiniMax M Plan**. Save, test, then explicitly select it. Existing credit packs may be consumed after quota. No account is assumed or required. |
 | Google Gemini / Antigravity consumer subscription | Consumer login pass-through is not supported for third-party apps | Google’s current FAQ also rules out wrapping `agy` in a third-party application under a consumer plan. PersonalTube offers Gemini API separately; it does not use this subscription. |
 | GitHub Copilot | Supported through the reviewed official CLI 1.0.107 | [Sign in, test a sample, then explicitly choose Use Copilot](COPILOT_SUBSCRIPTION.md). Login/test preserve the selected account. Your GitHub billing/overage settings apply. |
 | Kimi Code | Not offered for this automated batch flow | Its current guidelines restrict scripted batches/data annotation; a chat subscription is not a general API entitlement. |

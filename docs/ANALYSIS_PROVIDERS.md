@@ -2,7 +2,7 @@
 
 [Setup guide](ANALYSIS_SETUP.md) · [README](../README.md)
 
-PersonalTube supports three subscription CLIs, a direct MiniMax M Plan connection, seven cloud API services and three local model connection types. Choose one explicitly in **Connections**. The **Subscription → Find my account or subscription** guide helps new users identify the correct route without logging in or switching their active connection. It never changes services to work around an error or an exhausted allowance.
+PersonalTube supports three subscription CLIs, a direct MiniMax M Plan connection, seven cloud API services and three local model connection types. Choose one explicitly in **Connections**. The **Usage & help → Find my account or subscription** guide helps new users identify the correct route without logging in or switching their active connection. It never changes services to work around an error or an exhausted allowance.
 
 | Connection | What you supply | Where analysis runs | Billing |
 |---|---|---|---|
@@ -34,7 +34,7 @@ Tests use synthetic accounts for logout. Existing personal credentials are never
 
 ## MiniMax subscription setup
 
-Choose **Subscription → Add another subscription → MiniMax · M Plan subscription**. Save your M Plan key, then test one sample. Saving and testing do not change the selected provider or Codex/Claude sign-ins. Choose **Use MiniMax** explicitly when ready. See the [step-by-step guide and credit-pack caveat](MINIMAX_SUBSCRIPTION.md).
+Choose **Subscription → Choose a service → MiniMax M Plan**. Save your M Plan key, then test one sample. Saving and testing do not change the selected provider or Codex/Claude sign-ins. Choose **Use MiniMax** explicitly when ready. See the [step-by-step guide and credit-pack caveat](MINIMAX_SUBSCRIPTION.md).
 
 ## Cloud API setup
 
@@ -86,7 +86,7 @@ Reference protocols: [OpenAI Chat Completions](https://developers.openai.com/api
 2. In PersonalTube choose **Local model → Ollama**.
 3. Press **Find available models**, select it, or copy the exact installed name into **Model ID**, for example `gemma4:e4b` only if that variant is already listed. A model file downloaded elsewhere is not automatically registered with Ollama.
 4. Choose **Use this model**, then **Test with one sample**. This changes the active analysis provider; it does not sign out of Codex or Claude.
-5. To return, choose **Subscription → Use Codex/Claude**.
+5. To return, choose **Subscription → Choose a service → Codex/Claude → Use**.
 
 For LM Studio, load your model and start its local server on port 1234, then select LM Studio and its model ID. Model size, hardware, context and JSON support determine whether the test succeeds. PersonalTube does not install models. [Ollama's Gemma 4 listing](https://registry.ollama.com/library/gemma4) documents available variants; cloud variants are not local inference.
 

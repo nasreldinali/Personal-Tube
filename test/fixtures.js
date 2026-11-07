@@ -17,7 +17,7 @@ export const CATALOG_ROWS = [
 ];
 export function setupDocumentFixture() {
   const nodes=new Map();
-  const node=()=>({value:'codex',children:[],dataset:{},attributes:{},setAttribute(key,value){this.attributes[key]=value;},removeAttribute(key){delete this.attributes[key];},scrollIntoView(){},listeners:{},addEventListener(event,handler){this.listeners[event]=handler;},replaceChildren(...children){this.children=children;},append(...children){this.children.push(...children);},showModal(){this.open=true;},close(){this.open=false;}});
+  const node=()=>({value:'codex',children:[],dataset:{},attributes:{},setAttribute(key,value){this.attributes[key]=value;},removeAttribute(key){delete this.attributes[key];},scrollIntoView(){},focus(){this.focused=true;},listeners:{},addEventListener(event,handler){this.listeners[event]=handler;},replaceChildren(...children){this.children=children;},append(...children){this.children.push(...children);},showModal(){this.open=true;},close(){this.open=false;}});
   return {nodes,document:{getElementById(id){if(!nodes.has(id))nodes.set(id,node());return nodes.get(id);},createElement:node}};
 }
 export function setupFetchFixture(handler) {

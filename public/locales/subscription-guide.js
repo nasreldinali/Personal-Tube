@@ -30,15 +30,15 @@ const entries = {
     "Elige un nombre para ver la vía compatible. Esto no inicia sesión, cambia el servicio activo ni envía análisis."
   ],
   "guideCodex": [
-    "Use your eligible ChatGPT account through the supported Codex CLI. Open its controls below: install if needed, sign in, then test one sample. A browser login alone is not enough.",
-    "استخدم حساب ChatGPT المؤهل من خلال أداة Codex الرسمية المدعومة. افتح أزراره تحت: ثبّت الأداة لو ناقصة، سجّل دخول، وبعدها اختبر بعينة واحدة. دخول المتصفح لوحده مش كفاية.",
-    "Nutze dein berechtigtes ChatGPT-Konto über die unterstützte Codex CLI. Unten bei Bedarf installieren, anmelden und eine Probe testen. Eine Browser-Anmeldung allein reicht nicht.",
+    "Use your eligible ChatGPT account through the supported Codex CLI. Open its connection controls: install if needed, sign in, then test one sample. A browser login alone is not enough.",
+    "استخدم حساب ChatGPT المؤهل من خلال أداة Codex الرسمية المدعومة. افتح أزرار الربط: ثبّت الأداة لو ناقصة، سجّل دخول، وبعدها اختبر بعينة واحدة. دخول المتصفح لوحده مش كفاية.",
+    "Nutze dein berechtigtes ChatGPT-Konto über die unterstützte Codex CLI. Verbindungsoptionen öffnen, bei Bedarf installieren, anmelden und eine Probe testen. Eine Browser-Anmeldung allein reicht nicht.",
     "Usa tu cuenta elegible de ChatGPT con la CLI compatible de Codex. Abre sus controles: instala si hace falta, inicia sesión y prueba una muestra. La sesión del navegador no basta."
   ],
   "guideClaude": [
-    "Use your eligible Claude account through the supported Claude Code CLI. Open its controls below: install if needed, sign in, then test one sample.",
-    "استخدم حساب Claude المؤهل من خلال أداة Claude Code المدعومة. افتح أزراره تحت: ثبّت الأداة لو ناقصة، سجّل دخول، وبعدها اختبر بعينة واحدة.",
-    "Nutze dein berechtigtes Claude-Konto über die unterstützte Claude Code CLI. Unten bei Bedarf installieren, anmelden und eine Probe testen.",
+    "Use your eligible Claude account through the supported Claude Code CLI. Open its connection controls: install if needed, sign in, then test one sample.",
+    "استخدم حساب Claude المؤهل من خلال أداة Claude Code المدعومة. افتح أزرار الربط: ثبّت الأداة لو ناقصة، سجّل دخول، وبعدها اختبر بعينة واحدة.",
+    "Nutze dein berechtigtes Claude-Konto über die unterstützte Claude Code CLI. Verbindungsoptionen öffnen, bei Bedarf installieren, anmelden und eine Probe testen.",
     "Usa tu cuenta elegible de Claude con la CLI compatible de Claude Code. Abre sus controles: instala si hace falta, inicia sesión y prueba una muestra."
   ],
   "guideMinimax": [
@@ -54,9 +54,9 @@ const entries = {
     "Tu plan Google puede incluir Antigravity, pero Google no admite reutilizar su sesión personal en apps externas. PersonalTube ofrece Gemini API por separado, sin usar esa suscripción."
   ],
   "guideCopilot": [
-      "Use the official GitHub Copilot CLI connection below: install the reviewed version, sign in with GitHub, test a sample, then explicitly choose Use Copilot. Login and tests keep your current provider selected.",
-      "استخدم ربط GitHub Copilot الرسمي تحت: ثبّت الإصدار المدعوم، سجّل دخول GitHub، اختبر عينة، وبعدها اختار استخدام Copilot بنفسك. الدخول والاختبار مش بيغيّروا الحساب النشط.",
-      "Nutze unten die offizielle GitHub Copilot CLI: geprüfte Version installieren, mit GitHub anmelden, Probe testen und Copilot ausdrücklich auswählen. Anmeldung und Test ändern den aktiven Dienst nicht.",
+      "Use the official GitHub Copilot CLI connection: install the reviewed version, sign in with GitHub, test a sample, then explicitly choose Use Copilot. Login and tests keep your current provider selected.",
+      "استخدم أزرار ربط GitHub Copilot الرسمية: ثبّت الإصدار المدعوم، سجّل دخول GitHub، اختبر عينة، وبعدها اختار استخدام Copilot بنفسك. الدخول والاختبار مش بيغيّروا الحساب النشط.",
+      "Nutze die offizielle GitHub Copilot CLI: geprüfte Version installieren, mit GitHub anmelden, Probe testen und Copilot ausdrücklich auswählen. Anmeldung und Test ändern den aktiven Dienst nicht.",
       "Usa la conexión oficial de GitHub Copilot CLI: instala la versión revisada, inicia sesión, prueba una muestra y elige Usar Copilot. El inicio de sesión y la prueba mantienen tu servicio activo."
   ],
   "guideKimi": [

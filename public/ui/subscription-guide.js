@@ -26,8 +26,9 @@ export function createSubscriptionGuide({text,showMethod}) {
   $('subscription-account').addEventListener('change',render);
   $('subscription-guide-action').addEventListener('click',()=>{
     const current=choice();if(!current?.target)return;
+    showMethod('subscription',$('subscription-account').value);
     const target=$(current.target);if(current.target==='minimax-panel')target.open=true;
-    target.scrollIntoView({block:'nearest'});
+    $('subscription-provider').focus();
   });
   $('subscription-guide-api').addEventListener('click',()=>{const current=choice();if(current&&!current.target)showMethod('api',current.api);});
   $('subscription-guide-local').addEventListener('click',()=>{const current=choice();if(current&&!current.target)showMethod('local');});

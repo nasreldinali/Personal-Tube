@@ -20,9 +20,9 @@ test('account finder explains unsupported subscriptions and only navigates after
 test('supported subscription guidance reveals existing controls without login or provider selection',()=>{
  const before=globalThis.document,f=setupDocumentFixture();globalThis.document=f.document;const opened=[];
  try {
-  const n=id=>f.document.getElementById(id);createSubscriptionGuide({text:key=>key,showMethod:()=>{throw Error('No method change expected');}});
+  const n=id=>f.document.getElementById(id);createSubscriptionGuide({text:key=>key,showMethod:(method,provider)=>{assert.equal(method,'subscription');assert.ok(['codex','claude','minimax'].includes(provider));}});
   for(const provider of ['codex','claude','minimax']){
-   const target=n(provider==='minimax'?'minimax-panel':`setup-card-${provider}`);target.scrollIntoView=()=>opened.push(provider);
+   const target=n(provider==='minimax'?'minimax-panel':`setup-card-${provider}`);n('subscription-provider').focus=()=>opened.push(provider);
    n('subscription-account').value=provider;n('subscription-account').listeners.change();assert.equal(n('subscription-guide-action').hidden,false);assert.equal(n('subscription-guide-api').hidden,true);assert.equal(opened.length,provider==='codex'?0:provider==='claude'?1:2);
    n('subscription-guide-action').listeners.click();
   }

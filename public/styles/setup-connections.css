@@ -87,3 +87,22 @@
 #settings-dialog details { font-size:13px; line-height:1.7; }
 #settings-panel-data .button-row { display:grid; grid-template-columns:1fr 1fr; margin-top:20px; }
 @media(max-width:480px) { #settings-panel-data .button-row { grid-template-columns:1fr; } }
+
+/* A method, one service, then that service's controls. */
+.connection-nav-label { margin:0 12px 6px; color:var(--muted); font-size:11px; font-weight:700; line-height:1.6; }
+.connection-nav-support { border-top:1px solid var(--line); padding-top:18px; margin-top:12px; }
+.subscription-service { margin-top:22px; }
+#connection-browse-help { margin-top:8px; }
+#setup-dialog #setup-provider { margin:18px 0 0; }
+#setup-dialog .provider-card[hidden], #setup-dialog #minimax-panel[hidden] { display:none; }
+#setup-dialog #minimax-panel { margin-top:18px; border:1px solid var(--line); border-radius:12px; padding:18px; }
+#setup-dialog #api-active:empty, #setup-dialog #api-method-help:empty { display:none; }
+#setup-dialog .provider-heading { flex-wrap:wrap; }
+@media(max-width:700px) {
+  #setup-dialog .connection-methods { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); overflow:visible; }
+  #setup-dialog .connection-methods button { min-width:0; padding:8px; text-align:center; }
+  #setup-dialog .connection-nav-label { grid-column:1 / -1; margin:0 4px; }
+  #setup-dialog .connection-nav-support { display:none; }
+  #setup-dialog #method-youtube, #setup-dialog #method-help { border-top:1px solid var(--line); }
+  #setup-dialog #method-help { grid-column:2 / -1; }
+}

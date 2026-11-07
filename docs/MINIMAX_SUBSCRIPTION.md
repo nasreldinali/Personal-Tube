@@ -6,7 +6,7 @@ Use your own **global MiniMax M Plan subscription key** directly in PersonalTube
 
 ## Set up and test
 
-1. Open **Setup & connections → Subscription → MiniMax · M Plan subscription**.
+1. Open **Connections → Subscription → Choose a service → MiniMax M Plan**.
 2. Open your [M Plan account](https://platform.minimax.io/console/plan). Copy the subscription key beginning with `sk-cp-`. A normal pay-as-you-go API key or a chat subscription without M Plan access is not supported here. Do not post your key in an issue or chat.
 3. Paste the key in the password field, read the credit-pack notice and tick the acknowledgement. Choose **Save subscription connection**. Saving makes no MiniMax request and keeps your selected analysis provider.
 4. Choose **Test with one sample** and confirm. This sends one synthetic comment to MiniMax, without YouTube requests. A valid, evidence-checked response marks the connection as tested. The test also keeps the selected provider unchanged. Allow up to two minutes; there is a one-minute per-provider test cooldown.

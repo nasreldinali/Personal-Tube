@@ -1,4 +1,64 @@
 const entries = {
+  "connectionMethodStep": [
+    "1 · Connection method",
+    "١ · طريقة الربط",
+    "1 · Verbindungsart",
+    "1 · Tipo de conexión"
+  ],
+  "connectionMore": [
+    "More",
+    "خيارات إضافية",
+    "Weitere Optionen",
+    "Más opciones"
+  ],
+  "connectionServiceStep": [
+    "2 · Choose a service",
+    "٢ · اختار الخدمة",
+    "2 · Dienst auswählen",
+    "2 · Elige un servicio"
+  ],
+  "connectionBrowseHelp": [
+    "Choose a service to see its connection controls. This does not change your active account.",
+    "اختار الخدمة عشان تظهر إعداداتها بس. اختيار الاسم هنا مش بيغيّر الحساب النشط.",
+    "Wähle einen Dienst, um seine Verbindung einzurichten. Dein aktives Konto bleibt dabei unverändert.",
+    "Elige un servicio para ver sus controles. Esto no cambia tu cuenta activa."
+  ],
+  "connectionTitle_subscription": [
+    "Use your subscription",
+    "اربط اشتراكك",
+    "Dein Abonnement nutzen",
+    "Usa tu suscripción"
+  ],
+  "connectionHint_subscription": [
+    "Choose your account below, then connect or manage it. Tests use your plan’s allowance; there is no automatic paid API fallback.",
+    "اختار حسابك تحت، وبعدها اربطه أو راجع إعداداته. الاختبار بيستهلك من حصة اشتراكك؛ مفيش تحويل تلقائي لـAPI مدفوع.",
+    "Konto auswählen und verbinden oder verwalten. Tests nutzen dein Kontingent; kein automatischer Wechsel zu kostenpflichtigen APIs.",
+    "Elige tu cuenta para conectarla o gestionarla. Las pruebas usan tu cuota; no se cambia automáticamente a una API de pago."
+  ],
+  "connectionTitle_api": [
+    "Connect with an API key",
+    "اربط بمفتاح API",
+    "Mit API-Schlüssel verbinden",
+    "Conecta con una clave API"
+  ],
+  "connectionHint_api": [
+    "Separate developer billing, not your chat subscription. Choose a service, enter a model and key, then review the cost acknowledgement before saving.",
+    "ده حساب مطوّرين بفواتير منفصلة عن اشتراك الدردشة. اختار الخدمة، واكتب النموذج والمفتاح، وراجع إقرار التكلفة قبل الحفظ.",
+    "Separate Entwicklerabrechnung, nicht dein Chat-Abonnement. Dienst, Modell und Schlüssel wählen; vor dem Speichern die Kostenbestätigung prüfen.",
+    "Facturación de desarrollador separada de tu suscripción de chat. Elige servicio, modelo y clave, y revisa los costes antes de guardar."
+  ],
+  "connectionTitle_local": [
+    "Use a model on this computer",
+    "استخدم نموذج على جهازك",
+    "Modell auf diesem Computer nutzen",
+    "Usa un modelo en este equipo"
+  ],
+  "connectionHint_local": [
+    "Choose the program serving your model, then find an installed model. Your local server must already be running; nothing is downloaded automatically.",
+    "اختار البرنامج اللي مشغّل النموذج، وبعدها اعرض النماذج المتاحة. لازم الخادم المحلي يكون شغّال؛ مفيش تنزيل تلقائي.",
+    "Wähle deinen lokalen Modellserver und suche ein installiertes Modell. Der Server muss bereits laufen; keine automatischen Downloads.",
+    "Elige el programa que sirve tu modelo y busca uno instalado. El servidor debe estar funcionando; no se descarga nada automáticamente."
+  ],
   "setupTitle": [
     "Connections",
     "الاتصالات",

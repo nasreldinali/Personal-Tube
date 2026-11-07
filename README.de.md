@@ -41,6 +41,8 @@ Kein `npm install`, Build oder Datenbankserver ist erforderlich. `index.html` ni
 
 ## Verbindungen und Kosten
 
+**Verbindungen folgt einem klaren Ablauf: Verbindungsart → Dienst → verbinden, testen oder verwalten.** Abonnement, Cloud-API und lokales Modell zeigen nur die passenden Dienste. Die Abonnementauswahl zeigt jeweils ein Konto; das Durchsehen ändert weder das aktive Konto noch Anmeldungen und startet keinen Test. Das aktive Konto bleibt oben sichtbar. Die Kompatibilitätshilfe liegt unter **Nutzung & Hilfe**; MiniMax ist eine optionale Auswahl im Abonnementmenü.
+
 **GitHub Copilot:** CLI 1.0.107 installieren, in der App anmelden, eine Probe testen und ausdrücklich auswählen. Anmeldung und Test ändern den aktiven Dienst oder Codex/Claude-Anmeldungen nicht. Nutzt dein GitHub-Kontingent ohne API-Ausweichlösung; kostenpflichtigen Mehrverbrauch bei GitHub deaktivieren. Eine Analyse mit einem echten Copilot-Konto ist hier noch nicht verifiziert. [Einrichtung und Grenzen](docs/COPILOT_SUBSCRIPTION.md).
 
 **Settings & data** hat jetzt dieselbe feste Navigation wie Connections: YouTube, API-Verbrauch, Aktualisierung und Sicherung/Daten.
@@ -71,6 +73,6 @@ Automatische Empfehlungen können falsch sein. Shorts werden anhand der Dauer ge
 
 PersonalTube-Code und Dokumentation: [MIT](LICENSE). Der HackerTube/open-index-Katalog behält seine ODC-By-1.0-Bedingungen; Schriften und DEEDA-Markenmaterial haben eigene Hinweise. Siehe [NOTICE](NOTICE.md). PersonalTube ist ein unabhängiges Projekt, kein offizielles Produkt von Karpathy oder YouTube.
 
-Die neue Ansicht **Connections** trennt Abonnement, Cloud-API, lokales Modell, YouTube sowie Verbrauch/Hilfe. MiniMax ist optional unter **Add another subscription**. **Find available models** liest die Modellliste des lokalen Servers, ohne Analyse oder Download. LLMs und kleine SLMs benötigen geeignete JSON-Ausgabe. Nicht jedes Chat-Abonnement ist integrierbar; Google unterstützt private Antigravity-Anmeldungen in Drittanbieter-Apps nicht; Copilot ist über die offizielle CLI integriert, Kimi Code wird für diesen automatischen Ablauf nicht angeboten. [Kompatibilität und Grenzen](docs/CONNECTION_CATALOG.md).
+Die neue Ansicht **Connections** trennt Abonnement, Cloud-API, lokales Modell, YouTube sowie Verbrauch/Hilfe. **Find available models** liest die Modellliste des lokalen Servers, ohne Analyse oder Download. LLMs und kleine SLMs benötigen geeignete JSON-Ausgabe. Nicht jedes Chat-Abonnement ist integrierbar; Google unterstützt private Antigravity-Anmeldungen in Drittanbieter-Apps nicht; Copilot ist über die offizielle CLI integriert, Kimi Code wird für diesen automatischen Ablauf nicht angeboten. [Kompatibilität und Grenzen](docs/CONNECTION_CATALOG.md).
 
 Unter **Abonnement → Mein Konto oder Abonnement finden** zeigt die Kontoauswahl den passenden Weg. Sie meldet dich nicht an, wechselt nicht den Anbieter und verbraucht kein Analysekontingent.

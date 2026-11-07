@@ -41,6 +41,8 @@ No requiere `npm install`, compilación ni base de datos. No abras `index.html` 
 
 ## Conexiones y costes
 
+**Conexiones sigue un orden claro: tipo de conexión → servicio → conectar, probar o gestionar.** Suscripción, API en la nube y modelo local muestran solo sus servicios. El selector de suscripción muestra una cuenta a la vez; explorar opciones no cambia la cuenta activa ni inicia sesión o pruebas. La cuenta activa sigue visible arriba. La guía de compatibilidad está en **Uso y ayuda**; MiniMax es una opción del selector de suscripciones.
+
 **GitHub Copilot:** instala CLI 1.0.107, inicia sesión desde la app, prueba una muestra y selecciónalo explícitamente. El inicio de sesión y la prueba mantienen el servicio activo y las sesiones de Codex/Claude. Usa tu cuota GitHub sin alternativa API; desactiva los excesos de pago en GitHub. Aún no se ha verificado aquí un análisis con una cuenta real de Copilot. [Configuración y límites](docs/COPILOT_SUBSCRIPTION.md).
 
 **Settings & data** comparte la navegación fija de Connections: YouTube, uso de API, actualizaciones y copias/datos.
@@ -71,6 +73,6 @@ El análisis automático puede equivocarse. Los Shorts se estiman por duración.
 
 Código y documentación de PersonalTube: [MIT](LICENSE). El catálogo HackerTube/open-index conserva sus condiciones ODC-By 1.0; las fuentes y la marca DEEDA tienen avisos propios. Consulta [NOTICE](NOTICE.md). PersonalTube es independiente y no es un producto oficial de Karpathy ni de YouTube.
 
-La nueva vista **Connections** separa suscripción, API en la nube, modelo local, YouTube y uso/ayuda. MiniMax es opcional en **Add another subscription**. **Find available models** lee la lista del servidor local sin analizar ni descargar modelos. Los LLM y SLM pequeños necesitan una salida JSON adecuada. No toda suscripción de chat permite integración: Google no admite sesiones personales de Antigravity en apps externas; Copilot está integrado mediante su CLI oficial, y Kimi Code no se ofrece para este flujo automático. [Compatibilidad y límites](docs/CONNECTION_CATALOG.md).
+La nueva vista **Connections** separa suscripción, API en la nube, modelo local, YouTube y uso/ayuda. **Find available models** lee la lista del servidor local sin analizar ni descargar modelos. Los LLM y SLM pequeños necesitan una salida JSON adecuada. No toda suscripción de chat permite integración: Google no admite sesiones personales de Antigravity en apps externas; Copilot está integrado mediante su CLI oficial, y Kimi Code no se ofrece para este flujo automático. [Compatibilidad y límites](docs/CONNECTION_CATALOG.md).
 
 En **Suscripción → Encontrar mi cuenta o suscripción**, elige tu servicio para ver la vía disponible. Elegir un nombre no inicia sesión, cambia el proveedor ni consume cuota de análisis.

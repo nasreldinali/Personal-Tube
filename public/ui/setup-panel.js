@@ -24,7 +24,7 @@ export function createSetupPanel({ context, finish, openYouTube, onError, schedu
   const copilotPanel = createCopilotConnection({text,request,confirm});
   const minimaxPanel = createMiniMaxConnection({text,request,confirm});
   const clearSecrets = () => { apiPanel.clearSecret(); minimaxPanel.clearSecret(); };
-  const methods = createConnectionMethod({setMethod:apiPanel.setMethod,clearSecret:clearSecrets});
+  const methods = createConnectionMethod({text,setMethod:apiPanel.setMethod,clearSecret:clearSecrets});
   const accountGuide = createSubscriptionGuide({text,showMethod:methods.show});
   function stopPolling() { if (timer !== null) cancel(timer); timer = null; }
   function render() {
