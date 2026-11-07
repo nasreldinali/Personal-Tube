@@ -1,5 +1,24 @@
 # Verification
 
+## Arabic cooking and sports searches — 2026-11-07
+
+MEASURED on application revision `cbb6fb5`: four fresh searches through the Recommendations page, using existing Codex and Claude subscriptions. Fixed queries: `طريقة عمل البيتزا في البيت` (home pizza) and `تعلم تسديد كرة القدم للمبتدئين` (beginner football shooting). Each used declared Arabic audio, minimum 100,000 views / 1,000 likes and views order. Filters were not weakened after empty results.
+
+| Topic | Provider | Candidates | Videos analyzed | Comments analyzed | Displayed recommendations |
+|---|---|---:|---:|---:|---:|
+| Home pizza | Codex | 45 | 8 | 150 | 5 |
+| Home pizza | Claude | 45 | 8 | 152 | 2 |
+| Beginner football shooting | Codex | 46 | 8 | 148 | 0 |
+| Beginner football shooting | Claude | 46 | 6 | 113 | 0 |
+
+MEASURED: every displayed cooking title matched pizza preparation, and all 18 displayed excerpts across the two searches were Arabic. Evidence included successful dough attempts, water measurements, sauce preparation, refrigeration and dough thickness. Claude's two results were also present in Codex's five. One Codex excerpt praised fluffy dough without an explicit trial or learning outcome; it remains borderline evidence rather than a confident quality pass. Thanks or blessings accompanying practical detail were not treated as standalone proof.
+
+MEASURED: both sports analyses completed successfully but returned no video with sufficient qualifying support. Comments were unavailable for zero videos in all four searches. No sports recommendation was delivered or manually assessed as useful. Searches fetched independently, with different sample sizes and sports candidate subsets; this is not a controlled provider comparison. Hidden rejected labels were not independently reviewed.
+
+INFERRED: the cooking results support useful Arabic recommendations beyond AI videos, including colloquial Arabic evidence. The sports result establishes execution only, not useful coverage or correct rejection of every candidate. These two topics do not establish general Arabic accuracy, comment authenticity, recipe quality or coaching quality. Strict evidence can suppress useful results, and borderline praise can still pass model judgment.
+
+MEASURED: these runs added two successful calls per subscription: 298 comment inputs for Codex and 265 for Claude, with no failures. End-of-session totals were 4 completed / 497 inputs for Codex and 4 completed / 464 inputs for Claude, including earlier English checks. All cloud API counters remained zero; both accounts remained connected and Codex was restored as selected. No logout, paid API or application-code change occurred. YouTube quota and subscription allowances were consumed. Browser warning/error capture contained zero entries, and `npm run check` passed. Raw source quotes, links and screenshots remain in ignored local records; no credentials or account identifiers were published.
+
 ## Fresh YouTube search with both subscriptions — 2026-11-07
 
 MEASURED on application revision `cbb6fb5`: two new searches were submitted through the actual Recommendations page, selecting Codex and then Claude in Connections. Query: `large language models introduction`; declared English audio; minimum 100,000 views and 1,000 likes; popularity order by views. Each search inspected 50 candidates and analyzed **157 newly retrieved comments across 8 videos**, with comments unavailable for 0. This completes the fresh-browser check that was pending during the replay below. The key was entered by the user directly in the app, never extracted or copied into evidence.
