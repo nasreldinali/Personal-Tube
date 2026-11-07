@@ -4,6 +4,8 @@ import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const cases = [
+  { name: 'desktop-exact-tab-origin', file: 'scripts/focus-personaltube.js', from: ':4173(?:[/?#]|$)', to: ':4173', test: 'test/focus-personaltube.test.js' },
+  { name: 'desktop-select-existing-tab', file: 'scripts/focus-personaltube.js', from: 'activeTabIndex = tabIndex + 1', to: 'activeTabIndex = 1', test: 'test/focus-personaltube.test.js' },
   { name: 'desktop-refuses-foreign-listener', file: 'scripts/desktop-launch.mjs', from: "decision === 'refuse'", to: 'false', test: 'test/desktop-launch.test.js' },
   { name: 'desktop-stops-only-new-child', file: 'scripts/desktop-launch.mjs', from: 'server.stop();', to: '', test: 'test/desktop-launch.test.js' },
   { name: 'desktop-literal-shell-arguments', file: 'scripts/desktop-app-source.mjs', from: 'return `\'', to: 'return `${value}`; return `\'', test: 'test/desktop-app-source.test.js' },

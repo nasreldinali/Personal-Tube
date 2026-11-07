@@ -7,7 +7,9 @@ Double-click the desktop app, or drag it to your Dock for one-click opening. No 
 - A ready PersonalTube instance is reused without starting another server.
 - With no listener, a detached server starts and the launcher waits for readiness before opening the browser.
 - Another service, an unknown health version, or a startup failure produces a macOS alert. It never stops another process to free the port.
-- Chrome is preferred to preserve the usual browser profile; the default browser is used if Chrome cannot open. Browser settings and YouTube keys remain specific to each browser.
+- The desktop shortcut uses Google Chrome. It selects an existing PersonalTube tab, restores its window if minimized, and brings it forward without reloading or changing its route. Only if no matching tab exists does it open a new one. Both `127.0.0.1:4173` and `localhost:4173` are recognized; lookalike hosts or other ports are not. Existing duplicate tabs are left untouched.
+
+macOS may ask permission for **PersonalTube to control Google Chrome** under **System Settings → Privacy & Security → Automation**. This lets the shortcut select an existing tab. Accessibility and Full Disk Access are not required. The launcher reads tab addresses only to find the local app; it does not read page contents, execute webpage JavaScript, export browsing history, or close tabs. Denial or failure shows an error rather than falling back to another browser or creating a duplicate tab. Chrome must be installed; for another browser, open the local address manually. Already-installed shortcuts pick up this change from the project folder without reinstallation.
 
 The launch check is bounded to forty readiness attempts. Closing the browser does not stop a server started by this shortcut. It remains running until logout/restart, or until you stop that server process with Activity Monitor. Nothing is added to login items. An instance already running in Terminal keeps its original lifetime.
 

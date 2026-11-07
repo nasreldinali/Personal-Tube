@@ -1,5 +1,11 @@
 # Verification
 
+## Desktop shortcut reuses the Chrome tab — 2026-11-07
+
+MEASURED: **281 deterministic tests and 79 deliberate-defect checks** pass. Fake Chrome automation tests verify selecting an existing tab in another window without navigation, restoring a minimized window, preserving its route, rejecting lookalike origins, opening one missing tab and creating a window when none exists. Adapter tests verify a fixed script path, execution/output limits and refusal without fallback or raw browser details on error. Added plants detect incorrect origin matching and selecting the wrong tab.
+
+MEASURED: invoked the installed desktop app against the running server, then twice consecutively. Aggregate Chrome observations showed **one PersonalTube tab before and one afterwards**, with PersonalTube active after the launch. No tabs were closed or renamed and no account actions were performed. The installed shortcut uses the updated source automatically. First-time Chrome Automation consent on a clean macOS account was not tested; denial is tested with a deterministic fake. Missing-tab/window creation is covered by fake Chrome tests rather than closing the user's live tab.
+
 ## macOS desktop launcher — 2026-11-07
 
 MEASURED: **276 deterministic tests and 77 deliberate-defect checks** pass. Launcher tests cover running-instance reuse, readiness before opening, unknown-service refusal, bounded timeout, child failures, browser failures and literal shell argument handling. A command-path test executes the generated launcher against a local fixture without network or browser access. Three added defect plants prove conflicting-listener refusal, cleanup of only the newly created process, and command quoting are enforced.

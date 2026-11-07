@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Reuse the existing Chrome tab from the macOS desktop shortcut without reloading or changing its route. Create a tab only when absent, and explain scoped Chrome Automation access with no duplicate-tab fallback on denial.
+
 - Add a macOS desktop app installer. Open a verified running instance or start the local server in the background without Terminal; preserve existing accounts and refuse conflicting services. Include a DEEDA icon, bounded startup checks and visible error messages.
 
 - Adopt Apache License 2.0 for original application code and documentation on 2026-11-07. Retain earlier MIT grants, Karpathy/HackerTube credits, ODC-By data terms, font licenses and brand boundaries. Update all four README entry points and contribution terms.
