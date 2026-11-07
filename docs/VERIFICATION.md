@@ -8,6 +8,8 @@ MEASURED: 221 deterministic tests and all 43 deliberate defects pass through `np
 
 An isolated browser fixture exercised signed-in/signed-out cards, fast-login completion, rejection without API cost acknowledgement, configuration, a confirmed synthetic analysis test, local model selection and confirmed connection removal. A fast-login UI state that left API controls disabled was reproduced and corrected with a regression test. English desktop and Arabic RTL at 390px showed aligned fields and no horizontal overflow or warning/error logs. Channel explanations are grouped behind one concise refresh line; empty detail sections are hidden.
 
+The My channels screenshot uses verified public video metadata in a visibly labelled mixed-date fixture, without changing the live feed's date window, original catalog or personal browser data. See [presentation sources](REPOSITORY_PRESENTATION.md).
+
 LIMITS: subscription logout and new API/local analyses were tested with synthetic accounts and injected responses, not by logging out the owner's real accounts or charging a live API key. Real cloud/model compatibility and a first-ever subscription sign-in remain user-dependent checks. Use the explicit one-sample connection test; configuration alone does not establish successful analysis. ASVS Level 1 remains a review target, not certification.
 
 ## Frontend responsibility cleanup

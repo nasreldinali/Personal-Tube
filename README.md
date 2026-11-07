@@ -7,9 +7,13 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Interface](https://img.shields.io/badge/Interface-EN%20%7C%20AR%20%7C%20DE%20%7C%20ES-487EA4)](README.ar.md)
 
-[العربية](README.ar.md) · [User guide](docs/USER_GUIDE.md) · [Contributing](CONTRIBUTING.md) · [Checks](https://github.com/nasreldinali/Personal-Tube/actions/workflows/check.yml)
+[Quick start](#quick-start) · [Screenshots](#screenshots) · [Analysis connections](docs/ANALYSIS_PROVIDERS.md) · [العربية](README.ar.md) · [User guide](docs/USER_GUIDE.md) · [Contributing](CONTRIBUTING.md) · [Checks](https://github.com/nasreldinali/Personal-Tube/actions/workflows/check.yml)
 
 PersonalTube is a local YouTube dashboard built on **Andrej Karpathy’s [HackerTube](https://karpathy.bearblog.dev/hacker-tube/) idea and exported collection**. Browse the original recommendations immediately, follow your own channels, and discover videos through public community discussions—with English, Arabic, German and Spanish controls, adjustable quality filters and control over refresh usage.
+
+## Screenshots
+
+**Discover · the included community library**
 
 ![PersonalTube English interface in light mode, showing public videos from the original collection](docs/images/discover-en-light.png)
 
@@ -19,6 +23,12 @@ PersonalTube is a local YouTube dashboard built on **Andrej Karpathy’s [Hacker
 ![PersonalTube Arabic interface in dark mode with right-to-left layout](docs/images/discover-ar-dark.png)
 
 </details>
+
+**My channels · your own viewing interests**
+
+![My channels in light mode with public video examples from Tina Huang, Chase AI, Stanford Online, Nate Herk and Andrej Karpathy](docs/images/my-channels-en-light.jpg)
+
+*Illustrative mixed-date selection, not a live last-week feed. The app normally displays the selected 1–7 day window. [Video sources and presentation notes](docs/REPOSITORY_PRESENTATION.md).*
 
 ## What this adds to the HackerTube foundation
 
@@ -33,7 +43,7 @@ PersonalTube adds a workflow for ongoing personal use:
 | Four interface languages | English, Arabic, German and Spanish controls; Arabic right-to-left layout, light/dark/system themes and responsive cards. Source titles and quotes keep their original language; catalog topic/category labels currently have English and Arabic translations. |
 | Live community discovery | Choose a topic and source; collect and analyze the selected comments automatically, with progress and supporting quotes. |
 | Visible recommendation requirements | Adjust minimum views/likes, declared audio language and endorsement count. Unverified results are withheld. |
-| Your choice of analysis provider | Use a supported local Codex or Claude Code subscription login. Each user supplies their own account. |
+| Your choice of analysis provider | Sign in/out of Codex or Claude Code; configure OpenAI, Anthropic or OpenRouter API access; or connect a local Ollama/LM Studio model. Each user supplies their own access. |
 | Refresh and usage controls | Manual or scheduled channel refresh, selectable intervals and an explicitly estimated daily YouTube API counter. |
 | Personal library controls | Watch later, watched history, confirmed single/bulk hiding, restore, category management and portable backups. |
 | A choice of video images | Original thumbnail or a video-frame image; sticky filters and a collapsible sidebar. |
@@ -79,21 +89,32 @@ See the [clean-download verification](docs/FIRST_RUN_VERIFICATION.md) for measur
 
 This can comfortably fit moderate personal channel-following, but is not an unlimited-use promise. For illustration, 20 channels refreshed four times a day at two data requests per channel would use about 160 units; additional upload pages, searches, comments, retries and other apps using the same project add usage. Select manual refresh or a longer interval to reduce requests. Playing a video does not consume Data API quota. Reaching the limit stops new requests until quota is available; the app does not buy extra quota automatically.
 
-**Comment analysis is separate and optional.** It uses your own eligible Codex/ChatGPT or Claude Code account and its allowance. A paid plan may be needed; PersonalTube does not provide a free model or unlimited analysis, and never switches automatically to paid API billing. The original library works without either connection.
+**Comment analysis is separate and optional.** Choose your own eligible Codex/ChatGPT or Claude Code subscription, an explicitly configured cloud API, or a local model. API billing is separate from subscriptions and requires acknowledgement before configuration; connection tests can incur charges. Local models require your own hardware and setup. There is no automatic provider switch, shared allowance or unlimited analysis promise. The original library needs none of these connections.
 
 ## What do I need for each feature?
 
-| Feature | YouTube API key | Analysis account |
+| Feature | YouTube API key | Analysis connection |
 |---|---|---|
 | Browse/search the included HackerTube library, save videos and play available embeds | No | No |
 | Follow channels, fetch recent uploads or load missing durations | Your own key | No |
-| Find recommendations with analyzed YouTube comments | Your own key | Your own supported Codex or Claude Code login |
-| Search live communities with verified video statistics | Your own key | Your own supported Codex or Claude Code login |
+| Find recommendations with analyzed YouTube comments | Your own key | Your own subscription, API or local-model connection |
+| Search live communities with verified video statistics | Your own key | Your own subscription, API or local-model connection |
 | Import a prepared video-link file | No for import | No for import; it does not automatically classify the file |
 
-**Downloading this repository never gives someone access to the maintainer’s API key or subscription.** Each installation uses its own browser key and local analysis account. Analysis consumes that account’s allowance; the app does not sell credits, bundle a model, or provide a shared analysis service. Public comments are sent to the selected provider, so analysis is not fully offline.
+**Downloading this repository never gives someone access to the maintainer’s API key or subscription.** Each installation supplies its own YouTube key and analysis access. Subscription analysis uses that account’s allowance; cloud API analysis uses its separate billing; the app does not sell credits, bundle a model, or provide a shared analysis service. Public comments go to the selected analysis service. A truly local model can keep analysis on your computer, while YouTube and community requests still use the internet.
 
-For live features, open **Setup & connections**. Create a key with **YouTube Data API v3** enabled, restrict it to that API and the local website origin, then enter it in **Settings & data**. Install/sign in to your chosen analysis CLI separately if needed; PersonalTube does not install it for you. The app currently accepts **Codex CLI 0.155.1** and **Claude Code 2.1.281** only; other versions are refused until their execution policies are reviewed. A paid account alone does not replace the local CLI requirement. Follow the [first-time account setup guide](docs/ANALYSIS_SETUP.md). Connection detection and a successful analysis are shown separately; the guide explains what has been tested and how to complete your own first-use check.
+For live features, open **Setup & connections**. Create a key with **YouTube Data API v3** enabled, restrict it to that API and the local website origin, then enter it in **Settings & data**. Install/sign in to your chosen analysis CLI separately if needed; PersonalTube does not install it for you. The app currently accepts **Codex CLI 0.155.1** and **Claude Code 2.1.281** only; other versions are refused until their execution policies are reviewed. A paid account alone does not replace the local CLI requirement. Follow the [first-time account setup guide](docs/ANALYSIS_SETUP.md), or choose **API or local model** using the [provider guide](docs/ANALYSIS_PROVIDERS.md). Connection detection and a successful analysis are shown separately; the guide explains what has been tested and how to complete your own first-use check.
+
+## Choose your analysis connection
+
+| You prefer… | Choose… | You need… |
+|---|---|---|
+| Your existing eligible subscription | Codex or Claude Code | Supported CLI and your own login |
+| Direct cloud API access | OpenAI or Anthropic API | API key, model ID and explicit billing acknowledgement |
+| A wider choice of hosted closed/open-weight models | OpenRouter | Its API key and a compatible model ID |
+| Running a model on your own computer | Ollama or LM Studio | Local model server and installed model; enough hardware |
+
+**Configured** is not the same as **tested**. An explicit one-sample test verifies a configured API/local model; it may cost money for cloud APIs. Keys stay only in the local server's memory until removed or the server stops. Sign-out confirms its effect on the official CLI before acting. [Setup steps, supported endpoints and limits →](docs/ANALYSIS_PROVIDERS.md)
 
 ## Three ways to find something worth watching
 
@@ -107,13 +128,20 @@ An original community score measures community recommendation evidence—not a Y
 
 - **Local application, external content.** Settings and library data live in this browser. Thumbnails/playback contact YouTube; metadata contacts Google; selected public comments go to your chosen analysis provider. There is no PersonalTube analytics or hosted account system.
 - **Your API usage is yours.** Refresh, searches and metadata/comment requests consume Data API quota; embedded playback does not. The counter is a browser estimate, not Google’s live project balance. See [Google’s quota documentation](https://developers.google.com/youtube/data/determine_quota_cost).
-- **Keys are not encrypted by the app.** Session storage is the default; remembering a key is optional. Backups omit keys and API caches. Do not commit keys, account exports or personal screenshots.
+- **YouTube keys are not encrypted by the app.** Browser session storage is the default; remembering a YouTube key is optional. Analysis API keys stay only in local server memory. Backups omit keys and API caches. Do not commit keys, account exports or personal screenshots.
 - **Shorts are estimated.** The app groups videos up to three minutes as estimated Shorts; some short regular videos may appear there. Channel collection is bounded to 250 uploads per channel and discloses incomplete samples.
 - **Archives are not live connectors.** Hugging Face, Kaggle, Common Crawl, Wikipedia and Reddit archive imports require a prepared JSON/JSONL extract. PersonalTube does not crawl those entire datasets. Reddit live access requires approved OAuth access.
 - **Premium is not guaranteed inside embeds.** It depends on the browser/account and playback eligibility. Open on YouTube is available as a fallback.
 - **Keep the server local.** It binds to loopback and has no multi-user authentication. Do not deploy it as a public website without a separate security design.
 
 [Full user guide](docs/USER_GUIDE.md) · [Security policy](SECURITY.md) · [Import format](docs/COMMUNITY_FORMAT.md)
+
+## Help and feedback
+
+- **Installation/account help:** [setup guide](docs/ANALYSIS_SETUP.md) and [provider guide](docs/ANALYSIS_PROVIDERS.md).
+- **Something broken:** [report a reproducible bug](https://github.com/nasreldinali/Personal-Tube/issues/new?template=bug_report.yml). Include your OS, Node version and steps; never include keys or account exports.
+- **An improvement:** [describe the problem and proposed behavior](https://github.com/nasreldinali/Personal-Tube/issues/new?template=feature_request.yml).
+- **A security concern:** follow the private reporting instructions in [SECURITY.md](SECURITY.md).
 
 ## Contribute
 
