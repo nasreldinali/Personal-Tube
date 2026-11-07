@@ -8,11 +8,11 @@ YouTube API keys are stored in browser session storage by default, optionally lo
 
 ## Reporting
 
-Report a suspected vulnerability privately to the repository owner through an existing trusted contact channel. Do not include live credentials, personal exports or exploit details in public issues. If a key is exposed, revoke or rotate it at its provider; deleting a file is insufficient.
+Use [GitHub private vulnerability reporting](https://github.com/nasreldinali/Personal-Tube/security/advisories/new). If it is unavailable, contact the repository owner through an existing trusted private channel. Do not include live credentials, personal exports or exploit details in public issues. If a key is exposed, revoke or rotate it at its provider; deleting a file is insufficient.
 
 ## Verification and limitations
 
-`npm run check` includes security-focused validation and 46 deliberately introduced defects in isolated scratch copies. The review target is applicable OWASP ASVS Level 1 controls for this local architecture, not formal certification. No guarantee of complete vulnerability or secret detection is made. Live-key API behavior and Premium playback require separate manual verification.
+`npm run check` includes security-focused validation and deliberately introduced defects in isolated scratch copies; see the dated counts and scope in [the release review](docs/RELEASE_READINESS.md). The review target is applicable OWASP ASVS Level 1 controls for this local architecture, not formal certification. No guarantee of complete vulnerability or secret detection is made. Live-key API behavior and Premium playback require separate manual verification.
 
 Before changing repository visibility, review all reachable history, author metadata, branches, tags, attachments and artifacts, plus data and brand licensing. Removing a file in a later commit does not remove earlier copies. History rewrites require explicit owner approval and coordination with existing clones.
 

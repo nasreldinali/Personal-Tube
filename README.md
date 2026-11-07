@@ -2,6 +2,7 @@
 
 **Your channels. Community recommendations. A viewing space you control.**
 
+[![Checks](https://github.com/nasreldinali/Personal-Tube/actions/workflows/check.yml/badge.svg)](https://github.com/nasreldinali/Personal-Tube/actions/workflows/check.yml)
 [![JavaScript](https://img.shields.io/badge/JavaScript-vanilla-F7DF1E?logo=javascript&logoColor=black)](package.json)
 [![Node.js](https://img.shields.io/badge/Node.js-22%20%7C%2024-339933?logo=nodedotjs&logoColor=white)](#quick-start)
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
@@ -92,15 +93,17 @@ Optional: `npm run open` starts the server and opens a browser; on macOS it trie
 
 The shortcut brings your existing **Chrome tab** forward without reloading; it creates a tab only when none exists. macOS may request Automation access to Chrome. It does not need Accessibility or Full Disk Access, and permission denial does not trigger a duplicate-tab fallback.
 
+Use the same **Chrome profile** where you saved your channels. Profiles keep separate data; the shortcut supports a [local profile configuration](docs/DESKTOP_LAUNCHER.md#multiple-chrome-profiles). If Refresh channels is unavailable, the page now explains the missing connection or channel and provides a YouTube connection action.
+
 If the terminal says **port 4173 is already in use**, first open the address above: PersonalTube may already be running. Otherwise stop the conflicting local server before retrying. If `npm` is not found, install Node with npm and reopen the terminal; if `package.json` is not found, open the terminal in the extracted project folder.
 
-See [current verification](docs/VERIFICATION.md) and the [earlier clean-download/account checks](docs/FIRST_RUN_VERIFICATION.md), including the limits of first-time login testing.
+See the [release-readiness review](docs/RELEASE_READINESS.md), [current verification](docs/VERIFICATION.md) and [earlier clean-download/account checks](docs/FIRST_RUN_VERIFICATION.md), including the limits of first-time login testing.
 
 ## What does it cost?
 
 **YouTube Data API access is free within its daily quota. PersonalTube adds no API fee.** The default allocation currently includes **10,000 daily units for general data requests and 100 video-search calls separately**. Quotas reset at midnight Pacific Time. A project may have different limits; see [Google’s current quota table](https://developers.google.com/youtube/data/determine_quota_cost).
 
-This can comfortably fit moderate personal channel-following, but is not an unlimited-use promise. For illustration, 20 channels refreshed four times a day at two data requests per channel would use about 160 units; additional upload pages, searches, comments, retries and other apps using the same project add usage. Select manual refresh or a longer interval to reduce requests. Playing a video does not consume Data API quota. Reaching the limit stops new requests until quota is available; the app does not buy extra quota automatically.
+This can comfortably fit moderate personal channel-following, but is not an unlimited-use promise. The channel collector scans up to five upload pages and their video details: **up to ten data requests per channel per refresh**. For example, 20 channels refreshed four times a day can use up to 800 units for that feed alone. Channels with shorter upload lists use fewer requests; searches, comments, retries and other apps using the same project add usage. Select manual refresh or a longer interval to reduce requests. Playing a video does not consume Data API quota. Reaching the limit stops new requests until quota is available; the app does not buy extra quota automatically.
 
 **Comment analysis is separate and optional.** Choose your own eligible Codex/ChatGPT, Claude Code, GitHub Copilot or MiniMax M Plan subscription, an explicitly configured cloud API, or a local model. API billing is separate from subscriptions and requires acknowledgement before configuration; connection tests can incur charges. Local models require your own hardware and setup. There is no automatic provider switch, shared allowance or unlimited analysis promise. The original library needs none of these connections.
 

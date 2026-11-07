@@ -39,6 +39,8 @@ Kein `npm install`, Build oder Datenbankserver ist erforderlich. `index.html` ni
 
 Der Kurzbefehl aktiviert einen vorhandenen **Chrome-Tab** ohne Neuladen. Nur wenn keiner vorhanden ist, öffnet er einen neuen. macOS kann die Automation-Berechtigung für Chrome anfordern; Bedienungshilfen und Festplattenvollzugriff sind nicht erforderlich. Bei verweigerter Berechtigung erscheint ein Hinweis statt eines doppelten Tabs.
 
+Chrome-Profile speichern getrennte Kanallisten. Verwende das ursprüngliche Profil oder [konfiguriere es lokal für den Kurzbefehl](docs/DESKTOP_LAUNCHER.md#multiple-chrome-profiles). Bei deaktivierter Aktualisierung erklärt die Seite die fehlende Verbindung oder den fehlenden Kanal und bietet die YouTube-Verbindung direkt an.
+
 ## Was ist möglich?
 
 - Die enthaltene HackerTube-Bibliothek durchsuchen, Videos speichern und verfügbare Videos abspielen – ohne Analyse-Konto.
@@ -55,7 +57,7 @@ Der Kurzbefehl aktiviert einen vorhandenen **Chrome-Tab** ohne Neuladen. Nur wen
 
 **Settings & data** hat jetzt dieselbe feste Navigation wie Connections: YouTube, API-Verbrauch, Aktualisierung und Sicherung/Daten.
 
-**MiniMax M Plan:** Unter **Setup & connections → Subscription → MiniMax** den eigenen Aboschlüssel (`sk-cp-…`) speichern und ein Beispiel testen. Speichern/Testen ändern weder die Dienstauswahl noch Codex-/Claude-Anmeldungen. Erst **Use MiniMax** wählt den Dienst. Kein Pay-as-you-go-Ausweichdienst; MiniMax kann nach Verbrauch des Kontingents vorhandene Credit-Pakete nutzen. Ein echter Kontotest steht noch aus. [Einrichtung und Grenzen](docs/MINIMAX_SUBSCRIPTION.md).
+**MiniMax M Plan:** Unter **Connections → Subscription → MiniMax** den eigenen Aboschlüssel (`sk-cp-…`) speichern und ein Beispiel testen. Speichern/Testen ändern weder die Dienstauswahl noch Codex-/Claude-Anmeldungen. Erst **Use MiniMax** wählt den Dienst. Kein Pay-as-you-go-Ausweichdienst; MiniMax kann nach Verbrauch des Kontingents vorhandene Credit-Pakete nutzen. Ein echter Kontotest steht noch aus. [Einrichtung und Grenzen](docs/MINIMAX_SUBSCRIPTION.md).
 
 | Funktion | Voraussetzung |
 |---|---|
@@ -67,7 +69,7 @@ Der Kurzbefehl aktiviert einen vorhandenen **Chrome-Tab** ohne Neuladen. Nur wen
 | Cloud-Analyse | Eigener OpenAI-, Anthropic-, OpenRouter-, Gemini-, DeepSeek-, Mistral- oder Groq-Schlüssel und kompatible Modell-ID |
 | Lokale Analyse | Laufendes Ollama, LM Studio oder einen kompatiblen lokalen Server mit einem geeigneten lokalen Modell |
 
-In **Setup & connections** zwischen Abonnement, Cloud-API und lokalem Modell wählen. Die Auswahl der Ansicht allein wechselt den aktiven Dienst nicht. **Mit einem Beispiel testen** prüft die gewählte Verbindung nach Bestätigung.
+In **Connections** zwischen Abonnement, Cloud-API und lokalem Modell wählen. Die Auswahl der Ansicht allein wechselt den aktiven Dienst nicht. **Mit einem Beispiel testen** prüft die gewählte Verbindung nach Bestätigung.
 
 Die YouTube Data API ist innerhalb ihrer Kontingente kostenlos. Aktualisierungen, Suchanfragen und Metadaten verbrauchen Kontingent; die Wiedergabe selbst nicht. Der Zähler ist eine Schätzung dieses Browsers, kein offizieller Kontostand. Analyse kann Abonnementkontingent oder separate API-Kosten verursachen. Lokale Modelle benötigen eigene Hardware. Niemand nutzt Guthaben des Projektinhabers; es gibt keinen automatischen Wechsel zu einer kostenpflichtigen API.
 

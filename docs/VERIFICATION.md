@@ -1,5 +1,13 @@
 # Verification
 
+See the [release-readiness review](RELEASE_READINESS.md) for the latest clean-download, subscription and publication checks.
+
+## Browser profile recovery and refresh availability — 2026-11-07
+
+MEASURED: **287 deterministic tests and 81 deliberate-defect checks** pass. New tests cover versioned desktop profile configuration, a marked app tab rather than an unrelated profile's same-origin tab, exact marker matching, one profile launch followed by bounded verification, and missing-key/empty-channel refresh explanations. Configuration and backups remain local; no user profile identifiers, channel lists or keys are published.
+
+MEASURED: an apparently empty dashboard was a different Chrome profile. Opening the original profile exposed the existing channel list; a backup was exported through the app without importing, clearing or replacing data. After the user saved the key in the intended profile, its Refresh channels button became enabled. The pinned launcher was exercised twice and returned to that profile's marked tab without replacing its channel data. This verifies recovery, key availability and repeated opening; no new all-channel YouTube refresh was run as part of this check. The four-language disabled-state message was also checked in the Arabic browser view. Chrome Automation still requires OS consent where not already granted.
+
 ## Desktop shortcut reuses the Chrome tab — 2026-11-07
 
 MEASURED: **281 deterministic tests and 79 deliberate-defect checks** pass. Fake Chrome automation tests verify selecting an existing tab in another window without navigation, restoring a minimized window, preserving its route, rejecting lookalike origins, opening one missing tab and creating a window when none exists. Adapter tests verify a fixed script path, execution/output limits and refusal without fallback or raw browser details on error. Added plants detect incorrect origin matching and selecting the wrong tab.

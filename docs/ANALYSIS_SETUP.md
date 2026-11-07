@@ -24,7 +24,7 @@ Check with `codex --version` or `claude --version`. Reopen your terminal after i
 
 ## 2. Sign in
 
-Open **Setup & connections** in PersonalTube. Choose **Sign in with Codex** or **Sign in with Claude**. Complete the official provider login in your browser using **your own account**. PersonalTube never asks for your password.
+Open **Connections → Subscription → 2 · Choose a service**. Select **ChatGPT · Codex** or **Claude · Claude Code** to reveal that account’s controls, then choose **Sign in with Codex** or **Sign in with Claude**. If the CLI is missing, the account button opens installation help instead. Complete the official provider login in your browser using **your own account**. PersonalTube never asks for your password.
 
 The app checks the connection automatically for up to three minutes while this dialog remains open. If you signed in already, choose **Use Codex / Use Claude** instead. There is no analysis request just from opening setup or checking the connection.
 
@@ -77,4 +77,4 @@ This implementation runs the user's installed official CLI; it does not implemen
 
 Automated tests cover missing tools, unsupported versions, signed-out and API-only states, official login arguments, failures, pending login, successful status transitions and completed-analysis counts for both providers. These use controlled synthetic fixtures. They are **not** a completed browser login with a brand-new account on a clean machine. Existing local credentials were not removed or replaced. A real first-time user must still complete the provider's own authentication and an explicit analysis request to validate their environment.
 
-A separate [clean-download check on 2026-11-07](FIRST_RUN_VERIFICATION.md) ran the GitHub application without installation/build steps and completed one real, synthetic-comment analysis through each provider using already-connected subscriptions. It verifies that the downloaded integration works with those existing accounts; it does not replace the first-login check above.
+The [current release-readiness check](RELEASE_READINESS.md) and an earlier [clean-download check on 2026-11-07](FIRST_RUN_VERIFICATION.md) ran the GitHub application without installation/build steps and completed one real, synthetic-comment analysis through each provider using already-connected subscriptions. It verifies that the downloaded integration works with those existing accounts; it does not replace the first-login check above.

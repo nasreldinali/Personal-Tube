@@ -39,6 +39,8 @@ No requiere `npm install`, compilación ni base de datos. No abras `index.html` 
 
 El acceso activa la pestaña existente de **Chrome** sin recargarla; solo crea una nueva si no hay ninguna. macOS puede solicitar permiso de Automatización para Chrome. No necesita Accesibilidad ni acceso completo al disco. Si se deniega el permiso, muestra un aviso sin abrir una pestaña duplicada.
 
+Cada perfil de Chrome guarda canales distintos. Usa el perfil original o [configúralo localmente para el acceso directo](docs/DESKTOP_LAUNCHER.md#multiple-chrome-profiles). Si la actualización está desactivada, la página explica si falta la conexión o un canal y ofrece conectar YouTube directamente.
+
 ## ¿Qué puedes hacer?
 
 - Explorar la biblioteca incluida de HackerTube, guardar vídeos y reproducir los disponibles sin una cuenta de análisis.
@@ -55,7 +57,7 @@ El acceso activa la pestaña existente de **Chrome** sin recargarla; solo crea u
 
 **Settings & data** comparte la navegación fija de Connections: YouTube, uso de API, actualizaciones y copias/datos.
 
-**MiniMax M Plan:** En **Setup & connections → Subscription → MiniMax**, guarda tu clave de suscripción (`sk-cp-…`) y prueba una muestra. Guardar/probar no cambia el proveedor seleccionado ni las sesiones de Codex/Claude. **Use MiniMax** lo selecciona explícitamente. Sin alternativa de pago por uso; MiniMax puede consumir paquetes de créditos existentes al agotar la cuota. Falta verificar una cuenta real. [Configuración y límites](docs/MINIMAX_SUBSCRIPTION.md).
+**MiniMax M Plan:** En **Connections → Subscription → MiniMax**, guarda tu clave de suscripción (`sk-cp-…`) y prueba una muestra. Guardar/probar no cambia el proveedor seleccionado ni las sesiones de Codex/Claude. **Use MiniMax** lo selecciona explícitamente. Sin alternativa de pago por uso; MiniMax puede consumir paquetes de créditos existentes al agotar la cuota. Falta verificar una cuenta real. [Configuración y límites](docs/MINIMAX_SUBSCRIPTION.md).
 
 | Función | Requisito |
 |---|---|
@@ -67,7 +69,7 @@ El acceso activa la pestaña existente de **Chrome** sin recargarla; solo crea u
 | Análisis en la nube | Tu clave de OpenAI, Anthropic, OpenRouter, Gemini, DeepSeek, Mistral o Groq y un ID de modelo compatible |
 | Análisis local | Ollama, LM Studio o un servidor local compatible ejecutándose con un modelo local adecuado |
 
-En **Setup & connections**, elige suscripción, API en la nube o modelo local. Cambiar de sección no cambia por sí solo el servicio activo. **Probar con una muestra** comprueba la conexión seleccionada tras confirmarlo.
+En **Connections**, elige suscripción, API en la nube o modelo local. Cambiar de sección no cambia por sí solo el servicio activo. **Probar con una muestra** comprueba la conexión seleccionada tras confirmarlo.
 
 YouTube Data API es gratuita dentro de sus cuotas. Actualizar datos, buscar y obtener metadatos consume cuota; reproducir el vídeo no. El contador es una estimación del navegador, no el saldo oficial. El análisis puede consumir cuota de una suscripción o generar costes de API independientes. Los modelos locales requieren tu propio hardware. Nadie utiliza el crédito del propietario del proyecto y no hay cambio automático a una API de pago.
 
