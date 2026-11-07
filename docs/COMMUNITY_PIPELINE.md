@@ -1,6 +1,6 @@
 # Community recommendation pipeline
 
-Version 1. Reviewed 2026-11-04.
+Version 1. Provider guidance reviewed 2026-11-07.
 
 ## What works
 
@@ -21,11 +21,11 @@ The new sample score is distinct recommendation months plus 0.5 times distinct s
 
 Public YouTube oEmbed supplies available titles/channel names for up to 24 visible unknown videos, with four bounded workers, three-second individual deadlines and a one-hour memory cache. Missing/unavailable metadata retains an explicit YouTube ID fallback. It never changes community scores or invents publication dates.
 
-## Analysis subscription integration
+## Analysis provider integration
 
-Choose Codex CLI **0.155.1** or Claude Code **2.1.281** in Setup & connections. The adapter uses the selected local subscription login; other versions fail closed pending review. No provider API key is used. It sends at most 24 comment/video pairs and 40,000 serialized characters per process call, with a 120-second deadline and 1 MB combined output limit. Automatic searches permit at most three attempts, including failures. This consumes the selected account's allowance; it is not offline or unlimited. See [setup and channel changes](CHANNEL_ENHANCEMENTS.md) for login and accounting boundaries.
+Choose your analysis provider explicitly in **Setup & connections**: Codex/Claude subscriptions, MiniMax M Plan, OpenAI/Anthropic/OpenRouter APIs, or local Ollama/LM Studio. Codex CLI **0.155.1** and Claude Code **2.1.281** are the supported CLI versions; other versions fail closed pending review. Each call is bounded to 24 comment/video pairs and 40,000 serialized characters, with a 120-second deadline and 1 MB output limit. Automatic searches permit at most three attempts, including failures. Billing depends on the selected connection; MiniMax may use existing credit packs after quota, APIs use separate billing, and local models require your hardware. No automatic retries or provider fallback. See [connection requirements](ANALYSIS_PROVIDERS.md) and [MiniMax limits](MINIMAX_SUBSCRIPTION.md).
 
-Execution uses a fresh scratch directory, read-only mode, no inherited user/project instructions, disabled command/app/browser/plugin/agent/hook/skill tool features, disabled web search, no approval escalation, a minimal environment and no shell interpolation. Output must be a completed structured response. Unexpected tool events and malformed responses are rejected. These controls and observed no-tool runs do not constitute a formal proof that every native CLI capability is unavailable. See [security scope](COMMUNITY_SECURITY.md).
+Codex/Claude CLI execution uses a fresh scratch directory, read-only mode, no inherited user/project instructions, disabled command/app/browser/plugin/agent/hook/skill tool features, disabled web search, no approval escalation, a minimal environment and no shell interpolation. Output must be a completed structured response. Unexpected tool events and malformed responses are rejected. These controls and observed no-tool runs do not constitute a formal proof that every native CLI capability is unavailable. See [security scope](COMMUNITY_SECURITY.md).
 
 The CLI's ephemeral option avoids persisted session files; it is not a promise about every provider/CLI cache or log. No raw CLI output is returned to the UI. Temporary schema files are removed. Local original sources never enter model prompts; only the selected public live-comment batch does.
 

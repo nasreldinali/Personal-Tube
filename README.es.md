@@ -11,8 +11,6 @@ PersonalTube es un panel local de YouTube basado en la [idea de HackerTube de An
 *Selección ilustrativa de vídeos de distintas fechas. El uso normal muestra el periodo elegido de 1–7 días.*
 
 
-**MiniMax M Plan:** En **Setup & connections → Subscription → MiniMax**, guarda tu clave de suscripción (`sk-cp-…`) y prueba una muestra. Guardar/probar no cambia el proveedor seleccionado ni las sesiones de Codex/Claude. **Use MiniMax** lo selecciona explícitamente. Sin alternativa de pago por uso; MiniMax puede consumir paquetes de créditos existentes al agotar la cuota. Falta verificar una cuenta real. [Configuración y límites](docs/MINIMAX_SUBSCRIPTION.md).
-
 ## Empezar
 
 1. Instala [Node.js 22 o 24](https://nodejs.org/en/download) con npm.
@@ -43,11 +41,14 @@ No requiere `npm install`, compilación ni base de datos. No abras `index.html` 
 
 ## Conexiones y costes
 
+**MiniMax M Plan:** En **Setup & connections → Subscription → MiniMax**, guarda tu clave de suscripción (`sk-cp-…`) y prueba una muestra. Guardar/probar no cambia el proveedor seleccionado ni las sesiones de Codex/Claude. **Use MiniMax** lo selecciona explícitamente. Sin alternativa de pago por uso; MiniMax puede consumir paquetes de créditos existentes al agotar la cuota. Falta verificar una cuenta real. [Configuración y límites](docs/MINIMAX_SUBSCRIPTION.md).
+
 | Función | Requisito |
 |---|---|
 | Biblioteca incluida | Node.js y navegador |
 | Nuevos datos de canales y búsqueda en directo | Tu propia clave de YouTube Data API |
-| Análisis con suscripción | CLI compatible de Codex o Claude Code y tu cuenta elegible |
+| Suscripción MiniMax M Plan | Tu clave global de suscripción; sin CLI. Cuota y después posibles paquetes de créditos existentes. |
+| Suscripción Codex/Claude | CLI compatible de Codex o Claude Code y tu cuenta elegible |
 | Análisis en la nube | Tu clave de OpenAI, Anthropic u OpenRouter y un ID de modelo compatible |
 | Análisis local | Ollama o LM Studio ejecutándose con un modelo local adecuado |
 

@@ -11,8 +11,6 @@ PersonalTube ist ein lokales YouTube-Dashboard auf Grundlage von Andrej Karpathy
 *Illustrative Auswahl aus unterschiedlichen Veröffentlichungszeiträumen. Im normalen Betrieb zeigt der Feed das gewählte Fenster von 1–7 Tagen.*
 
 
-**MiniMax M Plan:** Unter **Setup & connections → Subscription → MiniMax** den eigenen Aboschlüssel (`sk-cp-…`) speichern und ein Beispiel testen. Speichern/Testen ändern weder die Dienstauswahl noch Codex-/Claude-Anmeldungen. Erst **Use MiniMax** wählt den Dienst. Kein Pay-as-you-go-Ausweichdienst; MiniMax kann nach Verbrauch des Kontingents vorhandene Credit-Pakete nutzen. Ein echter Kontotest steht noch aus. [Einrichtung und Grenzen](docs/MINIMAX_SUBSCRIPTION.md).
-
 ## Starten
 
 1. [Node.js 22 oder 24](https://nodejs.org/en/download) mit npm installieren.
@@ -43,11 +41,14 @@ Kein `npm install`, Build oder Datenbankserver ist erforderlich. `index.html` ni
 
 ## Verbindungen und Kosten
 
+**MiniMax M Plan:** Unter **Setup & connections → Subscription → MiniMax** den eigenen Aboschlüssel (`sk-cp-…`) speichern und ein Beispiel testen. Speichern/Testen ändern weder die Dienstauswahl noch Codex-/Claude-Anmeldungen. Erst **Use MiniMax** wählt den Dienst. Kein Pay-as-you-go-Ausweichdienst; MiniMax kann nach Verbrauch des Kontingents vorhandene Credit-Pakete nutzen. Ein echter Kontotest steht noch aus. [Einrichtung und Grenzen](docs/MINIMAX_SUBSCRIPTION.md).
+
 | Funktion | Voraussetzung |
 |---|---|
 | Enthaltene Bibliothek | Node.js und Browser |
 | Neue Kanaldaten und Live-Suche | Eigener YouTube-Data-API-Schlüssel |
-| Analyse per Abonnement | Unterstützte Codex- oder Claude-Code-CLI und eigenes berechtigtes Konto |
+| MiniMax-M-Plan-Abonnement | Eigener globaler Aboschlüssel; kein CLI nötig. Kontingent, danach eventuell vorhandene Credit-Pakete. |
+| Analyse per Codex-/Claude-Abonnement | Unterstützte Codex- oder Claude-Code-CLI und eigenes berechtigtes Konto |
 | Cloud-Analyse | Eigener OpenAI-, Anthropic- oder OpenRouter-Schlüssel und kompatible Modell-ID |
 | Lokale Analyse | Laufendes Ollama oder LM Studio mit einem geeigneten lokalen Modell |
 

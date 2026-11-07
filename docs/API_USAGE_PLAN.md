@@ -1,5 +1,7 @@
 # API usage and channel loading
 
+Historical implementation record: version-specific descriptions and counts below refer to that work. For current behavior, use the [user guide](USER_GUIDE.md), [analysis connections](ANALYSIS_PROVIDERS.md) and [latest verification](VERIFICATION.md).
+
 Acceptance before implementation:
 - Settings shows estimated requests recorded in this browser today, used/remaining against Google's default limits. Separate general list units (10,000/day) and search calls (100/day), per official quota documentation checked 2026-11-04. Reset at midnight America/Los_Angeles, including daylight saving changes.
 - Counts include attempted requests, including errors; exclude playback and invalid local input. No keys, channel IDs, comments or URLs stored in the meter. No claim of a live project balance; other clients, earlier usage, custom quotas and simultaneous tabs without Web Locks can differ. Storage failure shows unavailable, not a fabricated zero.

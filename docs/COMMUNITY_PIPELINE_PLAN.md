@@ -1,5 +1,7 @@
 # Community collection and recommendation pipeline
 
+Historical implementation record: version-specific descriptions and counts below refer to that work. For current behavior, use the [user guide](USER_GUIDE.md), [analysis connections](ANALYSIS_PROVIDERS.md) and [latest verification](VERIFICATION.md).
+
 Status: implementation. Owner authorized continuing the community feature on 2026-11-03. No history rewrite or deletion is authorized.
 
 ## Measured baseline

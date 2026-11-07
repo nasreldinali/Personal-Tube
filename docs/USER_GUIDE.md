@@ -1,14 +1,14 @@
 # PersonalTube user guide
 
-[Back to overview](../README.md) · [العربية](../README.ar.md)
+[English overview](../README.md) · [العربية](../README.ar.md) · [Deutsch](../README.de.md) · [Español](../README.es.md)
 
 A local viewing dashboard with DEEDA branding, English/Arabic/German/Spanish controls, Arabic right-to-left layout, light/dark/automatic themes, the supplied HackerTube collection, and your own recent-channel feed.
 
 ## Open the dashboard
 
-Double-click **Start PersonalTube.command** in this folder. It starts the server and opens Google Chrome. Keep its Terminal window open while using PersonalTube. Press Ctrl+C to stop it.
+On macOS, double-click **Start PersonalTube.command** in this folder. It starts the server and tries Google Chrome. If it cannot open Chrome, it prints the address so you can open it in your browser. Keep its Terminal window open while using PersonalTube. Press Ctrl+C to stop it.
 
-Alternatively, with Node.js 20 or newer:
+Alternatively, use Node.js 22 or 24 with npm (the minimum declared runtime is Node.js 20):
 
 ```sh
 npm run open
@@ -18,11 +18,13 @@ Open [PersonalTube](http://127.0.0.1:4173). The address needs the local server r
 
 ## First-run setup
 
-Follow the [first-time analysis account guide](ANALYSIS_SETUP.md) for installation, official login and troubleshooting. Setup now distinguishes a connected but untested account from a completed analysis in this server session.
+Choose an analysis connection using [the provider guide](ANALYSIS_PROVIDERS.md). Codex/Claude users can follow the [CLI account guide](ANALYSIS_SETUP.md) for installation, official login and troubleshooting. Setup now distinguishes a connected but untested account from a completed analysis in this server session.
 
 **Setup & connections** opens once on the first visit and remains available in the sidebar. The visit is saved immediately, so closing it or reloading without pressing Done does not reopen it. YouTube settings opened from setup provide a Back button; closing those settings also returns to setup. It checks local requirements and installed/signed-in analysis tools, explains which features need YouTube or an analysis account, and presents a separate card for **Codex** and **Claude Code**. Choose **Use Codex/Claude** for an already connected account, or **Sign in** for a disconnected account. The app follows sign-in automatically while the dialog is open, for up to three minutes. Status failures are shown inside the dialog; you can check again manually. If a tool is missing, its button opens installation help. Official installation links and manual login commands are provided if the browser cannot open. PersonalTube never receives your account password or installs software automatically.
 
-Choose a connection explicitly: Codex / ChatGPT, Claude Code / Claude, a supported cloud API, or a local model. See [all connection steps](ANALYSIS_PROVIDERS.md). Selection is shared by tabs using this local server and resets to Codex on restart. API-only logins are refused for this subscription workflow; there is no automatic provider/billing fallback. Each person uses their own account. Usage shows this server's attempts, validated completions, failures and input counts since startup, not tokens, money or remaining plan balance. Failed attempts can still consume allowance.
+Choose a connection explicitly: Codex / ChatGPT, Claude Code / Claude, MiniMax M Plan, a supported cloud API, or a local model. See [all connection steps](ANALYSIS_PROVIDERS.md). Selection is shared by tabs using this local server and resets to Codex on restart. Codex/Claude CLI connections refuse API-only logins; there is no automatic provider/billing fallback. Each person uses their own account. Usage shows this server's attempts, validated completions, failures and input counts since startup, not tokens, money or remaining plan balance. Failed attempts can still consume allowance.
+
+**MiniMax M Plan** has its own expandable setup under **Subscription**. Save your global `sk-cp-` subscription key, confirm a one-sample test, then choose **Use MiniMax** when ready. Saving/testing keeps the current provider and Codex/Claude sign-ins unchanged. MiniMax may consume existing credit packs after included quota; no pay-as-you-go fallback is implemented. Its real-account analysis remains unverified until you enter your key and test. [Steps and billing boundaries](MINIMAX_SUBSCRIPTION.md).
 
 ## Explore immediately
 
@@ -63,7 +65,7 @@ Choose **Video image** to use the original YouTube thumbnail or the existing vid
 
 Settings live in this browser at this exact address. A different browser or port has separate storage; backups provide manual transfer. Use one editing tab at a time. If another tab changes data, reload the older tab before editing.
 
-Keys use tab session storage by default. **Remember the key** explicitly opts into local storage. Neither is encrypted by this application; anyone with access to the browser profile can inspect it. Use the API restrictions above. **Remove saved key** withdraws that choice. Exports omit keys and API caches.
+YouTube keys use tab session storage by default. **Remember the key** explicitly opts into local storage. Neither browser storage option is encrypted by this application; anyone with access to the browser profile can inspect it. Use the API restrictions above. **Remove saved key** withdraws that choice. Exports omit keys and API caches. Analysis-service keys, including MiniMax, stay only in local server memory until removal or server shutdown.
 
 Preferences and saved IDs remain until changed or cleared. Channel caches older than seven days and duration metadata older than one day are pruned when read; nothing runs while the browser is closed. Clear personal data requires confirmation and removes only this app's entries. Export first if you want recovery. Imports validate before replacing data and attempt rollback if a write fails.
 
@@ -79,7 +81,7 @@ The player uses `https://www.youtube.com/embed/VIDEO_ID` with an Open on YouTube
 npm run check
 ```
 
-This runs Node tests, syntax checks, project-specific lint/format checks, dependency cycles, domain purity, original-data/brand integrity, and 33 deliberate defect plants in scratch copies. No dependencies are installed. This is not a full ESLint/Prettier or coverage report.
+This runs Node tests, syntax checks, project-specific lint/format checks, dependency cycles, domain purity, original-data/brand integrity, and deliberate defect checks in scratch copies. No dependencies are installed. This is not a full ESLint/Prettier or coverage report.
 
 See [verification](VERIFICATION.md), [security](../SECURITY.md), [contributing](../CONTRIBUTING.md) and [architecture](ARCHITECTURE.md). Real-key channel resolution and latest-video retrieval were verified in Chrome; Premium remains unverified. Automated API tests use synthetic responses.
 
@@ -87,8 +89,8 @@ See [verification](VERIFICATION.md), [security](../SECURITY.md), [contributing](
 
 | Path | Purpose |
 |---|---|
-| `public/` | Bilingual UI, domain rules, browser adapters and DEEDA assets |
-| `server/` | Loopback HTTP server and catalog reader |
+| `public/` | Four-language UI, domain rules, browser adapters and DEEDA assets |
+| `server/` | Loopback HTTP routes, catalog/evidence readers, bounded community collectors and analysis adapters |
 | `data/hackertube/` | Required original video catalog, taxonomy and upstream schema documentation |
 | `data/integrity.json` | SHA-256 integrity for retained source data and brand assets |
 | `test/`, `scripts/` | Automated tests, validation and local launcher |
@@ -107,4 +109,4 @@ See [NOTICE.md](../NOTICE.md) for source and licensing boundaries.
 
 ## More analysis connections and signing out
 
-Setup now provides confirmed **Sign out** for Codex/Claude and separate **Cloud API** and **Local model** sections for OpenAI, Anthropic, OpenRouter, Ollama and LM Studio. Configure a model explicitly, acknowledge cloud API costs, and use the optional one-sample connection test. See [the full connection guide](ANALYSIS_PROVIDERS.md) for session-only keys, local server requirements and supported model formats.
+Setup provides confirmed **Sign out** for Codex/Claude, an independent [MiniMax M Plan connection](MINIMAX_SUBSCRIPTION.md), and separate **Cloud API** and **Local model** sections for OpenAI, Anthropic, OpenRouter, Ollama and LM Studio. Configure a model explicitly, acknowledge cloud API costs, and use the optional one-sample connection test. See [the full connection guide](ANALYSIS_PROVIDERS.md) for session-only keys, local server requirements and supported model formats.

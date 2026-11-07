@@ -1,5 +1,7 @@
 # Repository presentation and release preparation
 
+Historical implementation record: version-specific descriptions and counts below refer to that work. For current behavior, use the [user guide](USER_GUIDE.md), [analysis connections](ANALYSIS_PROVIDERS.md) and [latest verification](VERIFICATION.md).
+
 Plan recorded 2026-11-06 before edits.
 
 - Rewrite README as a short product entry: purpose, actual screenshots, credit to Andrej Karpathy and HackerTube, added capabilities, three-step local setup, per-feature requirements, ownership of API/model usage, honest limits, contribution and license links. Preserve detailed operational guidance in a user guide.

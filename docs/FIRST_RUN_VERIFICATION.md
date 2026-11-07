@@ -2,6 +2,8 @@
 
 Date: 2026-11-07. Tested application revision: `893a241`.
 
+This is a historical check of the revision above, not the latest main. See [current verification](VERIFICATION.md) and the [provider guide](ANALYSIS_PROVIDERS.md) for the newer connections, including MiniMax.
+
 ## Measured results
 
 | Check | Result |

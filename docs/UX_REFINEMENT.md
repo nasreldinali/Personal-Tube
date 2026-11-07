@@ -1,5 +1,7 @@
 # Connection and card refinement
 
+Historical implementation record: version-specific descriptions and counts below refer to that work. For current behavior, use the [user guide](USER_GUIDE.md), [analysis connections](ANALYSIS_PROVIDERS.md) and [latest verification](VERIFICATION.md).
+
 Scope authorized by the user: replace intrusive card removal, shorten cards without dropping metadata, portrait Shorts with five desktop columns, and a clear functional connection dialog.
 
 Acceptance:

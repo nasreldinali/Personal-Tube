@@ -1,5 +1,7 @@
 # Video refresh controls
 
+Historical implementation record: version-specific descriptions and counts below refer to that work. For current behavior, use the [user guide](USER_GUIDE.md), [analysis connections](ANALYSIS_PROVIDERS.md) and [latest verification](VERIFICATION.md).
+
 Authorized scope: add automatic/manual channel-video refresh and a selectable automatic interval to Settings & data, persisted in browser preferences and backups. Keep current defaults for existing users: automatic, 30 minutes.
 
 Acceptance:

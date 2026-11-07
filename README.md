@@ -83,7 +83,7 @@ Optional: `npm run open` starts the server and opens a browser; on macOS it trie
 
 If the terminal says **port 4173 is already in use**, first open the address above: PersonalTube may already be running. Otherwise stop the conflicting local server before retrying. If `npm` is not found, install Node with npm and reopen the terminal; if `package.json` is not found, open the terminal in the extracted project folder.
 
-See the [clean-download verification](docs/FIRST_RUN_VERIFICATION.md) for measured startup and provider-analysis results, including the limits of first-time login testing.
+See [current verification](docs/VERIFICATION.md) and the [earlier clean-download/account checks](docs/FIRST_RUN_VERIFICATION.md), including the limits of first-time login testing.
 
 ## What does it cost?
 
@@ -150,7 +150,7 @@ An original community score measures community recommendation evidence—not a Y
 
 ## Contribute
 
-Small, focused contributions are welcome: clearer documentation, Arabic wording, accessibility improvements and reproducible bug reports. Start with [good first issues](https://github.com/nasreldinali/Personal-Tube/labels/good%20first%20issue), read [CONTRIBUTING.md](CONTRIBUTING.md), and run:
+Small, focused contributions are welcome: clearer documentation, English/Arabic/German/Spanish wording, accessibility improvements and reproducible bug reports. Start with [good first issues](https://github.com/nasreldinali/Personal-Tube/labels/good%20first%20issue), read [CONTRIBUTING.md](CONTRIBUTING.md), and run:
 
 ```sh
 npm run check

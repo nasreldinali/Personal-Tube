@@ -30,4 +30,4 @@ MEASURED: Chrome console inspection showed one expected YouTube commentThreads H
 
 ## Provider extension (1.5.0)
 
-The same evidence contract supports explicitly selected Codex or Claude subscriptions, OpenAI/Anthropic/OpenRouter APIs, and local Ollama/LM Studio models through Setup & connections. See [connection setup and billing](ANALYSIS_PROVIDERS.md). Shared provider controls and usage accounting are described in [architecture](ARCHITECTURE.md). Existing sample limits, exact quotes, positive thresholds and same-origin protection are unchanged. No analysis provider receives the YouTube API key.
+The same evidence contract supports explicitly selected Codex or Claude subscriptions, MiniMax M Plan, OpenAI/Anthropic/OpenRouter APIs, and local Ollama/LM Studio models through Setup & connections. See [connection setup and billing](ANALYSIS_PROVIDERS.md). Shared provider controls and usage accounting are described in [architecture](ARCHITECTURE.md). Existing sample limits, exact quotes, positive thresholds and same-origin protection are unchanged. No analysis provider receives the YouTube API key.

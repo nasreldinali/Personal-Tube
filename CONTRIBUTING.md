@@ -1,6 +1,6 @@
 # Contributing
 
-PersonalTube is a local, dependency-free Node.js application. Use Node.js 20 or newer and run `npm run open` to launch it.
+PersonalTube is a local, dependency-free Node.js application. Use Node.js 22 or 24 (declared minimum: 20) and run `npm run open` to launch it.
 
 ## Development workflow
 
@@ -22,4 +22,4 @@ Look for [good first issues](https://github.com/nasreldinali/Personal-Tube/label
 
 Fork the repository, create a focused branch, and describe the user-visible problem and validation in your pull request. The Checks workflow runs `npm run check` on Node.js 22 and 24 with public/synthetic fixtures only. No real YouTube key, provider login or model call is needed. Do not add credentials to make a test pass, and do not run an untrusted contribution with your personal credentials or elevated permissions.
 
-Preserve both README entry points when changing setup or feature requirements. Use public catalog content or synthetic data in screenshots. Original contributions are provided under this repository's MIT license; third-party data, fonts and branding keep the terms listed in NOTICE.md.
+Keep the English, Arabic, German and Spanish README entry points consistent when changing setup or feature requirements. Use public catalog content or synthetic data in screenshots. Original contributions are provided under this repository's MIT license; third-party data, fonts and branding keep the terms listed in NOTICE.md.

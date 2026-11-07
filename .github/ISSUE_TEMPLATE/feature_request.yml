@@ -20,4 +20,4 @@ body:
     id: considerations
     attributes:
       label: Optional considerations
-      description: Arabic/RTL, accessibility, API usage, local data or compatibility concerns. Do not include private data.
+      description: English/Arabic/German/Spanish, RTL, accessibility, API usage, local data or compatibility concerns. Do not include private data.

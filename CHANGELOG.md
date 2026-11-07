@@ -1,5 +1,14 @@
 # Changelog
 
+## Unreleased — changes on main since 1.8.2
+
+- Add German and Spanish controls and README introductions alongside English and Arabic; retain Arabic RTL and source-language video content.
+- Separate frontend behavior and styles by responsibility, preserving workflows and stylesheet order with characterization tests.
+- Organize setup into Subscription, Cloud API and Local model; add explicit sample tests, confirmed Codex/Claude sign-out, and OpenAI/Anthropic/OpenRouter/Ollama/LM Studio connections.
+- Add independent MiniMax M Plan save/test/use controls. Saving/testing preserves the selected provider and CLI sign-ins; disclose possible credit-pack usage and no pay-as-you-go fallback. Real MiniMax account compatibility remains unverified pending a user-supplied key and test.
+- Add an illustrative My channels preview, four-language entry points and current provider, setup and privacy guidance. Reconcile GitHub About/topics with the shipped capabilities.
+- Verification: see [current results and limits](docs/VERIFICATION.md). Earlier release entries below remain historical; no new tagged release has been published.
+
 ## 1.8.2 — 2026-11-06
 
 - Rewrite English and Arabic project introductions with real screenshots, setup requirements, a detailed user guide and explicit HackerTube/Karpathy attribution.

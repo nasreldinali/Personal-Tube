@@ -6,7 +6,7 @@ Describe the problem and what users will see after this change.
 
 - [ ] `npm run check` passes.
 - [ ] A behavior change has a regression test that failed before the fix.
-- [ ] Relevant UI changes were checked in English/Arabic and light/dark modes.
+- [ ] Relevant UI changes were checked in English, Arabic (RTL), German and Spanish, with light/dark/system themes and relevant screen sizes.
 - [ ] No secrets, personal exports, raw logs or private screenshots are included.
 - [ ] Documentation and attribution are updated where needed.
 

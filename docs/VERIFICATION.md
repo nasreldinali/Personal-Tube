@@ -1,5 +1,23 @@
 # Verification
 
+## Repository documentation and download check — 2026-11-07
+
+MEASURED: reviewed all 35 tracked Markdown files for internal links/assets: 167 relative references resolved, including checked Markdown heading anchors. Reconciled current language/provider guidance, GitHub About/topics and contribution templates; retained dated historical evidence. `npm run check` passed 231 tests and 52 deliberate-defect checks. No runtime source or account configuration changed in this documentation update.
+
+MEASURED: downloaded GitHub application revision `8a5fe8d` into an empty temporary folder with an authorized account. `npm start` launched it without installing dependencies; its health response, all 84 allowlisted assets and bundled catalog loaded. Only the scratch copy's port was changed to 4187 to avoid stopping the user's running app. This verifies the startup path with an isolated port, not an additional unmodified-port run. macOS, Node 24.3.0, npm 11.11.0. The full check in that downloaded copy also passed 231 tests and 52 deliberate defects. No setup, login, model or YouTube API request was made. Anonymous download remains unavailable while the repository is private.
+
+## MiniMax M Plan connection — 2026-11-07
+
+MEASURED: `npm run check` passes **231 deterministic tests and 52 deliberate-defect checks**, plus syntax, formatting, import/layer and source/asset integrity checks. New fixtures cover strict subscription credentials, acknowledgement, fixed destination/model, memory-only key handling, exact-quote evidence, rejected output, preserved selection, concurrency and no fallback. The full UI → same-origin HTTP → manager → MiniMax-adapter path runs with an injected response, never a paid service.
+
+MEASURED: isolated browser setup/save/confirmed-test succeeded while Codex remained selected. The real restarted local server still detected both Codex and Claude subscriptions, with Codex selected; no login/logout or model calls were made during this change. Desktop Arabic, 390-pixel phone and 768-pixel tablet layouts were inspected, with no dialog horizontal overflow or browser warning/error logs in these checks. Session counters reset on server restart; earlier real Codex/Claude test evidence remains in the earlier dated records below.
+
+LIMIT: no real MiniMax subscription key was supplied or consumed. Actual MiniMax account/model compatibility must be verified using **Test with one sample** after entering an eligible M Plan key in the app. The key-prefix gate cannot independently verify provider billing; MiniMax's possible use of existing credit packs is disclosed before saving and testing. This is not security certification or a guarantee of quota-only billing.
+
+## Earlier verification records
+
+The dated results below describe the revisions tested at the time; their smaller counts are historical, not the current test total.
+
 Reviewed: 2026-11-07.
 
 ## Connection methods and live subscription checks (2026-11-07)
@@ -140,11 +158,3 @@ Follow-up live Chrome verification returned eight recommendations from 48 candid
 ## Automatic YouTube analysis, 1.3.0
 
 MEASURED: deterministic tests cover search-to-analysis integration, exact quote binding, dissent counts, two-positive minimum, fail-closed output, creator/author/text deduplication, version/size/field limits, same-origin route checks, cooldown and shared classifier policy. The prior manual sample path is replaced by automatic analysis. Independent security review found no blocker and verified boundaries with synthetic probes; no real keys or author identifiers enter the analysis payload. Live verification is recorded in [the analysis record](YOUTUBE_ANALYSIS.md).
-
-## MiniMax M Plan connection — 2026-11-07
-
-MEASURED: `npm run check` passes **231 deterministic tests and 52 deliberate-defect checks**, plus syntax, formatting, import/layer and source/asset integrity checks. New fixtures cover strict subscription credentials, acknowledgement, fixed destination/model, memory-only key handling, exact-quote evidence, rejected output, preserved selection, concurrency and no fallback. The full UI → same-origin HTTP → manager → MiniMax-adapter path runs with an injected response, never a paid service.
-
-MEASURED: isolated browser setup/save/confirmed-test succeeded while Codex remained selected. The real restarted local server still detected both Codex and Claude subscriptions, with Codex selected; no login/logout or model calls were made during this change. Desktop Arabic, 390-pixel phone and 768-pixel tablet layouts were inspected, with no dialog horizontal overflow or browser warning/error logs in these checks. Session counters reset on server restart; earlier real Codex/Claude test evidence remains in the preceding record.
-
-LIMIT: no real MiniMax subscription key was supplied or consumed. Actual MiniMax account/model compatibility must be verified using **Test with one sample** after entering an eligible M Plan key in the app. The key-prefix gate cannot independently verify provider billing; MiniMax's possible use of existing credit packs is disclosed before saving and testing. This is not security certification or a guarantee of quota-only billing.
