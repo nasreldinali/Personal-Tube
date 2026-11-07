@@ -255,8 +255,9 @@
         <section id="feed" aria-labelledby="feed-title">
           <div class="feed-heading">
             <div><h2 id="feed-title">Today’s discoveries</h2><p id="feed-description" class="muted"></p></div>
-            <button id="refresh" class="d-btn d-btn-secondary" data-i18n="refresh" hidden>Refresh channels</button>
+            <button id="refresh" class="d-btn d-btn-secondary" data-i18n="refresh" aria-describedby="refresh-reason-text" hidden>Refresh channels</button>
           </div>
+          <p id="refresh-reason" class="help" role="status" hidden><span id="refresh-reason-text"></span> <button id="refresh-connect" type="button" class="text-button" data-i18n="refreshConnect" hidden></button></p>
           <div class="filters">
             <div id="catalog-filters" class="filter-group">
               <label class="d-field">

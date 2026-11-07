@@ -33,6 +33,7 @@ export function createFeedUpdates({
     finally { setBusy(false); render(); renderChannels(); }
   }
   bind('refresh', 'click', () => refresh(true));
+  bind('refresh-connect', 'click', openSettings);
   async function fetchDurations() {
     if (!readKey()) { openSettings(); return; }
     if (isBusy()) return;

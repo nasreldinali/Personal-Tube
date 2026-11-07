@@ -5,6 +5,28 @@ import { CHANNEL, VIDEO } from './fixtures.js';
 
 async function withApp(options, action) { const app = await appBrowserFixture(options); try { await action(app); } finally { app.restore(); } }
 
+test('missing YouTube key explains disabled refresh and opens connection settings without clearing channels', () => withApp({key:''}, async f => {
+  assert.equal(f.$('refresh').disabled, true);
+  assert.equal(f.$('refresh-reason').hidden, false);
+  assert.match(f.$('refresh-reason-text').textContent, /Connect YouTube/);
+  assert.equal(f.$('refresh-connect').hidden, false);
+  await f.$('refresh-connect').click();
+  assert.equal(f.$('settings-dialog').open, true);
+  assert.equal(f.state().channels.length, 1);
+  assert.equal(f.requests.some(r => r.url.includes('googleapis')), false);
+}));
+
+test('refresh explanation distinguishes an empty profile from a connected channel feed', async () => {
+  await withApp({key:'AIza'+'x'.repeat(35),state:{version:1,days:7,channels:[],cache:{}}}, async f => {
+    assert.match(f.$('refresh-reason-text').textContent, /Add a channel/);
+    assert.equal(f.$('refresh-connect').hidden, true);
+  });
+  await withApp({key:'AIza'+'x'.repeat(35)}, async f => {
+    assert.equal(f.$('refresh').disabled, false);
+    assert.equal(f.$('refresh-reason').hidden, true);
+  });
+});
+
 test('manual startup and navigation preserve the view without fetching YouTube', () => withApp({}, async f => {
   assert.equal(f.$('current-view').textContent, 'My channels');
   assert.equal(f.$('videos').children.length, 1);

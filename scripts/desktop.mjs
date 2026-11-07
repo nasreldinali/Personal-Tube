@@ -1,5 +1,6 @@
 import { spawn } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { readFile } from 'node:fs/promises';
 import { setTimeout as delay } from 'node:timers/promises';
 import { launchDesktop } from './desktop-launch.mjs';
 import { focusDesktopBrowser } from './desktop-browser.mjs';
@@ -24,7 +25,10 @@ function start() {
 }
 try {
   if (process.platform !== 'darwin') throw new Error('This launcher requires macOS. Use npm start on other systems.');
-  await launchDesktop({ probe, start, wait: () => delay(250), open: focusDesktopBrowser });
+  let profile = null;
+  try { profile = JSON.parse(await readFile(new URL('../.local/desktop-browser.json', import.meta.url), 'utf8')); }
+  catch (error) { if (error.code !== 'ENOENT') throw new Error('Cannot read .local/desktop-browser.json. Check the desktop profile configuration.'); }
+  await launchDesktop({ probe, start, wait: () => delay(250), open: () => focusDesktopBrowser(undefined, profile) });
 } catch (error) {
   console.error(error.message);
   process.exitCode = 1;

@@ -26,3 +26,22 @@ test('desktop browser reports denied access without fallback, retries or raw bro
   assert.equal(calls, 1);
   await assert.rejects(focusDesktopBrowser(async () => ({ stdout: 'unexpected data' })), /could not focus/);
 });
+
+test('missing pinned profile opens its directory once and verifies without creating duplicate tabs', async () => {
+  const calls = [];
+  const status = await focusDesktopBrowser(async (command, args) => {
+    calls.push({ command, args });
+    if (command === '/usr/bin/open') { assert.ok(args.includes('--profile-directory=Profile 2')); return {}; }
+    const config = JSON.parse(args[3]);
+    assert.equal(config.name, 'Work');
+    return { stdout: config.findOnly ? 'focused' : 'profileMissing' };
+  }, { version: 1, directory: 'Profile 2', name: 'Work', marker: 'fixture-marker-12345' }, async () => {});
+  assert.equal(status, 'focused');
+  assert.equal(calls.filter(call => call.command === '/usr/bin/open').length, 1);
+  let opened = 0;
+  await assert.rejects(focusDesktopBrowser(async command => {
+    if (command === '/usr/bin/open') { opened++; return {}; }
+    return { stdout: 'profileMissing' };
+  }, { version: 1, directory: 'Profile 2', name: 'Work', marker: 'fixture-marker-12345' }, async () => {}), /selected Chrome profile/);
+  assert.equal(opened, 1);
+});

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Support a local Chrome-profile configuration for the desktop shortcut so separate browser profiles do not appear to lose channels. Explain disabled channel refresh with a connection action in all four languages; preserve browser data and tab-only key behavior.
+
 - Reuse the existing Chrome tab from the macOS desktop shortcut without reloading or changing its route. Create a tab only when absent, and explain scoped Chrome Automation access with no duplicate-tab fallback on denial.
 
 - Add a macOS desktop app installer. Open a verified running instance or start the local server in the background without Terminal; preserve existing accounts and refuse conflicting services. Include a DEEDA icon, bounded startup checks and visible error messages.

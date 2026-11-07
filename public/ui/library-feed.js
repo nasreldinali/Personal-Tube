@@ -70,6 +70,10 @@ export function createLibraryFeed({
     $('refresh').hidden = !channelMode;
     $('refresh').disabled = isBusy() || isStorageBlocked() || !hasKey() || !readState().channels.length;
     $('refresh').textContent = text(isBusy() ? 'refreshing' : 'refresh');
+    const reason = isStorageBlocked() ? 'storageRead' : !hasKey() ? 'refreshNeedsKey' : !readState().channels.length ? 'refreshNeedsChannels' : '';
+    $('refresh-reason').hidden = !channelMode || !reason || isBusy();
+    $('refresh-reason-text').textContent = reason ? text(reason) : '';
+    $('refresh-connect').hidden = !channelMode || reason !== 'refreshNeedsKey' || isBusy();
     const times = Object.values(readState().cache).map(item => item.fetchedAt);
     $('update-time').textContent = times.length ? text('lastRefresh', { date: dateLabel(lang, Math.min(...times)) }) : text('neverRefreshed');
     const videos = filteredVideos().filter(v => !(readLibrary().hidden || []).includes(v.id));

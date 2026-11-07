@@ -4,6 +4,8 @@ import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const cases = [
+  { name: 'desktop-pinned-profile-only', file: 'scripts/focus-personaltube.js', from: '(!profile || matchesDesktopMarker(url, profile.marker))', to: 'true', test: 'test/focus-personaltube.test.js' },
+  { name: 'desktop-profile-version', file: 'scripts/desktop-profile.mjs', from: 'value?.version !== 1', to: 'false', test: 'test/desktop-profile.test.js' },
   { name: 'desktop-exact-tab-origin', file: 'scripts/focus-personaltube.js', from: ':4173(?:[/?#]|$)', to: ':4173', test: 'test/focus-personaltube.test.js' },
   { name: 'desktop-select-existing-tab', file: 'scripts/focus-personaltube.js', from: 'activeTabIndex = tabIndex + 1', to: 'activeTabIndex = 1', test: 'test/focus-personaltube.test.js' },
   { name: 'desktop-refuses-foreign-listener', file: 'scripts/desktop-launch.mjs', from: "decision === 'refuse'", to: 'false', test: 'test/desktop-launch.test.js' },
