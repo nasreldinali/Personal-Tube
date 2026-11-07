@@ -1,5 +1,30 @@
 # Verification
 
+## Practical-skill recommendations and evidence tiers — 2026-11-07
+
+MEASURED: **266 deterministic tests and 74 deliberate-defect checks** pass. RED regressions reproduced popularity displacing the search shortlist, missing practical-outcome guidance, shallow comment sampling and the old 50-item response ceiling. The previous UI also failed the new evidence-tier regression in an isolated copy. Tests cover relevance order despite reordered metadata, unchanged eligibility gates, bounded distributed sampling, resource-specific response limits, supported-before-limited ordering, exact evidence, and distinct card labels across all four interface languages. No dependency, credential store, paid-provider fallback or analysis-call budget changed.
+
+MEASURED: initial revised-policy sports runs still returned zero supported results (132 comments each). Inspecting the redacted public sample showed unrelated engagement, requests for other videos and generic praise crowding the first twenty comments. One specific endorsement was insufficient for the supported threshold. The final implementation selects eligible videos in search-relevance order, samples twenty comments across up to one hundred per video in the same Google request, and recognizes explicit applied skill/recipe outcomes. Two positives and more support than criticism remain necessary for a supported recommendation. Exactly one qualifying positive with zero criticism may appear after supported results as **limited evidence**, visibly distinguished from consensus. Generic praise alone qualifies for neither tier.
+
+### Final fresh browser searches
+
+Fixed queries: `طريقة عمل البيتزا في البيت` and `تعلم تسديد كرة القدم للمبتدئين`; declared Arabic audio, minimum 100,000 views / 1,000 likes, views order. No thresholds were lowered between the following runs. Each search used one subscription analysis call. YouTube comments were unavailable for zero videos.
+
+| Topic | Provider | Search candidates | Videos analyzed | Comments analyzed | Supported | Limited evidence |
+|---|---|---:|---:|---:|---:|---:|
+| Football shooting | Codex | 42 | 8 | 160 | 1 | 0 |
+| Home pizza | Codex | 45 | 8 | 160 | 4 | 1 |
+| Home pizza | Claude | 45 | 8 | 160 | 4 | 1 |
+| Football shooting | Claude | 45 | 6 | 120 | 1 | 1 |
+
+MEASURED: both sports runs displayed the same shooting-power lesson with two specific Arabic comments: correcting striking errors and scoring using the demonstrated technique. Claude additionally displayed a ball-curling lesson with one viewer reporting mastering the move in five minutes; this was explicitly labelled limited evidence. Cooking results contained applied dough, sauce and recipe experiences, including colloquial Arabic. Reviewed every displayed excerpt (up to five per card). Repeated recipe use and subjective successful-result claims are weaker than detailed technique explanations; they are not independently verified. One Codex cooking result showed five positive versus four critical comments, so support does not imply unanimity. Spot checks of rejected labels confirmed generic creator praise and unrelated engagement remained neutral.
+
+INFERRED: the final sports searches demonstrate useful subject-related results where the earlier runs were empty, while preserving a separate stronger evidence standard. This is a small, adaptive live check, not a held-out accuracy benchmark. Search results, metadata and sampled comments changed between runs; equal samples or provider superiority are not claimed. Model judgments can still miss useful comments or accept weak ones. Public metadata, viewer claims and exact source quotes do not prove authenticity, full-video quality, recipe safety or coaching quality.
+
+MEASURED: the four final searches analyzed 600 comment inputs. Including three diagnostic runs, this task consumed seven successful subscription calls: Codex 452 inputs across three calls, Claude 572 across four, with zero failed model calls. One intermediate browser search hit the old response-size limit before analysis; a regression fixed that. One immediate next search was refused by the existing 15-second cooldown and retried after waiting; it made no model call. These intermediate searches still used YouTube quota. All paid/cloud API usage counters stayed zero, and neither account was logged out.
+
+MEASURED: Arabic mobile inspection at 319px showed no horizontal overflow; both evidence tiers and source quotes were visible. Final browser warning/error capture was empty. A temporary local diagnostic harness used the same routes and providers and saved only redacted public analysis inputs/validated labels in ignored records. It was stopped after testing and the ordinary server restored with Codex selected and both subscriptions connected. Restart resets session usage/test-status counters; captured pre-restart evidence is retained privately. Raw comments, account identifiers, keys and diagnostic files are not part of the commit. License remains MIT.
+
 ## Arabic cooking and sports searches — 2026-11-07
 
 MEASURED on application revision `cbb6fb5`: four fresh searches through the Recommendations page, using existing Codex and Claude subscriptions. Fixed queries: `طريقة عمل البيتزا في البيت` (home pizza) and `تعلم تسديد كرة القدم للمبتدئين` (beginner football shooting). Each used declared Arabic audio, minimum 100,000 views / 1,000 likes and views order. Filters were not weakened after empty results.

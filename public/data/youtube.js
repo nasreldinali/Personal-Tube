@@ -39,7 +39,7 @@ export class YouTubeClient {
       if (response.status === 404) throw new AppError('channelMissing');
       throw new AppError('serviceUnavailable');
     }
-    if (!data || !Array.isArray(data.items) || data.items.length > 50 || (data.nextPageToken !== undefined && (typeof data.nextPageToken !== 'string' || data.nextPageToken.length > 2000))) throw new AppError('invalidResponse');
+    if (!data || !Array.isArray(data.items) || data.items.length > (resource === 'commentThreads' ? 100 : 50) || (data.nextPageToken !== undefined && (typeof data.nextPageToken !== 'string' || data.nextPageToken.length > 2000))) throw new AppError('invalidResponse');
     return data;
   }
 

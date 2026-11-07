@@ -22,7 +22,7 @@ export function youtubeAnalysisRows(input) {
   }
   return rows;
 }
-export function positiveYouTubeVideos(videos, result, topic) {
+export function youtubeEvidenceCandidates(videos, result, topic) {
   const rows = applyClassifications(youtubeAnalysisRows(youtubeAnalysisInput(videos, topic)), result);
   return videos.map(video => {
     const evidence = { sampled: video.evidence?.sampled || 0, analyzed: 0, positive: 0, critical: 0, comments: [] };
@@ -35,6 +35,11 @@ export function positiveYouTubeVideos(videos, result, topic) {
         evidence.comments.push({ id: row.id, text: row.text, likes: original.likes, quote: label.quote, stance: label.stance });
       }
     }
+    evidence.support = evidence.positive >= 2 ? 'supported' : 'limited';
     return { ...video, evidence };
-  }).filter(video => video.evidence.positive >= 2 && video.evidence.positive > video.evidence.critical);
+  }).filter(video => video.evidence.positive >= 1 && video.evidence.positive > video.evidence.critical);
+}
+
+export function positiveYouTubeVideos(videos, result, topic) {
+  return youtubeEvidenceCandidates(videos, result, topic).filter(video => video.evidence.positive >= 2);
 }

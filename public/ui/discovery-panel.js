@@ -66,6 +66,7 @@ export function createDiscoveryPanel({ context, saveDiscovery, setBusy, client, 
     } else {
       evidence.append(element('p', '', `${text('viewsLabel', { count: number(c.language, video.views) })} · ${text('likesLabel', { count: number(c.language, video.likes) })}`));
       evidence.append(element('p', 'muted', video.audioLanguage ? `${text('audioLanguage')}: ${video.audioLanguage}` : text('unknownAudio')));
+      evidence.append(element('p', 'evidence-label', text(video.evidence.support === 'limited' ? 'limitedEvidence' : 'supportedEvidence')));
       evidence.append(element('p', 'evidence-label', text('positiveEvidence', { positive: video.evidence.positive, analyzed: video.evidence.analyzed, critical: video.evidence.critical })));
       if (video.evidence?.comments.length) {
         const details = element('details');
@@ -105,7 +106,7 @@ export function createDiscoveryPanel({ context, saveDiscovery, setBusy, client, 
     const videos = community ? communityVideos() : results;
     $('discovery-videos').replaceChildren(...videos.filter(v=>!(c.library.hidden||[]).includes(v.id)).slice(0,community ? pageSize : 8).map(video => card(video, community)));
     $('community-more').hidden = !community || videos.length <= pageSize;
-    let message = community ? videos.length ? text('communityCount', { count: number(c.language, videos.length) }) : text('communityEmpty') : resultSummary ? text('recommendationResults', { shown: number(c.language, results.length), inspected: number(c.language, resultSummary.inspected), analyzed: number(c.language, resultSummary.analyzedComments), reviewed: number(c.language, resultSummary.reviewed), unavailable: number(c.language, resultSummary.commentsUnavailable) }) : text(recommendationStage || 'recommendationIdle');
+    let message = community ? videos.length ? text('communityCount', { count: number(c.language, videos.length) }) : text('communityEmpty') : resultSummary ? text('recommendationResults', { shown: number(c.language, results.filter(v=>v.evidence.support !== 'limited').length), limited: number(c.language, results.filter(v=>v.evidence.support === 'limited').length), inspected: number(c.language, resultSummary.inspected), analyzed: number(c.language, resultSummary.analyzedComments), reviewed: number(c.language, resultSummary.reviewed), unavailable: number(c.language, resultSummary.commentsUnavailable) }) : text(recommendationStage || 'recommendationIdle');
     if (status && community) message = text(status, statusValues);
     $('discovery-status').textContent = message; $('discovery-status').hidden = community && !videos.length && !status;
   }

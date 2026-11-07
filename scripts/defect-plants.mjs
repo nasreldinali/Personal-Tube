@@ -4,6 +4,11 @@ import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const cases = [
+  { name: 'youtube-support-before-popularity', file: 'public/services/recommendations.js', from: "Number(a.evidence.support === 'limited') - Number(b.evidence.support === 'limited') || ", to: '', test: 'test/youtube-analysis-flow.test.js' },
+  { name: 'youtube-limited-evidence-refusal', file: 'public/domain/youtube-evidence.js', from: 'video.evidence.positive >= 1 && video.evidence.positive > video.evidence.critical', to: 'video.evidence.positive >= 0', test: 'test/youtube-evidence.test.js' },
+  { name: 'youtube-resource-response-bound', file: 'public/data/youtube.js', from: "resource === 'commentThreads' ? 100 : 50", to: '100', test: 'test/youtube.test.js' },
+  { name: 'youtube-comment-sample-depth', file: 'public/domain/recommendations.js', from: 'rows.slice(0,100)', to: 'rows.slice(0,20)', test: 'test/recommendations.test.js' },
+  { name: 'youtube-relevance-shortlist', file: 'public/services/recommendations.js', from: 'ids.map(id => eligible.get(id)).filter(Boolean).slice(0,8)', to: '[...eligible.values()].slice(0,8)', test: 'test/youtube-analysis-flow.test.js' },
   { name: 'youtube-topic-preservation', file: 'public/domain/youtube-evidence.js', from: 'topic: plainText(input.topic)', to: "topic: ''", test: 'test/youtube-evidence.test.js' },
   { name: 'youtube-description-bound', file: 'public/domain/youtube-evidence.js', from: 'video.description.length > 1000', to: 'false', test: 'test/youtube-evidence.test.js' },
   { name: 'youtube-topic-required', file: 'public/domain/youtube-evidence.js', from: '!plainText(input.topic)', to: 'false', test: 'test/youtube-evidence.test.js' },

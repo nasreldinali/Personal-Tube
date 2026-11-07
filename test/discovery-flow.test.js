@@ -21,7 +21,7 @@ test('recommendation path queries a topic, verifies metrics/audio and exposes an
   assert.equal(calls[0].params.q, 'physics');
   assert.equal(calls[0].params.relevanceLanguage, 'en');
   assert.equal(calls.length, 3);
-  assert.equal(calls[2].params.maxResults, '20');
+  assert.equal(calls[2].params.maxResults, '100');
 });
 test('community and recommendation settings round-trip through v2 backups while v1 remains readable', () => {
   const a = new BrowserStore(memoryStorage(), memoryStorage());

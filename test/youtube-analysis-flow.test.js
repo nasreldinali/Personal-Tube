@@ -32,3 +32,41 @@ test('YouTube analysis route requires exact same-origin JSON and refuses oversiz
   assert.equal(calls,0);
   assert.equal(await request(good),200); assert.equal(calls,1);
 });
+
+test('search relevance selects the bounded shortlist before popularity sorts qualified results', async () => {
+  const ids=Array.from({length:10},(_,i)=>`sportskill${i}`);
+  const rows=ids.map((id,i)=>({id,snippet:{title:`Shooting lesson ${i}`,channelId:CHANNEL.id,defaultAudioLanguage:'ar'},status:{privacyStatus:'public'},statistics:{viewCount:String(i===0?1:100000+i*10000),likeCount:String(3000-i*100)}}));
+  for(const sort of ['views','likes']) {
+    const requested=[];
+    const client={request:async(resource,params)=>{
+      if(resource==='search')return {items:ids.map(videoId=>({id:{videoId}}))};
+      if(resource==='videos')return {items:[...rows].reverse()};
+      requested.push(params.videoId);
+      assert.equal(params.maxResults,'100');
+      return {items:[0,1].map(i=>({snippet:{topLevelComment:{id:`c${i}`,snippet:{textOriginal:`Practicing the foot placement made my shots more accurate ${i}`,likeCount:1}}}}))};
+    }};
+    let calls=0;
+    const analyze=createYouTubeAnalysis({classify:async inputs=>{
+      calls++;
+      return {version:1,items:inputs.map((row,i)=>({key:`${i}:${row.videoIds[0]}`,stance:'rec',quote:row.text}))};
+    },now:()=>1000});
+    const result=await recommendVideos(client,{...parseRecommendationSettings(null),query:'تعلم تسديد كرة القدم للمبتدئين',language:'ar',sort},analyze);
+    assert.deepEqual(requested,ids.slice(1,9));
+    assert.equal(calls,1);
+    assert.equal(result.reviewed,8);
+    assert.equal(result.analyzedComments,16);
+    assert.deepEqual(result.videos.map(v=>v.id),sort==='views'?ids.slice(1,9).reverse():ids.slice(1,9));
+  }
+});
+
+test('supported recommendations precede more popular limited candidates without another analysis call', async () => {
+  const ids=['supported01','limited0001'];
+  let calls=0;
+  const client={request:async(resource)=>({items:resource==='search'?ids.map(videoId=>({id:{videoId}})):resource==='videos'?ids.map((id,i)=>({id,snippet:{title:'Shooting tutorial',channelId:CHANNEL.id},status:{privacyStatus:'public'},statistics:{viewCount:String(200000+i*1000000),likeCount:'2000'}})):[0,1].map(i=>({snippet:{topLevelComment:{id:`c${i}`,snippet:{textOriginal:`The foot placement lesson improved my shot accuracy ${i}`,likeCount:1}}}}))})};
+  const result=await recommendVideos(client,{...parseRecommendationSettings(null),query:'shooting'},async input=>{
+    calls++;
+    return {version:1,items:input.videos.flatMap((v,i)=>v.comments.map((c,j)=>({key:`${i*2+j}:${v.id}`,stance:i===1&&j===1?'reference':'rec',quote:i===1&&j===1?'':c.text})))};
+  });
+  assert.equal(calls,1);
+  assert.deepEqual(result.videos.map(v=>[v.id,v.evidence.support]),[['supported01','supported'],['limited0001','limited']]);
+});

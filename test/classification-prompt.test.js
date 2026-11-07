@@ -18,3 +18,15 @@ test('YouTube policy requires direct topic fit and concrete evidence, including 
   assert.deepEqual(JSON.parse(prompt.split('\nDATA:\n')[1]),inputs);
   assert.doesNotMatch(classificationPrompt(inputs,'community'),/BOTH gates/);
 });
+
+test('YouTube practical-skill policy accepts applied outcomes but rejects praise and unevidenced intent', () => {
+  const prompt=classificationPrompt([],'youtube');
+  assert.match(prompt,/practical outcome/);
+  assert.match(prompt,/does not need to name a technical mechanism/);
+  assert.match(prompt,/جربت التمرين وتسديدي بقى أدق/);
+  assert.match(prompt,/جامد يا كابتن/);
+  assert.match(prompt,/future intention/);
+  assert.match(prompt,/vague improvement/);
+  assert.match(prompt,/highlights/);
+  assert.doesNotMatch(classificationPrompt([],'community'),/practical outcome/);
+});

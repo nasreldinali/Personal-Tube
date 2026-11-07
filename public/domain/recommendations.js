@@ -41,7 +41,7 @@ export function commentSample(rows, creatorId = '') {
   const authors = new Set();
   const texts = new Set();
   const comments = [];
-  for (const row of rows.slice(0,20)) {
+  for (const row of rows.slice(0,100)) {
     const comment = row?.snippet?.topLevelComment;
     if (typeof comment?.id !== 'string' || !/^[\w-]{1,200}$/.test(comment.id) || seen.has(comment.id) || typeof comment.snippet?.textOriginal !== 'string') continue;
     const author = comment.snippet.authorChannelId?.value;
@@ -53,6 +53,10 @@ export function commentSample(rows, creatorId = '') {
     seen.add(comment.id);
     comments.push({ id: comment.id, text, likes: Number.isSafeInteger(comment.snippet.likeCount) && comment.snippet.likeCount >= 0 ? comment.snippet.likeCount : 0 });
   }
-  comments.sort((a,b) => b.likes - a.likes);
-  return { sampled: comments.length, comments };
+  const selected = comments.length <= 20 ? comments : [
+    ...comments.slice(0,5),
+    ...Array.from({length:15},(_,i) => comments[5 + Math.floor(i * (comments.length - 6) / 14)]),
+  ];
+  selected.sort((a,b) => b.likes - a.likes);
+  return { sampled: selected.length, comments: selected };
 }

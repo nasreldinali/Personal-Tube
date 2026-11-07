@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { youtubeAnalysisInput, youtubeAnalysisRows, positiveYouTubeVideos } from '../public/domain/youtube-evidence.js';
+import { youtubeAnalysisInput, youtubeAnalysisRows, positiveYouTubeVideos, youtubeEvidenceCandidates } from '../public/domain/youtube-evidence.js';
 import { VIDEO } from './fixtures.js';
 
 const videos = () => [{ ...VIDEO, evidence: { sampled: 3, comments: [
@@ -56,4 +56,15 @@ test('topic and public context survive redaction and refuse absent, oversized or
   for (const change of [{description:'x'.repeat(1001)},{description:null},{url:'https://example.test'}]) {
     assert.throws(() => youtubeAnalysisRows({...input,videos:[{...input.videos[0],...change}]}), {code:'invalidYouTubeAnalysis'});
   }
+});
+
+
+test('one specific supporter is a limited candidate, never a supported recommendation', () => {
+  const one=labels(['rec','reference','reference']);
+  assert.equal(positiveYouTubeVideos(videos(),one,'shooting').length,0);
+  const limited=youtubeEvidenceCandidates(videos(),one,'shooting');
+  assert.equal(limited.length,1);
+  assert.equal(limited[0].evidence.support,'limited');
+  assert.equal(youtubeEvidenceCandidates(videos(),labels(),'shooting')[0].evidence.support,'supported');
+  for(const stances of [['reference','reference','reference'],['rec','critical','reference'],['rec','critical','critical']]) assert.equal(youtubeEvidenceCandidates(videos(),labels(stances),'shooting').length,0);
 });

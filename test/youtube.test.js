@@ -73,3 +73,13 @@ test('hard request deadline releases stalled transport and stalled response bodi
     await refusal; assert.equal(signal.aborted,true);
   }
 });
+
+test('comment response permits one hundred items without relaxing other resource bounds', async () => {
+  let size=100;
+  const client=new YouTubeClient('fixture',async()=>apiResponse({items:Array.from({length:size},()=>({}))}));
+  assert.equal((await client.request('commentThreads',{})).items.length,100);
+  size=101;
+  await assert.rejects(client.request('commentThreads',{}),{code:'invalidResponse'});
+  size=51;
+  for(const resource of ['videos','search','channels','playlistItems'])await assert.rejects(client.request(resource,{}),{code:'invalidResponse'});
+});
