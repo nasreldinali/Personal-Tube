@@ -45,7 +45,7 @@ export function createProviderManager({ inspect, login, classifiers, now, logout
           await logout(provider); tested[provider]=false; connections[provider]='idle';
         }
         if (input.action === 'test') {
-          if (!api || !apiProviderIds.includes(provider) || selected !== provider) throw new AppError('invalidSetup');
+          if (selected !== provider) throw new AppError('invalidSetup');
           if (now() - (lastTest[provider] ?? -Infinity) < 60000) throw new AppError('connectionCooldown');
           lastTest[provider]=now();
           await execute([{id:'connection-test',videoIds:['abcdefghijk'],text:'Recommended explanation',title:'Synthetic connection test'}], 'community');

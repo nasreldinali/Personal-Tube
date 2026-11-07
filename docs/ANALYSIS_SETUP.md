@@ -50,7 +50,7 @@ See [Codex authentication](https://learn.chatgpt.com/docs/auth) and [Claude Code
 
 **Connected · analysis not yet tested** means the local tool recognizes your login. It does not prove model access, available allowance or a working network request.
 
-Open **Recommendations**, enter a topic and start a search. This explicitly uses your YouTube quota and selected analysis account. After a successful validated analysis, the active provider card says **analysis completed in this server session**. Counts in **Analysis since server start** show attempts, completions, failures and comment/video inputs. They reset on server restart and are not your provider’s token balance or bill.
+In **Setup & connections → Subscription**, select your connected account, choose **Test with one sample** and confirm. This uses one synthetic comment and your subscription allowance, without a YouTube request, sign-out or paid API fallback. You can also open **Recommendations**, enter a topic and start a search; that uses your YouTube quota and selected analysis account. After a successful validated analysis, the active provider card says **analysis completed in this server session**. Counts in **Analysis since server start** show attempts, completions, failures and comment/video inputs. They reset on server restart and are not your provider’s token balance or bill.
 
 No matching videos is possible even after a successful analysis: the sample may not meet your recommendation requirements. An account or network error is different from a valid search with no qualifying results.
 

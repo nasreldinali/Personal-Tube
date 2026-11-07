@@ -7,9 +7,11 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
 [![Interface](https://img.shields.io/badge/Interface-EN%20%7C%20AR%20%7C%20DE%20%7C%20ES-487EA4)](README.ar.md)
 
-[Quick start](#quick-start) · [Screenshots](#screenshots) · [Analysis connections](docs/ANALYSIS_PROVIDERS.md) · [العربية](README.ar.md) · [User guide](docs/USER_GUIDE.md) · [Contributing](CONTRIBUTING.md) · [Checks](https://github.com/nasreldinali/Personal-Tube/actions/workflows/check.yml)
+[Quick start](#quick-start) · [Screenshots](#screenshots) · [Analysis connections](docs/ANALYSIS_PROVIDERS.md) · [User guide](docs/USER_GUIDE.md) · [Contributing](CONTRIBUTING.md) · [Checks](https://github.com/nasreldinali/Personal-Tube/actions/workflows/check.yml)
 
 PersonalTube is a local YouTube dashboard built on **Andrej Karpathy’s [HackerTube](https://karpathy.bearblog.dev/hacker-tube/) idea and exported collection**. Browse the original recommendations immediately, follow your own channels, and discover videos through public community discussions—with English, Arabic, German and Spanish controls, adjustable quality filters and control over refresh usage.
+
+**Read this guide:** English · [العربية](README.ar.md) · [Deutsch](README.de.md) · [Español](README.es.md)
 
 ## Screenshots
 
@@ -103,7 +105,7 @@ This can comfortably fit moderate personal channel-following, but is not an unli
 
 **Downloading this repository never gives someone access to the maintainer’s API key or subscription.** Each installation supplies its own YouTube key and analysis access. Subscription analysis uses that account’s allowance; cloud API analysis uses its separate billing; the app does not sell credits, bundle a model, or provide a shared analysis service. Public comments go to the selected analysis service. A truly local model can keep analysis on your computer, while YouTube and community requests still use the internet.
 
-For live features, open **Setup & connections**. Create a key with **YouTube Data API v3** enabled, restrict it to that API and the local website origin, then enter it in **Settings & data**. Install/sign in to your chosen analysis CLI separately if needed; PersonalTube does not install it for you. The app currently accepts **Codex CLI 0.155.1** and **Claude Code 2.1.281** only; other versions are refused until their execution policies are reviewed. A paid account alone does not replace the local CLI requirement. Follow the [first-time account setup guide](docs/ANALYSIS_SETUP.md), or choose **API or local model** using the [provider guide](docs/ANALYSIS_PROVIDERS.md). Connection detection and a successful analysis are shown separately; the guide explains what has been tested and how to complete your own first-use check.
+For live features, open **Setup & connections**. Create a key with **YouTube Data API v3** enabled, restrict it to that API and the local website origin, then enter it in **Settings & data**. Install/sign in to your chosen analysis CLI separately if needed; PersonalTube does not install it for you. The app currently accepts **Codex CLI 0.155.1** and **Claude Code 2.1.281** only; other versions are refused until their execution policies are reviewed. A paid account alone does not replace the local CLI requirement. Follow the [first-time account setup guide](docs/ANALYSIS_SETUP.md), or choose **Cloud API** or **Local model** using the [provider guide](docs/ANALYSIS_PROVIDERS.md). Connection detection and a successful analysis are shown separately; the guide explains what has been tested and how to complete your own first-use check.
 
 ## Choose your analysis connection
 
@@ -114,7 +116,7 @@ For live features, open **Setup & connections**. Create a key with **YouTube Dat
 | A wider choice of hosted closed/open-weight models | OpenRouter | Its API key and a compatible model ID |
 | Running a model on your own computer | Ollama or LM Studio | Local model server and installed model; enough hardware |
 
-**Configured** is not the same as **tested**. An explicit one-sample test verifies a configured API/local model; it may cost money for cloud APIs. Keys stay only in the local server's memory until removed or the server stops. Sign-out confirms its effect on the official CLI before acting. [Setup steps, supported endpoints and limits →](docs/ANALYSIS_PROVIDERS.md)
+**Configured** is not the same as **tested**. An explicit one-sample test verifies the selected subscription, API or local model; it uses subscription allowance or may cost money for cloud APIs. Keys stay only in the local server's memory until removed or the server stops. Sign-out confirms its effect on the official CLI before acting. [Setup steps, supported endpoints and limits →](docs/ANALYSIS_PROVIDERS.md)
 
 ## Three ways to find something worth watching
 

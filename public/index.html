@@ -347,34 +347,52 @@
         <button class="close" data-close="setup-dialog" data-i18n-label="close" aria-label="Close">×</button>
       </div>
       <div class="setup-body">
-        <p class="setup-intro" data-i18n="setupIntro"></p>
+        <p id="setup-active" class="setup-active" role="status"></p>
+        <details class="setup-details setup-youtube-details">
+          <summary>YouTube <span id="setup-youtube-state" class="connection-badge"></span></summary>
         <section class="connection-row">
-          <div><h3>YouTube</h3><p data-i18n="youtubeConnectionBrief"></p><small id="setup-youtube-state"></small></div>
+          <div><h3>YouTube</h3><p data-i18n="youtubeConnectionBrief"></p></div>
           <button id="setup-youtube" class="d-btn d-btn-secondary"></button>
         </section>
         <p class="help" data-i18n="youtubeFree"></p>
+        </details>
         <section class="analysis-section">
           <h3 data-i18n="analysisAccount"></h3>
           <p class="help" data-i18n="analysisBrief"></p>
+          <div class="connection-methods" role="group" data-i18n-label="connectionMethod">
+            <button type="button" id="method-subscription" aria-pressed="true" data-i18n="methodSubscription"></button>
+            <button type="button" id="method-api" aria-pressed="false" data-i18n="methodApi"></button>
+            <button type="button" id="method-local" aria-pressed="false" data-i18n="methodLocal"></button>
+          </div>
+          <section id="subscription-connections">
           <div id="setup-provider" class="provider-grid">
             <article class="provider-card" id="setup-card-codex">
               <div class="provider-heading"><h4>Codex</h4><span id="setup-badge-codex" class="connection-badge"></span></div>
               <p class="provider-plan">ChatGPT</p>
               <p id="setup-state-codex" class="provider-state"></p>
               <button id="setup-codex" class="d-btn d-btn-secondary"></button>
-              <button id="setup-logout-codex" class="text-button provider-logout" data-i18n="signOut" hidden></button>
+              <div class="provider-secondary"><button type="button" id="setup-test-codex" class="text-button" data-i18n="apiTest" hidden></button>
+              <button id="setup-logout-codex" class="text-button provider-logout" data-i18n="signOut" hidden></button></div>
             </article>
             <article class="provider-card" id="setup-card-claude">
               <div class="provider-heading"><h4>Claude Code</h4><span id="setup-badge-claude" class="connection-badge"></span></div>
               <p class="provider-plan">Claude</p>
               <p id="setup-state-claude" class="provider-state"></p>
               <button id="setup-claude" class="d-btn d-btn-secondary"></button>
-              <button id="setup-logout-claude" class="text-button provider-logout" data-i18n="signOut" hidden></button>
+              <div class="provider-secondary"><button type="button" id="setup-test-claude" class="text-button" data-i18n="apiTest" hidden></button>
+              <button id="setup-logout-claude" class="text-button provider-logout" data-i18n="signOut" hidden></button></div>
             </article>
           </div>
-          <details class="setup-details api-connections">
-            <summary><span data-i18n="apiConnections"></span> <span id="api-active" class="connection-badge"></span></summary>
-            <p class="help" data-i18n="apiConnectionsIntro"></p>
+          <p class="help" data-i18n="subscriptionMethodHelp"></p>
+          <details class="setup-details">
+            <summary data-i18n="setupStepsTitle"></summary>
+            <ol><li data-i18n="setupStepInstall"></li><li data-i18n="setupStepLogin"></li><li data-i18n="setupStepVerify"></li></ol>
+            <a href="https://github.com/nasreldinali/Personal-Tube/blob/main/docs/ANALYSIS_SETUP.md" target="_blank" rel="noopener noreferrer" data-i18n="setupFullGuide"></a>
+          </details>
+          </section>
+          <section id="model-connections" class="api-connections" hidden>
+            <span id="api-active" class="connection-badge"></span>
+            <p id="api-method-help" class="help"></p>
             <form id="api-connection-form">
               <div class="api-model-fields">
                 <label class="d-field"><span data-i18n="apiProvider"></span><select id="api-provider" class="d-select"><option value="openai">OpenAI API</option><option value="anthropic">Anthropic API</option><option value="openrouter">OpenRouter</option><option value="ollama">Ollama · Local</option><option value="lmstudio">LM Studio · Local</option></select></label>
@@ -383,8 +401,7 @@
               <p id="api-model-help" class="help" data-i18n="apiModelHelp"></p>
               <label class="d-field" id="api-key-field"><span data-i18n="analysisKey"></span><input class="d-input" id="analysis-key" type="password" maxlength="2048" autocomplete="off" spellcheck="false" dir="ltr"></label>
               <label class="check api-consent" id="api-cost-label"><input type="checkbox" id="api-cost-consent"><span data-i18n="apiConsent"></span></label>
-              <p id="api-local-help" class="help" data-i18n="apiLocalHelp" hidden></p>
-              <p class="help" data-i18n="apiSessionHelp"></p>
+              <details id="api-local-help" class="setup-details" hidden><summary data-i18n="localSetupSteps"></summary><p class="help" data-i18n="apiLocalHelp"></p><a href="https://github.com/nasreldinali/Personal-Tube/blob/main/docs/ANALYSIS_PROVIDERS.md#gemma-4-already-on-your-computer" target="_blank" rel="noopener noreferrer" data-i18n="setupFullGuide"></a></details>
               <button id="api-save" class="d-btn d-btn-primary" data-i18n="apiSave"></button>
             </form>
             <p id="api-state" class="help" role="status"></p>
@@ -393,15 +410,9 @@
               <button id="api-test" type="button" class="d-btn d-btn-secondary" data-i18n="apiTest" disabled></button>
               <button id="api-forget" type="button" class="text-button" data-i18n="apiRemove" disabled></button>
             </div>
-          </details>
+            <details class="setup-details connection-storage"><summary data-i18n="connectionStorage"></summary><p class="help" data-i18n="apiSessionHelp"></p></details>
+          </section>
           <p id="setup-message" role="status"></p>
-          <p class="help" data-i18n="connectionBrief"></p>
-          <p class="help" data-i18n="analysisCost"></p>
-          <details class="setup-details">
-            <summary data-i18n="setupStepsTitle"></summary>
-            <ol><li data-i18n="setupStepInstall"></li><li data-i18n="setupStepLogin"></li><li data-i18n="setupStepVerify"></li></ol>
-            <a href="https://github.com/nasreldinali/Personal-Tube/blob/main/docs/ANALYSIS_SETUP.md" target="_blank" rel="noopener noreferrer" data-i18n="setupFullGuide"></a>
-          </details>
         </section>
         <details class="setup-details">
           <summary data-i18n="analysisUsage"></summary>

@@ -42,3 +42,15 @@ test('analysis and pending login prevent credential mutation and switching from 
  await manager.control({version:1,action:'connect',provider:'codex'});
  await assert.rejects(manager.control(config),{code:'busy'});
 });
+
+test('subscription sample tests require confirmation and selection, stay subscription-only and enforce cooldown',async()=>{
+ const calls=[];const manager=createProviderManager({inspect:async()=>({installed:true,supported:true,connected:true,method:'subscription'}),login:async()=>{},logout:async()=>{throw Error('must not logout');},classifiers:{codex:async()=>{calls.push('codex');return result;},claude:async()=>{calls.push('claude');return result;}},now:()=>100000});
+ await assert.rejects(manager.control({version:1,action:'test',provider:'codex'}),{code:'invalidSetup'});
+ await assert.rejects(manager.control({version:1,action:'test',provider:'claude',confirm:true}),{code:'invalidSetup'});
+ const first=await manager.control({version:1,action:'test',provider:'codex',confirm:true});assert.equal(first.providers.codex.tested,true);assert.equal(first.usage.codex.completed,1);
+ await assert.rejects(manager.control({version:1,action:'test',provider:'codex',confirm:true}),{code:'connectionCooldown'});
+ await manager.control({version:1,action:'select',provider:'claude'});
+ const second=await manager.control({version:1,action:'test',provider:'claude',confirm:true});assert.equal(second.providers.claude.tested,true);assert.deepEqual(calls,['codex','claude']);
+ const wrongAuth=createProviderManager({inspect:async()=>({installed:true,supported:true,connected:true,method:'other'}),classifiers:{codex:async()=>{throw Error('must not run');}},now:()=>100000});
+ await assert.rejects(wrongAuth.control({version:1,action:'test',provider:'codex',confirm:true}),{code:'analysisConnectionRequired'});
+});

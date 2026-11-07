@@ -1,3 +1,4 @@
+import { createConnectionMethod } from './connection-method.js';
 import { createApiConnections } from './api-connections.js';
 import { providerIds, providerNames } from '../domain/analysis-providers.js';
 import { byId as $, element } from './dom.js';
@@ -17,9 +18,11 @@ export function createSetupPanel({ context, finish, openYouTube, onError, schedu
   const name = provider => provider === 'claude' ? 'Claude' : providerNames[provider];
   const text = (key, values) => t(context().language, key, values);
   const apiPanel = createApiConnections({text,request,confirm});
+  const methods = createConnectionMethod({setMethod:apiPanel.setMethod,clearSecret:apiPanel.clearSecret});
   function stopPolling() { if (timer !== null) cancel(timer); timer = null; }
   function render() {
     $('setup-check').disabled = running;
+    $('setup-active').textContent = result ? text('activeAnalysis',{provider:name(result.selected)}) : text('setupChecking');
     $('setup-youtube').textContent = text(context().hasKey ? 'manageConnection' : 'connectAction');
     $('setup-youtube-state').textContent = text(context().hasKey ? 'keySaved' : 'keyNeeded');
     for (const provider of providers) {
@@ -33,15 +36,18 @@ export function createSetupPanel({ context, finish, openYouTube, onError, schedu
       button.setAttribute('aria-pressed', String(active));
       $(`setup-logout-${provider}`).hidden = !state?.connected;
       $(`setup-logout-${provider}`).disabled = running || context().busy || Boolean(result?.busy) || pending;
+      $(`setup-test-${provider}`).disabled = button.disabled || !active;
+      $(`setup-test-${provider}`).hidden = !state?.connected;
       $(`setup-card-${provider}`).dataset.active = String(active);
       $(`setup-badge-${provider}`).textContent = active ? text('activeProvider') : state?.connected ? text('connectedBadge') : '';
-      const status = !state ? 'setupChecking' : !state.installed ? 'providerMissing' : !state.supported ? 'classifierVersion' : active ? ((state.tested ?? result.usage[provider].completed > 0) ? 'analysisTested' : 'activeConnectionHelp') : state.connected ? 'availableConnectionHelp' : pending ? 'loginAutoCheck' : state.connection === 'failed' ? 'connectionFailed' : state.method === 'other' ? 'subscriptionRequired' : 'providerDisconnected';
+      const status = !state ? 'setupChecking' : !state.installed ? 'providerMissing' : !state.supported ? 'classifierVersion' : active ? ((state.tested ?? result.usage[provider].completed > 0) ? 'analysisTested' : 'activeConnectionHelp') : state.connected ? (state.tested ? 'analysisTested' : 'availableConnectionHelp') : pending ? 'loginAutoCheck' : state.connection === 'failed' ? 'connectionFailed' : state.method === 'other' ? 'subscriptionRequired' : 'providerDisconnected';
       $(`setup-state-${provider}`).textContent = text(status);
     }
     $('setup-status').replaceChildren(...['setupRuntime', context().storageReady ? 'setupStorageReady' : 'setupStorageBlocked'].map(key => element('li', '', text(key))));
-    $('setup-message').textContent = running ? text('setupChecking') : message ? text(message, messageValues) : '';
+    $('setup-message').textContent = running ? text(message === 'analysisTesting' ? 'analysisTesting' : 'setupChecking') : message ? text(message, messageValues) : '';
     $('setup-usage').replaceChildren();
     apiPanel.render(result, running || context().busy || Boolean(result?.busy) || Boolean(result && providers.some(p=>result.providers[p]?.connection==='pending' && !result.providers[p]?.connected)));
+    methods.render(result?.selected);
     if (result) for (const provider of providerIds.filter(p=>result.usage[p])) {
       const usage = result.usage[provider];
       $('setup-usage').append(element('p', '', `${name(provider)} · ${text('usageCounts', Object.fromEntries(Object.entries(usage).map(([key, value]) => [key, number(context().language, value)])))}`));
@@ -61,7 +67,7 @@ export function createSetupPanel({ context, finish, openYouTube, onError, schedu
   }
   async function request(action, provider = result?.selected || 'codex', extras = {}) {
     if (running) return;
-    stopPolling(); running = true; message = ''; render();
+    stopPolling(); running = true; message = action === 'test' ? 'analysisTesting' : ''; render();
     let succeeded = false;
     try {
       const response = await fetch('/api/setup', { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify({ version: 1, action, provider, ...extras }), signal: AbortSignal.timeout(action === 'test' ? 130000 : 25000) });
@@ -69,7 +75,7 @@ export function createSetupPanel({ context, finish, openYouTube, onError, schedu
       if (!response.ok) throw new AppError(data.error || 'connectionFailed');
       if (data.version !== 1 || !providerIds.includes(data.selected) || !data.providers || !data.usage) throw new AppError('invalidSetup');
       for (const p of providers) if (!data.providers[p] || !data.usage[p] || ['attempted', 'completed', 'failed', 'inputs'].some(k => !Number.isSafeInteger(data.usage[p][k]) || data.usage[p][k] < 0)) throw new AppError('invalidSetup');
-      result = data; succeeded = true;
+      result = data; succeeded = true; message = action === 'test' ? 'analysisTested' : '';
       if (action === 'connect') { pollUntil = now() + 185000; message = data.providers[provider].connected ? 'providerSelected' : 'loginAutoCheck'; messageValues = { provider: name(provider) }; }
     } catch (error) {
       const allowed = ['busy', 'providerMissing', 'classifierVersion', 'connectionCooldown', 'connectionFailed', 'invalidSetup', 'analysisConnectionRequired', 'analysisKeyRequired', 'analysisCostRequired', 'analysisModelRequired', 'analysisAuthFailed', 'analysisRateLimit', 'analysisUnavailable', 'invalidClassification'];
@@ -81,6 +87,9 @@ export function createSetupPanel({ context, finish, openYouTube, onError, schedu
     if (!state) return;
     if (!state.installed || !state.supported) { $('setup-requirements').open = true; $('setup-help').open = true; $('setup-help').scrollIntoView({ block: 'nearest' }); return; }
     void request('connect', provider);
+  });
+  for (const provider of providers) $(`setup-test-${provider}`).addEventListener('click', () => {
+    confirm('subscriptionTestConfirm', () => request('test',provider,{confirm:true}));
   });
   for (const provider of providers) $(`setup-logout-${provider}`).addEventListener('click', () => {
     confirm(provider === 'codex' ? 'logoutCodexConfirm' : 'logoutClaudeConfirm', () => request('logout',provider,{confirm:true}));
@@ -97,7 +106,7 @@ export function createSetupPanel({ context, finish, openYouTube, onError, schedu
   $('setup-finish').addEventListener('click', () => { opened = false; stopPolling(); $('setup-dialog').close(); });
   function open() {
     try { finish(); } catch (error) { onError(error); }
-    opened = true; pollUntil = 0; render(); $('setup-dialog').showModal(); void request('status');
+    opened = true; pollUntil = 0; methods.reset(); render(); $('setup-dialog').showModal(); void request('status');
   }
   return { open, render };
 }

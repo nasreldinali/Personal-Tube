@@ -107,4 +107,4 @@ See [NOTICE.md](../NOTICE.md) for source and licensing boundaries.
 
 ## More analysis connections and signing out
 
-Setup now provides confirmed **Sign out** for Codex/Claude and an **API or local model** section for OpenAI, Anthropic, OpenRouter, Ollama and LM Studio. Configure a model explicitly, acknowledge cloud API costs, and use the optional one-sample connection test. See [the full connection guide](ANALYSIS_PROVIDERS.md) for session-only keys, local server requirements and supported model formats.
+Setup now provides confirmed **Sign out** for Codex/Claude and separate **Cloud API** and **Local model** sections for OpenAI, Anthropic, OpenRouter, Ollama and LM Studio. Configure a model explicitly, acknowledge cloud API costs, and use the optional one-sample connection test. See [the full connection guide](ANALYSIS_PROVIDERS.md) for session-only keys, local server requirements and supported model formats.

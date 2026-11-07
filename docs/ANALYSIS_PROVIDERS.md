@@ -14,17 +14,19 @@ PersonalTube supports two subscription CLIs, three cloud API services and two lo
 | Ollama | Running local server and installed local model ID | Your configured local server | Your hardware; no PersonalTube API fee |
 | LM Studio | Running local server and loaded model ID | Your configured local server | Your hardware; no PersonalTube API fee |
 
-Closed and open-weight models are available through these services. Support for a service does **not** mean every model supports the required JSON output, context length or requested generation limit. There is no arbitrary endpoint field. Ollama's `:cloud` model suffix is refused in the local option; you are responsible for ensuring the local server actually uses a local model.
+Closed and open-weight models are available through these services. Support for a service does **not** mean every model supports the required JSON output, context length or requested generation limit. There is no arbitrary endpoint field. Ollama's `:cloud` and `-cloud` model suffixes are refused in the local option; you are responsible for ensuring the local server actually uses a local model.
 
 ## Subscription sign-in and sign-out
 
 Install a supported CLI using [the account guide](ANALYSIS_SETUP.md). A signed-out card offers **Sign in**. A connected card offers **Use** and **Sign out**. Sign out asks for confirmation because it invokes the official CLI logout on this computer; other tools sharing that CLI login may need to authenticate again. It does not remove your PersonalTube library or cancel your subscription. After sign-out, use Sign in to reconnect or choose another account in the provider's browser flow.
 
+**Test with one sample** also works for the selected connected subscription. It sends one synthetic comment through the same classifier, uses your plan allowance, requires confirmation and has a one-minute per-service cooldown. It does not log out, fetch YouTube data or fall back to a paid API.
+
 Tests use synthetic accounts for logout. Existing personal credentials are never removed for an automated test.
 
 ## Cloud API setup
 
-1. Open **Setup & connections → API or local model**.
+1. Open **Setup & connections → Cloud API**.
 2. Choose OpenAI API, Anthropic API or OpenRouter. Enter the exact model ID and your key from that service. A ChatGPT or Claude subscription is not an API key or a promise of included API credit.
 3. Read and tick the API cost acknowledgement, then choose **Use this model**. Saving the connection makes no model request.
 4. Choose **Test with one sample** and confirm. This sends one synthetic comment; the service may charge for it. A valid result marks the configuration as tested. The test is limited to one attempt per service per minute.
@@ -56,8 +58,26 @@ API-key rejection, rate limits, unavailable servers and invalid model output are
 - `logout`: subscription `provider`, `confirm: true`.
 - `configure`: API/local `provider`, `configuration` containing exactly `provider`, `model`, `key`, `acknowledgeCost`. Cloud options require a nonempty key and `true`; local options require an empty key and `false`.
 - `forget`: API/local `provider`, `confirm: true`.
-- `test`: selected API/local `provider`, `confirm: true`.
+- `test`: selected subscription/API/local `provider`, `confirm: true`.
 
 Every request includes `version: 1`; unknown versions, providers and additional input fields are refused. Status returns availability, method, model ID, tested state and aggregate usage, never keys. Login, analysis and configuration mutations cannot race. The server is for one local user, not a publicly hosted account service.
 
 Reference protocols: [OpenAI Chat Completions](https://developers.openai.com/api/reference/resources/chat/subresources/completions/methods/create), [Anthropic Messages](https://platform.claude.com/docs/en/api/messages), [OpenRouter](https://openrouter.ai/docs/api/reference/overview), [Ollama chat](https://docs.ollama.com/api/chat), [LM Studio compatibility](https://lmstudio.ai/docs/developer/openai-compat/chat-completions).
+
+## Gemma 4 already on your computer
+
+1. Start your Ollama app/server. Run `ollama list` to see installed model IDs; this does not download a model.
+2. In PersonalTube choose **Local model → Ollama**.
+3. Copy the exact installed name into **Model ID**, for example `gemma4:e4b` only if that variant is already listed. A model file downloaded elsewhere is not automatically registered with Ollama.
+4. Choose **Use this model**, then **Test with one sample**. This changes the active analysis provider; it does not sign out of Codex or Claude.
+5. To return, choose **Subscription → Use Codex/Claude**.
+
+For LM Studio, load your model and start its local server on port 1234, then select LM Studio and its model ID. Model size, hardware, context and JSON support determine whether the test succeeds. PersonalTube does not install models. [Ollama's Gemma 4 listing](https://registry.ollama.com/library/gemma4) documents available variants; cloud variants are not local inference.
+
+## MiniMax and Kimi subscriptions
+
+These are **not direct PersonalTube subscription connectors**. Do not paste their subscription keys into OpenAI, Anthropic or OpenRouter fields: a credential belongs to its issuing service. Selecting a compatible model through OpenRouter uses OpenRouter billing, not an existing MiniMax/Kimi subscription.
+
+MiniMax's [plan documentation](https://platform.minimax.io/subscribe/token-plan) describes subscription keys for compatible tools, distinct from ordinary pay-as-you-go keys. Supporting that plan here would require a dedicated, verified connector with its own endpoint and account semantics; the present UI does not implement it.
+
+Kimi Code's [current usage guidelines](https://www.kimi.com/en/help/kimi-code/community-guidelines) distinguish interactive personal use from non-interactive scripted batches/data annotation. That makes it unsuitable to present as a drop-in subscription for this automatic comment-analysis flow without provider clarification. This is a product-support limitation, not a claim that Kimi models cannot analyze comments. Separately billed model API access is a different product.

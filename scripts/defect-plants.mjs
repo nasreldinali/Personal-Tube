@@ -4,6 +4,9 @@ import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const cases = [
+  { name: 'sample-test-selected-provider', file: 'server/provider-manager.js', from: "if (selected !== provider)", to: 'if (false)', test: 'test/provider-options.test.js' },
+  { name: 'sample-test-cooldown', file: 'server/provider-manager.js', from: 'now() - (lastTest[provider] ?? -Infinity) < 60000', to: 'false', test: 'test/provider-options.test.js' },
+  { name: 'local-cloud-tag-refusal', file: 'public/domain/analysis-providers.js', from: 'model)))', to: "'local')))" , test: 'test/analysis-providers.test.js' },
   { name: 'api-explicit-cost-consent', file: 'public/domain/analysis-providers.js', from: 'acknowledgeCost !== true', to: 'false', test: 'test/analysis-providers.test.js' },
   { name: 'api-status-secret-exclusion', file: 'server/api-analysis.js', from: 'model:config?.model', to: 'key:config?.key, model:config?.model', test: 'test/api-analysis.test.js' },
   { name: 'api-transport-redirect-refusal', file: 'server/analysis-request.js', from: "redirect:'error'", to: "redirect:'follow'", test: 'test/analysis-request.test.js' },

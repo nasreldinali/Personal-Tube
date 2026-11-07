@@ -2,6 +2,14 @@
 
 Reviewed: 2026-11-07.
 
+## Connection methods and live subscription checks (2026-11-07)
+
+MEASURED: 225 deterministic tests and 46 deliberate defects pass. Setup method navigation preserves the active provider, narrows service choices and clears unsent key fields. A deterministic full-path test drives the setup UI through same-origin HTTP into both subscription classifier adapters with controlled responses. Confirmed tests enforce selection, one-minute cooldown, account method and existing concurrency/evidence guards. Known Ollama cloud tags remain outside the local option.
+
+Live browser checks used the actual app's **Test with one sample** controls: Codex and Claude each recorded one attempted/completed analysis, zero failures and one input. Both remained connected through subscription authentication; all five API/local providers recorded zero attempts. The original Codex selection was restored. No login/logout, paid API call or YouTube request was made. This verifies one synthetic comment per account, not a full live YouTube search, future quota availability or first-ever login.
+
+The setup review found repeated information and competing subscription/model forms. The revised flow shows the chosen analysis provider, then three explicit methods; only the selected method's controls appear. YouTube requirements, local preparation and storage details are expandable. Arabic RTL at 390px had no horizontal overflow; returning from YouTube settings reopened setup. These are viewport/interaction checks, not complete accessibility certification. German and Spanish README introductions now accompany the English and Arabic guides; deeper technical documents remain English.
+
 ## Analysis connections and channel guidance (2026-11-07)
 
 MEASURED: 221 deterministic tests and all 43 deliberate defects pass through `npm run check`. New coverage exercises confirmed subscription logout, explicit API billing consent, memory-only configuration/removal, fixed destinations, redirect refusal, response/time bounds, exact evidence, no fallback, test cooldown and concurrent-operation refusal. The existing classification instructions were extracted unchanged for reuse by the new adapters. No runtime dependencies were added.

@@ -1,4 +1,4 @@
-import { byId as $ } from './dom.js';
+import { byId as $, element } from './dom.js';
 import { isLocalProvider, providerNames, apiProviderIds } from '../domain/analysis-providers.js';
 
 export function createApiConnections({ text, request, confirm }) {
@@ -44,5 +44,16 @@ export function createApiConnections({ text, request, confirm }) {
   $('api-forget').addEventListener('click', () => {
     const id=provider(); confirm('apiRemoveConfirm',()=>request('forget',id,{confirm:true}));
   });
-  return { render, clearSecret };
+  function setMethod(method) {
+    const ids = apiProviderIds.filter(id => isLocalProvider(id) === (method === 'local'));
+    const selected = ids.includes(provider()) ? provider() : ids[0];
+    clearSecret(); $('api-cost-consent').checked=false;
+    $('api-provider').replaceChildren(...ids.map(id => { const option=element('option','',providerNames[id]); option.value=id; return option; }));
+    $('api-provider').value=selected;
+    $('api-model').value=result?.providers[selected]?.model || '';
+    $('api-model').placeholder=method==='local'?'gemma4:e4b':'';
+    $('api-method-help').textContent=text(method==='local'?'localMethodHelp':'cloudMethodHelp');
+    render();
+  }
+  return { render, clearSecret, setMethod };
 }

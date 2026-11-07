@@ -1,4 +1,17 @@
 const entries = {
+  localSetupSteps: ["How to prepare a local model", "إزاي تجهّز النموذج المحلي؟", "Lokales Modell vorbereiten", "Cómo preparar un modelo local"],
+  activeAnalysis: ["Selected for analysis: {provider}", "المختار للتحليل: {provider}", "Für die Analyse gewählt: {provider}", "Seleccionado para analizar: {provider}"],
+  connectionMethod: ["Analysis connection method", "طريقة ربط التحليل", "Verbindung für die Analyse", "Método de conexión"],
+  methodSubscription: ["Subscription", "اشتراك", "Abonnement", "Suscripción"],
+  methodApi: ["Cloud API", "API سحابي", "Cloud-API", "API en la nube"],
+  methodLocal: ["Local model", "نموذج محلي", "Lokales Modell", "Modelo local"],
+  subscriptionMethodHelp: ["Uses your own eligible plan. Testing uses a small amount of your allowance, with no paid API fallback.", "بيستخدم اشتراكك المدعوم. الاختبار بيستهلك جزء صغير من حصتك، من غير تحويل لـAPI مدفوع.", "Nutzt deinen unterstützten Tarif. Der Test verbraucht etwas Kontingent, ohne Wechsel zu einer kostenpflichtigen API.", "Usa tu plan compatible. La prueba consume una pequeña parte de tu cuota, sin recurrir a una API de pago."],
+  cloudMethodHelp: ["Use an API key from the chosen service. API billing is separate from chat subscriptions.", "استخدم مفتاح من الخدمة اللي تختارها. فاتورة API منفصلة عن اشتراكات الدردشة.", "API-Schlüssel des gewählten Dienstes verwenden. API-Kosten sind getrennt vom Chat-Abonnement.", "Usa una clave del servicio elegido. La facturación de API es independiente de las suscripciones de chat."],
+  localMethodHelp: ["Run a model you already have on this computer. No cloud key is needed.", "شغّل نموذج موجود على جهازك. مش محتاج مفتاح خدمة سحابية.", "Ein vorhandenes Modell auf diesem Computer nutzen. Kein Cloud-Schlüssel nötig.", "Usa un modelo que ya tengas en este equipo. No necesitas clave de la nube."],
+  connectionStorage: ["Storage and shared settings", "حفظ البيانات والإعدادات المشتركة", "Speicherung und gemeinsame Einstellungen", "Almacenamiento y ajustes compartidos"],
+  analysisTesting: ["Analyzing one sample… This can take up to two minutes.", "جاري تحليل عينة واحدة… ممكن يستغرق لحد دقيقتين.", "Ein Beispiel wird analysiert… Das kann bis zu zwei Minuten dauern.", "Analizando una muestra… Puede tardar hasta dos minutos."],
+  subscriptionTestConfirm: ["Analyze one synthetic comment with the selected subscription? This uses your plan allowance. No paid API or YouTube request is made, and you stay signed in.", "نحلّل تعليق تجريبي واحد بالاشتراك المختار؟ ده بيستهلك من حصة اشتراكك. مفيش API مدفوع أو طلب ليوتيوب، وهتفضل مسجّل دخول.", "Einen Beispielkommentar mit dem gewählten Abonnement analysieren? Nutzt dein Kontingent, ohne kostenpflichtige API oder YouTube-Anfrage. Du bleibst angemeldet.", "¿Analizar un comentario ficticio con la suscripción elegida? Usa tu cuota, sin API de pago ni petición a YouTube. No se cierra tu sesión."],
+
   apiConnections: ['API or local model', 'API أو نموذج محلي', 'API oder lokales Modell', 'API o modelo local'],
   apiConnectionsIntro: ['Use a cloud API key or a model running on this computer.', 'استخدم مفتاح خدمة سحابية أو نموذج شغّال على الجهاز ده.', 'Cloud-API-Schlüssel oder ein Modell auf diesem Computer verwenden.', 'Usa una clave de API en la nube o un modelo en este equipo.'],
   apiProvider: ['Service', 'الخدمة', 'Dienst', 'Servicio'],

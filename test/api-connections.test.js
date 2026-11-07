@@ -13,3 +13,12 @@ test('API form sends explicit consent and clears secrets on submit, provider cha
   n('analysis-key').value='third-secret';ui.clearSecret();assert.equal(n('analysis-key').value,'');
  } finally {globalThis.document=before;}
 });
+test('changing method clears credentials and limits the provider list without a network request',()=>{
+ const before=globalThis.document,f=setupDocumentFixture();globalThis.document=f.document;const calls=[];
+ try {
+  const n=id=>f.document.getElementById(id),ui=createApiConnections({text:key=>key,request:(...args)=>calls.push(args),confirm(){}});
+  n('api-provider').value='openai';n('analysis-key').value='fixture';n('api-cost-consent').checked=true;
+  ui.setMethod('local');assert.equal(n('api-provider').value,'ollama');assert.deepEqual(n('api-provider').children.map(x=>x.value),['ollama','lmstudio']);assert.equal(n('analysis-key').value,'');assert.equal(n('api-cost-consent').checked,false);assert.equal(n('api-key-field').hidden,true);
+  ui.setMethod('api');assert.deepEqual(n('api-provider').children.map(x=>x.value),['openai','anthropic','openrouter']);assert.equal(calls.length,0);
+ }finally{globalThis.document=before;}
+});

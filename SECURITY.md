@@ -12,7 +12,7 @@ Report a suspected vulnerability privately to the repository owner through an ex
 
 ## Verification and limitations
 
-`npm run check` includes security-focused validation and 43 deliberately introduced defects in isolated scratch copies. The review target is applicable OWASP ASVS Level 1 controls for this local architecture, not formal certification. No guarantee of complete vulnerability or secret detection is made. Live-key API behavior and Premium playback require separate manual verification.
+`npm run check` includes security-focused validation and 46 deliberately introduced defects in isolated scratch copies. The review target is applicable OWASP ASVS Level 1 controls for this local architecture, not formal certification. No guarantee of complete vulnerability or secret detection is made. Live-key API behavior and Premium playback require separate manual verification.
 
 Before changing repository visibility, review all reachable history, author metadata, branches, tags, attachments and artifacts, plus data and brand licensing. Removing a file in a later commit does not remove earlier copies. History rewrites require explicit owner approval and coordination with existing clones.
 
@@ -33,3 +33,5 @@ Live community recommendations require multiple distinct known endorsing account
 The contribution workflow runs untrusted pull-request code only on GitHub-hosted runners, with a read-only contents token, no persisted checkout credentials, no repository secrets, pinned official actions and a ten-minute job limit. It does not use pull_request_target or a self-hosted runner. Two deliberate-defect checks verify token and checkout restrictions. Action updates must retain those boundaries. This is not network isolation or a full supply-chain certification.
 
 Cloud analysis keys live only in server memory, never browser persistence, backups, status responses or logs. Requests refuse redirects and enforce a two-minute deadline, a 1 MB response limit and an 8,192-token output cap. Cloud configuration requires explicit billing acknowledgement. Confirmed test/logout/forget actions serialize with active analysis and login. Local connectors use fixed loopback endpoints; the user controls whether the separate model server forwards requests. Synthetic tests and six new deliberate defects verify consent, secret exclusion, transport limits, logout confirmation and output evidence. Actual provider/account compatibility needs a user-initiated test.
+
+Subscription sample tests use the same fixed, subscription-only classifier path as ordinary analysis. Confirmation, selected-provider identity and per-provider cooldown are enforced server-side; three additional defect plants cover test selection, cooldown and known Ollama cloud-tag refusal. Navigation among setup methods performs no provider mutation or analysis and clears an unsent key field.

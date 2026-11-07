@@ -8,5 +8,6 @@ test('API configuration requires an explicit provider, model, secret and cloud c
  for(const provider of ['ollama','lmstudio'])assert.equal(validateApiConfiguration({...base,provider,key:'',acknowledgeCost:false}).key,'');
  assert.throws(()=>validateApiConfiguration({...base,provider:'ollama',key:''}));
  assert.throws(()=>validateApiConfiguration({...base,provider:'ollama',model:'fixture:cloud',key:'',acknowledgeCost:false}));
+ assert.throws(()=>validateApiConfiguration({...base,provider:'ollama',model:'gemma4:31b-cloud',key:'',acknowledgeCost:false}));
  assert.deepEqual(apiProviderIds,['openai','anthropic','openrouter','ollama','lmstudio']);
 });

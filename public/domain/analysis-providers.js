@@ -11,7 +11,7 @@ export function validateApiConfiguration(value) {
   if (typeof model !== 'string' || !/^[a-zA-Z0-9][a-zA-Z0-9._:/-]{0,199}$/.test(model)) throw new AppError('analysisModelRequired');
   if (typeof key !== 'string' || key.length > 2048 || (key && !/^[\x21-\x7e]+$/.test(key))) throw new AppError('analysisKeyRequired');
   if (isLocalProvider(provider)) {
-    if (key || acknowledgeCost !== false || (provider === 'ollama' && /:cloud$/i.test(model))) throw new AppError('invalidSetup');
+    if (key || acknowledgeCost !== false || (provider === 'ollama' && /(?:[:-])cloud$/i.test(model))) throw new AppError('invalidSetup');
   } else if (!key) throw new AppError('analysisKeyRequired');
   else if (acknowledgeCost !== true) throw new AppError('analysisCostRequired');
   return { provider, model, key, acknowledgeCost };

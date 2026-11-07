@@ -1,11 +1,10 @@
 /* Connections: two clear choices, with supporting detail available on demand. */
-#setup-dialog { width:min(680px,calc(100vw - 28px)); padding:0; max-height:90dvh; }
+#setup-dialog { width:min(760px,calc(100vw - 28px)); padding:0; max-height:90dvh; }
 #setup-dialog[open] { display:flex; flex-direction:column; overflow:hidden; }
 #setup-dialog .dialog-header { padding:24px 28px 16px; margin:0; flex-shrink:0; align-items:center; }
 #setup-dialog h2 { font-size:23px; margin:0; }
 .setup-eyebrow { font:700 10px var(--deeda-font-body); letter-spacing:.16em; color:var(--muted); margin:0 0 8px; }
 .setup-body { padding:0 28px 12px; overflow-y:auto; min-height:0; overscroll-behavior:contain; }
-.setup-intro { font-size:13px; color:var(--muted); margin:0 0 20px; }
 #setup-dialog h3 { font-size:15px; margin:0 0 6px; }
 #setup-dialog .help { font-size:12px; line-height:1.7; margin:6px 0 12px; }
 .connection-row { display:flex; align-items:center; gap:18px; justify-content:space-between; padding:16px; border:1px solid var(--line); border-radius:12px; margin-bottom:22px; }
@@ -44,7 +43,6 @@
 }
 
 .provider-logout { align-self:flex-start; margin-top:6px; }
-.api-connections { margin-top:18px; }
 .api-model-fields { display:grid; grid-template-columns:1fr 1fr; gap:12px; margin-top:14px; }
 .api-model-fields .d-field { min-width:0; }
 .api-consent { align-items:start; margin-block:14px; font-size:12px; line-height:1.6; }
@@ -52,3 +50,25 @@
 .api-connections .d-btn { font-size:12px; min-height:40px; padding:8px 14px; }
 #api-state { overflow-wrap:anywhere; }
 @media(max-width:480px) { .api-model-fields { grid-template-columns:1fr; } }
+
+/* Keep account choice and its next action together. */
+.setup-active { margin:0 0 16px; padding:10px 14px; border-inline-start:3px solid var(--primary); background:var(--blue-soft); border-radius:6px; font-size:13px; font-weight:700; }
+.setup-youtube-details { margin-bottom:12px; }
+.setup-youtube-details summary { display:list-item; }
+.setup-youtube-details summary .connection-badge { float:inline-end; margin-inline-start:12px; }
+.setup-youtube-details .connection-row { margin:10px 0; }
+.connection-methods { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:4px; padding:4px; margin:14px 0 18px; border:1px solid var(--line); border-radius:12px; background:var(--bg); }
+.connection-methods button { min-width:0; min-height:42px; padding:8px; background:transparent; border:1px solid transparent; border-radius:8px; color:var(--muted); font:600 12px var(--deeda-font-body); cursor:pointer; }
+.connection-methods button[aria-pressed=true] { background:var(--surface); color:var(--ink); border-color:var(--primary); }
+.connection-methods button:focus-visible { outline:2px solid var(--focus); outline-offset:2px; }
+.provider-secondary { display:flex; justify-content:space-between; flex-wrap:wrap; gap:4px 12px; margin-top:8px; }
+.provider-secondary .provider-logout { margin:0; }
+.provider-secondary .text-button { padding-inline:0; }
+.api-connections { margin-top:0; padding:16px; border:1px solid var(--line); border-radius:12px; }
+.connection-storage { margin-top:12px; }
+#setup-dialog .api-connections .d-input, #setup-dialog .api-connections .d-select { font-size:13px; min-height:42px; }
+@media(max-width:480px) {
+  .connection-methods button { font-size:11px; padding:6px 3px; }
+  .api-connections { padding:12px; }
+  .setup-active { font-size:12px; }
+}

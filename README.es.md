@@ -1,0 +1,63 @@
+# PersonalTube
+
+**Tus canales, recomendaciones de comunidades y una biblioteca de vídeos que tú controlas.**
+
+[English](README.md) · [العربية](README.ar.md) · [Deutsch](README.de.md) · **Español**
+
+PersonalTube es un panel local de YouTube basado en la [idea de HackerTube de Andrej Karpathy](https://karpathy.bearblog.dev/hacker-tube/) y su colección exportada. Utiliza el catálogo, no el código original de la aplicación HackerTube. Esta introducción está en español; las guías técnicas detalladas están principalmente en inglés.
+
+![Tus canales en PersonalTube](docs/images/my-channels-en-light.jpg)
+
+*Selección ilustrativa de vídeos de distintas fechas. El uso normal muestra el periodo elegido de 1–7 días.*
+
+## Empezar
+
+1. Instala [Node.js 22 o 24](https://nodejs.org/en/download) con npm.
+2. Descarga el repositorio con **Code → Download ZIP** y descomprímelo. Un repositorio privado requiere permiso de acceso. También puedes usar:
+
+```sh
+git clone https://github.com/nasreldinali/Personal-Tube.git
+cd Personal-Tube
+```
+
+3. Abre una terminal en la carpeta del proyecto y ejecuta:
+
+```sh
+npm start
+```
+
+4. Abre [http://127.0.0.1:4173](http://127.0.0.1:4173) en el navegador. Mantén abierta la terminal; usa **Ctrl+C** para detenerlo.
+
+No requiere `npm install`, compilación ni base de datos. No abras `index.html` directamente. La interfaz se adapta a pantallas pequeñas, pero el servidor local solo es accesible desde el mismo equipo.
+
+## ¿Qué puedes hacer?
+
+- Explorar la biblioteca incluida de HackerTube, guardar vídeos y reproducir los disponibles sin una cuenta de análisis.
+- Añadir tus canales y filtrar por categoría, canal, fecha, vídeos o Shorts estimados.
+- Recopilar comentarios sobre un tema de fuentes compatibles y analizarlos automáticamente; ver recomendaciones con citas que las respaldan.
+- Elegir actualización manual o programada y consultar una estimación del uso de YouTube API.
+- Usar inglés, árabe, alemán o español y apariencia clara, oscura o del sistema. Los títulos y citas conservan su idioma; las categorías del catálogo están actualmente en inglés/árabe.
+
+## Conexiones y costes
+
+| Función | Requisito |
+|---|---|
+| Biblioteca incluida | Node.js y navegador |
+| Nuevos datos de canales y búsqueda en directo | Tu propia clave de YouTube Data API |
+| Análisis con suscripción | CLI compatible de Codex o Claude Code y tu cuenta elegible |
+| Análisis en la nube | Tu clave de OpenAI, Anthropic u OpenRouter y un ID de modelo compatible |
+| Análisis local | Ollama o LM Studio ejecutándose con un modelo local adecuado |
+
+En **Setup & connections**, elige suscripción, API en la nube o modelo local. Cambiar de sección no cambia por sí solo el servicio activo. **Probar con una muestra** comprueba la conexión seleccionada tras confirmarlo.
+
+YouTube Data API es gratuita dentro de sus cuotas. Actualizar datos, buscar y obtener metadatos consume cuota; reproducir el vídeo no. El contador es una estimación del navegador, no el saldo oficial. El análisis puede consumir cuota de una suscripción o generar costes de API independientes. Los modelos locales requieren tu propio hardware. Nadie utiliza el crédito del propietario del proyecto y no hay cambio automático a una API de pago.
+
+Las claves de análisis solo permanecen en la memoria del servidor local. Al reiniciarlo se eliminan esas conexiones. Las claves de YouTube se guardan por defecto en la sesión del navegador; recordarlas de forma persistente es opcional. Las copias de seguridad no incluyen claves.
+
+[Guía de conexiones](docs/ANALYSIS_PROVIDERS.md) · [Manual de uso](docs/USER_GUIDE.md) · [Pruebas](docs/VERIFICATION.md) · [Contribuir](CONTRIBUTING.md)
+
+## Límites y licencia
+
+El análisis automático puede equivocarse. Los Shorts se estiman por duración. YouTube Premium no está garantizado dentro del reproductor integrado. El servidor es para un usuario local y no debe publicarse en internet sin un diseño de seguridad adicional.
+
+Código y documentación de PersonalTube: [MIT](LICENSE). El catálogo HackerTube/open-index conserva sus condiciones ODC-By 1.0; las fuentes y la marca DEEDA tienen avisos propios. Consulta [NOTICE](NOTICE.md). PersonalTube es independiente y no es un producto oficial de Karpathy ni de YouTube.
