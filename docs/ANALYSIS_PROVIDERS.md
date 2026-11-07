@@ -2,7 +2,7 @@
 
 [Setup guide](ANALYSIS_SETUP.md) · [README](../README.md)
 
-PersonalTube supports two subscription CLIs, a direct MiniMax M Plan connection, seven cloud API services and three local model connection types. Choose one explicitly in **Connections**. It never changes services to work around an error or an exhausted allowance.
+PersonalTube supports two subscription CLIs, a direct MiniMax M Plan connection, seven cloud API services and three local model connection types. Choose one explicitly in **Connections**. The **Subscription → Find my account or subscription** guide helps new users identify the correct route without logging in or switching their active connection. It never changes services to work around an error or an exhausted allowance.
 
 | Connection | What you supply | Where analysis runs | Billing |
 |---|---|---|---|

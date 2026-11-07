@@ -358,6 +358,17 @@
         <div class="setup-body">
           <div id="connection-analysis-intro"><h3 data-i18n="analysisAccount"></h3><p class="help" data-i18n="connectionCenterIntro"></p></div>
           <section id="subscription-connections">
+          <details id="subscription-guide" class="setup-details subscription-guide">
+            <summary data-i18n="findAccount"></summary>
+            <label class="d-field"><span data-i18n="guideAccount"></span><select id="subscription-account" class="d-select" aria-describedby="subscription-guide-copy"></select></label>
+            <p id="subscription-guide-copy" class="help" role="status"></p>
+            <a id="subscription-guide-source" href="https://antigravity.google/docs/faq/" target="_blank" rel="noopener noreferrer" data-i18n="guideSource" hidden></a>
+            <div class="api-connection-actions">
+              <button type="button" id="subscription-guide-action" class="d-btn d-btn-secondary" data-i18n="guideControls" hidden></button>
+              <button type="button" id="subscription-guide-api" class="text-button" data-i18n="guideApi" hidden></button>
+              <button type="button" id="subscription-guide-local" class="text-button" data-i18n="guideLocal" hidden></button>
+            </div>
+          </details>
           <div id="setup-provider" class="provider-grid">
             <article class="provider-card" id="setup-card-codex">
               <div class="provider-heading"><h4>Codex</h4><span id="setup-badge-codex" class="connection-badge"></span></div>

@@ -71,3 +71,8 @@
   .setup-footer { padding:12px 18px; }
   .connection-row { flex-wrap:wrap; }
 }
+
+.subscription-guide { margin-top:16px; border-top:0; border-bottom:1px solid var(--line); }
+.subscription-guide .d-field { margin-top:12px; }
+.subscription-guide .d-btn { font-size:13px; min-height:42px; padding:8px 16px; }
+.subscription-guide .api-connection-actions { margin-top:8px; }

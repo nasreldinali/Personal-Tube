@@ -1,5 +1,11 @@
 # Verification
 
+## Account finder for new users — 2026-11-07
+
+MEASURED: full check passes **241 deterministic tests and 58 deliberate-defect checks**. RED-first interaction tests cover explicit-only navigation, supported account controls, unknown choice refusal and no automatic provider selection. The optional finder explains Codex, Claude, MiniMax, Google, Copilot, Kimi and other accounts in all four interface languages; named guidance is not a claim of seven subscription integrations.
+
+MEASURED: isolated browser fixture verified Google guidance → Gemini API form with empty key and unchecked cost consent, Codex still selected, and Claude guidance → existing controls without login or selection. Arabic mobile at 390×844 had no horizontal content overflow; console warnings/errors were empty. No model request, authentication change or paid API call. Google consumer Antigravity guidance was corrected against its current official FAQ. This adds onboarding guidance, not a new Google subscription adapter.
+
 ## Connection center and broader model support — 2026-11-07
 
 MEASURED: the complete check passes **239 deterministic tests and 58 deliberate-defect checks**, including syntax, formatting, import/layer and asset integrity gates. New coverage includes four fixed cloud API protocols, explicit local-only GET discovery, port/list limits, strict configuration fields, stale-result refusal, an origin-guarded full HTTP flow and returning from YouTube settings to its connection section, and reopening the active model configuration. Existing tests and defect checks remain.

@@ -1,3 +1,4 @@
+import { createSubscriptionGuide } from './subscription-guide.js';
 import { createMiniMaxConnection } from './minimax-connection.js';
 import { createConnectionMethod } from './connection-method.js';
 import { createApiConnections } from './api-connections.js';
@@ -22,6 +23,7 @@ export function createSetupPanel({ context, finish, openYouTube, onError, schedu
   const minimaxPanel = createMiniMaxConnection({text,request,confirm});
   const clearSecrets = () => { apiPanel.clearSecret(); minimaxPanel.clearSecret(); };
   const methods = createConnectionMethod({setMethod:apiPanel.setMethod,clearSecret:clearSecrets});
+  const accountGuide = createSubscriptionGuide({text,showMethod:methods.show});
   function stopPolling() { if (timer !== null) cancel(timer); timer = null; }
   function render() {
     $('setup-check').disabled = running;
@@ -53,6 +55,7 @@ export function createSetupPanel({ context, finish, openYouTube, onError, schedu
     apiPanel.render(result, connectionBusy);
     minimaxPanel.render(result, connectionBusy);
     methods.render(result?.selected);
+    accountGuide.render();
     if (result) for (const provider of providerIds.filter(p=>result.usage[p])) {
       const usage = result.usage[provider];
       $('setup-usage').append(element('p', '', `${name(provider)} · ${text('usageCounts', Object.fromEntries(Object.entries(usage).map(([key, value]) => [key, number(context().language, value)])))}`));

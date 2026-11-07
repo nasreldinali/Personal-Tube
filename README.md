@@ -117,9 +117,9 @@ For live features, open **Connections**. Create a key with **YouTube Data API v3
 | A wider choice of hosted closed/open-weight models | OpenRouter | Its API key and a compatible model ID |
 | Running an LLM or smaller SLM on your computer | Ollama, LM Studio or OpenAI-compatible · Local | Local server, suitable model and hardware; discover available model IDs from the app |
 
-Connections now has five separate sections: **Subscription, Cloud API, Local model, YouTube, Usage & help**. The active analysis service stays visible. MiniMax is optional under **Add another subscription**; no MiniMax account is required.
+Connections now has five separate sections: **Subscription, Cloud API, Local model, YouTube, Usage & help**. The active analysis service stays visible. **Subscription → Find my account or subscription** explains the route for your existing account without switching providers or making a request. MiniMax is optional under **Add another subscription**; no MiniMax account is required.
 
-**Not every chat subscription is an integration.** Gemini CLI and Copilot are not integrated; Kimi Code is not offered for this automated batch flow. API access is separate. See the [connection compatibility catalog](docs/CONNECTION_CATALOG.md).
+**Not every chat subscription is an integration.** Google does not support consumer Antigravity login pass-through in third-party apps, and Copilot is not integrated; Kimi Code is not offered for this automated batch flow. API access is separate. See the [connection compatibility catalog](docs/CONNECTION_CATALOG.md).
 
 MiniMax has a separate **save → test → use** flow. Saving/testing keeps your selected provider and Codex/Claude logins unchanged. It accepts M Plan keys only, without pay-as-you-go fallback; MiniMax may consume existing credit packs after plan quota. Actual MiniMax account compatibility still needs your explicit sample test.
 

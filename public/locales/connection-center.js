@@ -30,10 +30,10 @@ const entries = {
     "¿Dónde está mi otra suscripción?"
   ],
   "subscriptionCompatibility": [
-    "Subscriptions need a supported official connection. Gemini CLI and Copilot subscriptions are not integrated here yet; Kimi Code is not offered for automatic comment batches. API access has separate billing. See supported routes before adding a key.",
-    "كل اشتراك محتاج طريقة ربط رسمية مدعومة. اشتراكات Gemini CLI وCopilot لسه مش مدمجة هنا، وKimi Code مش متاح لدفعات تحليل التعليقات التلقائية. الـAPI بفواتير منفصلة. راجع الطرق المدعومة قبل إضافة مفتاح.",
-    "Abonnements benötigen eine unterstützte offizielle Anbindung. Gemini CLI und Copilot sind hier noch nicht integriert; Kimi Code wird nicht für automatische Kommentarstapel angeboten. APIs haben separate Abrechnung. Prüfe zuerst die unterstützten Wege.",
-    "Cada suscripción necesita una conexión oficial compatible. Gemini CLI y Copilot aún no están integrados; Kimi Code no se ofrece para lotes automáticos de comentarios. Las API tienen facturación separada. Revisa las vías compatibles antes de añadir una clave."
+    "Subscriptions need a supported official connection. Google consumer Antigravity login is not supported in third-party apps; Copilot is not integrated here yet; Kimi Code is not offered for automatic comment batches. API access has separate billing. See supported routes before adding a key.",
+    "كل اشتراك محتاج طريقة ربط رسمية مدعومة. دخول Antigravity الشخصي مش مدعوم للتطبيقات الخارجية، وCopilot لسه مش مدمج هنا، وKimi Code مش متاح لدفعات تحليل التعليقات التلقائية. الـAPI بفواتير منفصلة. راجع الطرق المدعومة قبل إضافة مفتاح.",
+    "Abonnements benötigen eine unterstützte offizielle Anbindung. Googles private Antigravity-Anmeldung wird in Drittanbieter-Apps nicht unterstützt; Copilot ist hier noch nicht integriert; Kimi Code wird nicht für automatische Kommentarstapel angeboten. APIs haben separate Abrechnung. Prüfe zuerst die unterstützten Wege.",
+    "Cada suscripción necesita una conexión oficial compatible. Google no admite su sesión personal de Antigravity en apps externas; Copilot aún no está integrado; Kimi Code no se ofrece para lotes automáticos de comentarios. Las API tienen facturación separada. Revisa las vías compatibles antes de añadir una clave."
   ],
   "connectionCatalog": [
     "View connection compatibility",
