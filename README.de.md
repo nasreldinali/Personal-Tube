@@ -35,6 +35,8 @@ npm start
 
 Kein `npm install`, Build oder Datenbankserver ist erforderlich. `index.html` nicht direkt öffnen. Die Oberfläche passt sich kleinen Bildschirmen an; der lokale Server ist jedoch nur auf demselben Computer erreichbar.
 
+**macOS-Desktopsymbol:** Einmal `npm run desktop:install` ausführen. Danach **PersonalTube.app** auf dem Schreibtisch doppelt anklicken oder für einen Klick ins Dock ziehen. Die App öffnet eine laufende PersonalTube-Instanz oder startet den Server ohne Terminal im Hintergrund. Projektordner und Node.js am bisherigen Ort behalten. [Details](docs/DESKTOP_LAUNCHER.md).
+
 ## Was ist möglich?
 
 - Die enthaltene HackerTube-Bibliothek durchsuchen, Videos speichern und verfügbare Videos abspielen – ohne Analyse-Konto.

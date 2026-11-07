@@ -8,6 +8,7 @@
     "start": "node server.mjs",
     "test": "node --test test/*.test.js",
     "open": "node scripts/start.mjs",
+    "desktop:install": "node scripts/install-desktop.mjs",
     "check": "node scripts/check.mjs"
   },
   "engines": {

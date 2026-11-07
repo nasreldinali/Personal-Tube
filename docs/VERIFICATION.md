@@ -1,5 +1,11 @@
 # Verification
 
+## macOS desktop launcher — 2026-11-07
+
+MEASURED: **276 deterministic tests and 77 deliberate-defect checks** pass. Launcher tests cover running-instance reuse, readiness before opening, unknown-service refusal, bounded timeout, child failures, browser failures and literal shell argument handling. A command-path test executes the generated launcher against a local fixture without network or browser access. Three added defect plants prove conflicting-listener refusal, cleanup of only the newly created process, and command quoting are enforced.
+
+MEASURED: the installed named desktop app opened successfully and reused the existing listener without changing its process. A separate scratch copy cold-started the real server on an isolated loopback port; it survived launcher exit and a second invocation reused the same listener. The browser command was stubbed only in that scratch run; opening the installed app exercised the real browser path. The test stopped only its isolated server. Reinstallation refused the existing desktop app. No account selection, credentials, browser data, login items or existing server lifecycle changed. This is a local macOS installation check, not a signed/notarized desktop release or a first-use OS-permission test on a clean machine.
+
 ## Apache 2.0 license transition — 2026-11-07
 
 MEASURED: LICENSE matches the official Apache License 2.0 text byte-for-byte (SHA-256 `cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30`). Package metadata uses `Apache-2.0`; all four README entry points and contribution terms agree. NOTICE retains the existing application copyright and Karpathy/HackerTube, data, font and brand credits. NOTICE.md describes the separate licensing boundaries. The previous MIT notice is preserved verbatim in `docs/licenses/MIT-legacy.txt` (SHA-256 `98f855fd22d8f350018282825eae6bce25797efefe28a7de7e552b3233e5f63e`); earlier distribution rights are not withdrawn. Historical delivery records explicitly identify their MIT references as historical.

@@ -4,6 +4,9 @@ import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const cases = [
+  { name: 'desktop-refuses-foreign-listener', file: 'scripts/desktop-launch.mjs', from: "decision === 'refuse'", to: 'false', test: 'test/desktop-launch.test.js' },
+  { name: 'desktop-stops-only-new-child', file: 'scripts/desktop-launch.mjs', from: 'server.stop();', to: '', test: 'test/desktop-launch.test.js' },
+  { name: 'desktop-literal-shell-arguments', file: 'scripts/desktop-app-source.mjs', from: 'return `\'', to: 'return `${value}`; return `\'', test: 'test/desktop-app-source.test.js' },
   { name: 'youtube-support-before-popularity', file: 'public/services/recommendations.js', from: "Number(a.evidence.support === 'limited') - Number(b.evidence.support === 'limited') || ", to: '', test: 'test/youtube-analysis-flow.test.js' },
   { name: 'youtube-limited-evidence-refusal', file: 'public/domain/youtube-evidence.js', from: 'video.evidence.positive >= 1 && video.evidence.positive > video.evidence.critical', to: 'video.evidence.positive >= 0', test: 'test/youtube-evidence.test.js' },
   { name: 'youtube-resource-response-bound', file: 'public/data/youtube.js', from: "resource === 'commentThreads' ? 100 : 50", to: '100', test: 'test/youtube.test.js' },

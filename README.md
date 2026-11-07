@@ -88,6 +88,8 @@ Open **[http://127.0.0.1:4173](http://127.0.0.1:4173)** and keep that terminal o
 
 Optional: `npm run open` starts the server and opens a browser; on macOS it tries Chrome. macOS also has **Start PersonalTube.command**. Do not open `index.html` directly.
 
+**macOS desktop shortcut:** run `npm run desktop:install` once to create **PersonalTube.app** on your Desktop. Afterwards, double-click the icon (or drag it to the Dock for one-click opening). It opens an existing verified PersonalTube instance, or starts the local server in the background and opens the browser without Terminal. It does not start at login or change account connections. Keep Node.js and the project folder installed. [Desktop launcher details](docs/DESKTOP_LAUNCHER.md).
+
 If the terminal says **port 4173 is already in use**, first open the address above: PersonalTube may already be running. Otherwise stop the conflicting local server before retrying. If `npm` is not found, install Node with npm and reopen the terminal; if `package.json` is not found, open the terminal in the extracted project folder.
 
 See [current verification](docs/VERIFICATION.md) and the [earlier clean-download/account checks](docs/FIRST_RUN_VERIFICATION.md), including the limits of first-time login testing.
