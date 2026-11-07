@@ -13,6 +13,8 @@ PersonalTube ist ein lokales YouTube-Dashboard auf Grundlage von Andrej Karpathy
 
 YouTube-Empfehlungen prüfen jetzt das konkrete Suchthema und das gewünschte Niveau anhand begrenzter öffentlicher Videobeschreibungen und Kommentare. Pauschales Lob und nur benachbarte Themen reichen nicht: erforderlich sind konkrete Lernbelege oder begründete, themenbezogene Sehempfehlungen. Mindestens zwei positive Kommentare und mehr Zustimmung als Kritik bleiben nötig. Weniger oder keine Ergebnisse sind möglich; Modellurteile können falsch sein. [Regeln und Prüfungen](docs/YOUTUBE_ANALYSIS.md).
 
+**Live-Prüfung (7. November 2026):** Codex und Claude analysierten über die App jeweils 157 neu abgerufene Kommentare. Codex zeigte 3 themenbezogene Ergebnisse, Claude 2. Die geprüften Belege nennen konkrete Konzepte; ein einzelnes Thema belegt keine allgemeine Genauigkeit. Bestehende Anmeldungen blieben erhalten, keine kostenpflichtige API wurde genutzt. [Ergebnisse und Grenzen](docs/VERIFICATION.md).
+
 ## Starten
 
 1. [Node.js 22 oder 24](https://nodejs.org/en/download) mit npm installieren.

@@ -13,6 +13,8 @@ PersonalTube es un panel local de YouTube basado en la [idea de HackerTube de An
 
 Las recomendaciones de YouTube comprueban ahora el tema y el nivel solicitados usando contexto público limitado del vídeo y comentarios. Los elogios genéricos y los temas solo relacionados no bastan: se exigen beneficios de aprendizaje concretos o recomendaciones justificadas sobre el tema. Siguen siendo necesarios al menos dos comentarios positivos y más apoyo que críticas. Puede haber menos resultados o ninguno; el modelo puede equivocarse. [Reglas y comprobaciones](docs/YOUTUBE_ANALYSIS.md).
 
+**Prueba real (7 de noviembre de 2026):** Codex y Claude analizaron cada uno 157 comentarios recién obtenidos desde la aplicación. Codex mostró 3 resultados relacionados con el tema y Claude 2. Las citas revisadas mencionan conceptos concretos; un solo tema no demuestra precisión general. Se conservaron las sesiones y no se usó ninguna API de pago. [Resultados y límites](docs/VERIFICATION.md).
+
 ## Empezar
 
 1. Instala [Node.js 22 o 24](https://nodejs.org/en/download) con npm.

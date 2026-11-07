@@ -1,5 +1,20 @@
 # Verification
 
+## Fresh YouTube search with both subscriptions — 2026-11-07
+
+MEASURED on application revision `cbb6fb5`: two new searches were submitted through the actual Recommendations page, selecting Codex and then Claude in Connections. Query: `large language models introduction`; declared English audio; minimum 100,000 views and 1,000 likes; popularity order by views. Each search inspected 50 candidates and analyzed **157 newly retrieved comments across 8 videos**, with comments unavailable for 0. This completes the fresh-browser check that was pending during the replay below. The key was entered by the user directly in the app, never extracted or copied into evidence.
+
+| Provider | Displayed results | Positive counts on displayed videos |
+|---|---:|---|
+| Codex | 3 | Transformers: 6/19; Karpathy LLM deep dive: 2/20; LLMs explained briefly: 6/20 |
+| Claude | 2 | Transformers: 5/19; LLMs explained briefly: 6/20 |
+
+MEASURED: both displayed the two 3Blue1Brown explanations, while Codex also displayed Karpathy's *Deep Dive into LLMs like ChatGPT*. The prior general AI overview, RAG tutorial and agent-course candidates did not appear. Reviewed every displayed evidence excerpt (up to five per video): they identify embeddings, vector arithmetic, transformer computation, attention, token prediction, training data, RLHF or hallucinations/post-training. The previously observed bare engagement/clarity/foundation and color-choice praise did not appear as standalone proof. The two providers disagreed on some positive/critical classifications, including 2 versus 0 critical comments for the brief LLM explainer. Searches fetched independently and public statistics changed, so byte-identical samples are not claimed.
+
+INFERRED: these results better match the requested subject and provide more specific evidence than the earlier seven-result run. Some concept-specific appreciation remains weaker than an explicit viewing recommendation. This single English-topic check, source titles/context and sampled excerpts do not establish overall accuracy, authenticity, best-provider status or a full review of the videos. Strict evidence can exclude relevant videos; a title mentioning a concept is not itself proof of quality.
+
+MEASURED: after both runs, each account showed 2 completed calls, 0 failed and 199 inputs in the current server session: the previous 42-excerpt replay plus the new 157-comment search. Both subscription accounts remained connected; Codex was restored as selected. All cloud API counters stayed zero. No logout, paid API, fallback or application-code change occurred during this follow-up. YouTube quota and subscription allowances were used. Browser warning/error capture contained zero entries. Private raw result/quote records and the verification screenshot remain ignored locally; no key or account identifier was published.
+
 ## Topic-aware YouTube recommendations — 2026-11-07
 
 MEASURED: **259 deterministic tests and 69 deliberate-defect checks** pass. New regressions cover mandatory topic/version/context fields, redaction, description bounds, end-to-end search-to-classifier topic delivery, and the stricter multilingual evidence policy. RED failures showed the previous request omitted the topic and used version 1. Three added defects (dropped topic, missing-topic acceptance and missing description bound) are detected. No dependency was added.
@@ -10,7 +25,7 @@ An initial policy run still accepted two overly general displayed extracts. Afte
 
 Both accounts completed one 42-input run with zero failures on the final server session, remained connected, and Codex was restored as selected. All cloud API counters remained zero. One earlier 42-input iteration per account also consumed subscription allowance before the stricter final run; no paid API or logout was used in either iteration. Counters reset when the local server restarts.
 
-LIMIT: the old browser tab containing the session-only YouTube key became inaccessible to automation. The updated UI was loaded and its new disclosure verified with no browser warnings/errors, but a fresh end-to-end YouTube search on this revision remains pending direct key entry in the new tab. Deterministic full-flow tests and real subscription replay cover different parts of the path and must not be described as that missing fresh browser search. Semantic decisions remain fallible; the policy deliberately favors fewer results over vague evidence.
+REPLAY LIMIT: this earlier check reused saved excerpts rather than fetching new comments. The fresh browser follow-up above subsequently completed after user key entry and recovery of the existing tab. The replay and fresh-search results remain separate evidence; semantic decisions are fallible and strict rules may suppress useful results.
 
 ## Focused Connections navigation — 2026-11-07
 
