@@ -1,0 +1,30 @@
+PersonalTube
+Copyright (c) 2026 Nasreldin and PersonalTube contributors
+
+Original PersonalTube application code and documentation are licensed under
+Apache License 2.0. See LICENSE. PersonalTube is an independent project and is
+not affiliated with the Apache Software Foundation, YouTube or HackerTube.
+
+Andrej Karpathy's HackerTube idea and supplied collection informed this project.
+The collection comes from HackerTube / open-index Hacker News and retains
+Open Data Commons Attribution License 1.0 (ODC-By 1.0) terms:
+https://hackertube.org/about
+https://huggingface.co/datasets/open-index/hacker-news
+https://opendatacommons.org/licenses/by/1-0/
+The original HackerTube application/server source is not included.
+
+Bundled fonts retain their SIL Open Font License 1.1 terms and notices:
+Copyright 2016 The Inter Project Authors
+Copyright 2011 The Montserrat Project Authors
+Copyright 2022 The Noto Project Authors
+See public/assets/fonts/OFL.txt, NotoKufiArabic-OFL.txt and README.md.
+
+Live Stack Exchange material retains its applicable CC BY-SA conditions and
+source attribution. Third-party comments, videos and screenshots containing
+video imagery retain their respective rights. DEEDA marks and design assets
+are not licensed for general brand reuse.
+
+See NOTICE.md for full attribution and licensing boundaries. Earlier MIT
+application grants are preserved in docs/licenses/MIT-legacy.txt; this is a
+historical notice, not an alternative license for the current distribution.
+This NOTICE is informational and does not modify any applicable license.

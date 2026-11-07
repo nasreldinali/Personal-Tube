@@ -1,5 +1,7 @@
 # Frontend maintenance contract
 
+Historical delivery record: MIT references below describe the license at that time. The owner subsequently adopted Apache License 2.0 on 2026-11-07; see the current [LICENSE](../LICENSE) and [attribution boundaries](../NOTICE.md).
+
 The frontend cleanup preserves behavior, appearance, stored formats, MIT licensing and account/API boundaries. Modules are separated by responsibility, not a line-count target. No dependencies are added.
 
 Characterization runs the application with deterministic DOM, storage, time and network fixtures. It covers navigation, player lifecycle, saved/hidden videos, confirmations, channel changes, settings and stale-tab refusals. Browser layout verification complements the DOM fixture; it is not simulated by that fixture.

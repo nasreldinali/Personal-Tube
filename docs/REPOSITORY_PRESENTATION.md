@@ -1,5 +1,7 @@
 # Repository presentation decisions
 
+Historical delivery record: MIT references below describe the license at that time. The owner subsequently adopted Apache License 2.0 on 2026-11-07; see the current [LICENSE](../LICENSE) and [attribution boundaries](../NOTICE.md).
+
 Reviewed 2026-11-07. These projects informed presentation choices, not implementation or copied content:
 
 - [FreeTube](https://github.com/FreeTubeApp/FreeTube): clear navigation between screenshots, features, downloads and contribution guidance. Applied: a short README navigation row and a separate My channels preview.

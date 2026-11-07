@@ -1,5 +1,7 @@
 # First-use clarity and language expansion
 
+Historical delivery record: MIT references below describe the license at that time. The owner subsequently adopted Apache License 2.0 on 2026-11-07; see the current [LICENSE](../LICENSE) and [attribution boundaries](../NOTICE.md).
+
 ## Scope and acceptance
 
 - Explain that YouTube Data API access has a free daily quota, not unlimited usage or a guarantee that every workload fits. Keep optional analysis-account costs separate.

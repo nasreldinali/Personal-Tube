@@ -4,7 +4,7 @@
 
 [![JavaScript](https://img.shields.io/badge/JavaScript-vanilla-F7DF1E?logo=javascript&logoColor=black)](package.json)
 [![Node.js](https://img.shields.io/badge/Node.js-22%20%7C%2024-339933?logo=nodedotjs&logoColor=white)](#quick-start)
-[![License: MIT](https://img.shields.io/badge/License-MIT-blue.svg)](LICENSE)
+[![License: Apache 2.0](https://img.shields.io/badge/License-Apache_2.0-blue.svg)](LICENSE)
 [![Interface](https://img.shields.io/badge/Interface-EN%20%7C%20AR%20%7C%20DE%20%7C%20ES-487EA4)](README.ar.md)
 
 [Quick start](#quick-start) · [Screenshots](#screenshots) · [Analysis connections](docs/ANALYSIS_PROVIDERS.md) · [User guide](docs/USER_GUIDE.md) · [Contributing](CONTRIBUTING.md) · [Checks](https://github.com/nasreldinali/Personal-Tube/actions/workflows/check.yml)
@@ -194,4 +194,6 @@ The frontend is separated by responsibility, with characterization tests for use
 
 **Thank you, Andrej Karpathy, for HackerTube and the export that makes personal versions possible.** Read [the original project story](https://karpathy.bearblog.dev/hacker-tube/) and visit [HackerTube](https://hackertube.org/). PersonalTube is an independent adaptation with DEEDA branding, not an official Karpathy, HackerTube or YouTube product.
 
-Original PersonalTube code and documentation use the [MIT License](LICENSE). This does **not** relicense everything bundled in the repository: HackerTube/open-index collection material retains its [ODC-By 1.0](https://opendatacommons.org/licenses/by/1-0/) attribution requirements, fonts retain SIL OFL notices, and DEEDA branding is not granted for general reuse. Video content and third-party material remain with their owners. See [NOTICE.md](NOTICE.md) before redistributing a fork.
+Original PersonalTube code and documentation use the [Apache License 2.0](LICENSE). This does **not** relicense everything bundled in the repository: HackerTube/open-index collection material retains its [ODC-By 1.0](https://opendatacommons.org/licenses/by/1-0/) attribution requirements, fonts retain SIL OFL notices, and DEEDA branding is not granted for general reuse. Video content and third-party material remain with their owners. See [NOTICE.md](NOTICE.md) before redistributing a fork.
+
+The Apache 2.0 transition preserves earlier MIT grants in [the legacy notice](docs/licenses/MIT-legacy.txt). Include [NOTICE](NOTICE) and the applicable third-party notices when redistributing.

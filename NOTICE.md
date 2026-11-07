@@ -1,5 +1,9 @@
 # Attribution and licensing
 
+PersonalTube — Copyright (c) 2026 Nasreldin and PersonalTube contributors.
+
+The distribution notice is [NOTICE](NOTICE); the complete application license is [LICENSE](LICENSE).
+
 ## HackerTube collection
 
 `data/hackertube/videos.jsonl` and `taxonomy.json` are retained unchanged from the supplied HackerTube export. `DATA.md` in that directory preserves the original export schema documentation, including descriptions of optional files not distributed in this source tree.
@@ -16,4 +20,10 @@ Bundled fonts retain their accompanying notices in `public/assets/fonts/OFL.txt`
 
 ## Application code
 
-Original PersonalTube application code and documentation are licensed under MIT; see [LICENSE](LICENSE). This grant does not replace the separate terms for the HackerTube/open-index data, third-party excerpts, bundled fonts, videos, or DEEDA marks/design assets described above. Screenshots illustrate the application and may contain third-party video imagery; they do not grant rights to reuse that video content or branding. Preserve the applicable notices when distributing a fork.
+Original PersonalTube application code and documentation are licensed under the Apache License 2.0; see [LICENSE](LICENSE). This grant does not replace the separate terms for the HackerTube/open-index data, third-party excerpts, bundled fonts, videos, or DEEDA marks/design assets described above. Screenshots illustrate the application and may contain third-party video imagery; they do not grant rights to reuse that video content or branding. Preserve the applicable notices when distributing a fork.
+
+## Earlier MIT distributions
+
+The owner authorized the Apache 2.0 transition on 7 November 2026. The preceding application revision, `23ec300464e9be4b7cbe7c5053432507ec788e7f`, was distributed under MIT. Its original copyright and permission notice is retained verbatim in [MIT-legacy.txt](docs/licenses/MIT-legacy.txt). This preserves the earlier notice; it does not offer the current distribution under a choice of MIT or Apache, and does not withdraw rights already granted for earlier copies. Third-party material keeps its separate terms above.
+
+When redistributing the current application, include LICENSE, NOTICE, this attribution document and the applicable bundled third-party notices. Preserve attribution and mark your modified files as required by Apache 2.0. The license does not grant general rights to the DEEDA or other owners' trademarks.

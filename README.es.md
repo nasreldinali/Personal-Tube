@@ -75,8 +75,10 @@ Las claves de análisis solo permanecen en la memoria del servidor local. Al rei
 
 El análisis automático puede equivocarse. Los Shorts se estiman por duración. YouTube Premium no está garantizado dentro del reproductor integrado. El servidor es para un usuario local y no debe publicarse en internet sin un diseño de seguridad adicional.
 
-Código y documentación de PersonalTube: [MIT](LICENSE). El catálogo HackerTube/open-index conserva sus condiciones ODC-By 1.0; las fuentes y la marca DEEDA tienen avisos propios. Consulta [NOTICE](NOTICE.md). PersonalTube es independiente y no es un producto oficial de Karpathy ni de YouTube.
+Código y documentación de PersonalTube: [Apache 2.0](LICENSE). El catálogo HackerTube/open-index conserva sus condiciones ODC-By 1.0; las fuentes y la marca DEEDA tienen avisos propios. Consulta [NOTICE](NOTICE.md). PersonalTube es independiente y no es un producto oficial de Karpathy ni de YouTube.
 
 La nueva vista **Connections** separa suscripción, API en la nube, modelo local, YouTube y uso/ayuda. **Find available models** lee la lista del servidor local sin analizar ni descargar modelos. Los LLM y SLM pequeños necesitan una salida JSON adecuada. No toda suscripción de chat permite integración: Google no admite sesiones personales de Antigravity en apps externas; Copilot está integrado mediante su CLI oficial, y Kimi Code no se ofrece para este flujo automático. [Compatibilidad y límites](docs/CONNECTION_CATALOG.md).
 
 En **Suscripción → Encontrar mi cuenta o suscripción**, elige tu servicio para ver la vía disponible. Elegir un nombre no inicia sesión, cambia el proveedor ni consume cuota de análisis.
+
+Se conservan los derechos MIT anteriores; consulta el [aviso histórico](docs/licenses/MIT-legacy.txt). Al redistribuir, incluye [NOTICE](NOTICE) y los avisos de terceros.

@@ -2,6 +2,8 @@
 
 ## Unreleased
 
+- Adopt Apache License 2.0 for original application code and documentation on 2026-11-07. Retain earlier MIT grants, Karpathy/HackerTube credits, ODC-By data terms, font licenses and brand boundaries. Update all four README entry points and contribution terms.
+
 - Require the requested topic in YouTube comment analysis, add bounded public video context, and tighten positive evidence to reject adjacent-topic results and generic praise. Keep existing provider connections, comment budgets and no-fallback billing behavior.
 
 - Simplify Connections to method → service → controls. Show one subscription account at a time, move compatibility guidance to Usage & help, distinguish API billing, and preserve active accounts while browsing. Include four-language copy and responsive navigation.

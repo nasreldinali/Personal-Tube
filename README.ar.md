@@ -4,7 +4,7 @@
 
 **قنواتك. ترشيحات المجتمعات. ومساحة مشاهدة أنت المتحكم فيها.**
 
-[دليل الاستخدام التفصيلي بالإنجليزية](docs/USER_GUIDE.md) · [المساهمة](CONTRIBUTING.md) · [رخصة MIT](LICENSE)
+[دليل الاستخدام التفصيلي بالإنجليزية](docs/USER_GUIDE.md) · [المساهمة](CONTRIBUTING.md) · [رخصة Apache 2.0](LICENSE)
 
 PersonalTube لوحة شخصية لتصفح فيديوهات YouTube، مبنية على **فكرة مشروع [HackerTube لأندريه كارباثي](https://karpathy.bearblog.dev/hacker-tube/) ومجموعة البيانات اللي أتاحها**. تقدر تبدأ بالمكتبة الأصلية فوراً، وتضيف قنواتك، وتبحث عن فيديوهات رشّحها الناس في نقاشات المجتمعات.
 
@@ -142,4 +142,6 @@ npm run check
 
 شكر خاص لأندريه كارباثي و[HackerTube](https://hackertube.org/) على الفكرة والتصدير. PersonalTube مشروع مستقل بهوية DEEDA، وغير تابع رسمياً لكارباثي أو HackerTube أو YouTube.
 
-الكود والتوثيق الأصليان لـPersonalTube برخصة [MIT](LICENSE). البيانات الخارجية تحت شروطها، والخطوط تحت SIL OFL، وهوية DEEDA مش مرخصة لإعادة الاستخدام العام. راجع [NOTICE.md](NOTICE.md) قبل توزيع نسخة مشتقة. [سياسة الأمان](SECURITY.md) · [نتائج الفحص](docs/VERIFICATION.md).
+الكود والتوثيق الأصليان لـPersonalTube برخصة [Apache 2.0](LICENSE). البيانات الخارجية تحت شروطها، والخطوط تحت SIL OFL، وهوية DEEDA مش مرخصة لإعادة الاستخدام العام. راجع [NOTICE.md](NOTICE.md) قبل توزيع نسخة مشتقة. [سياسة الأمان](SECURITY.md) · [نتائج الفحص](docs/VERIFICATION.md).
+
+التحويل لـApache 2.0 لا يسحب حقوق النسخ السابقة؛ نص MIT القديم محفوظ في [الإشعار التاريخي](docs/licenses/MIT-legacy.txt). عند إعادة التوزيع، احتفظ بملف [NOTICE](NOTICE) وإشعارات الأطراف الخارجية.

@@ -75,8 +75,10 @@ Analyse-API-Schlüssel bleiben nur im Arbeitsspeicher des lokalen Servers. Ein S
 
 Automatische Empfehlungen können falsch sein. Shorts werden anhand der Dauer geschätzt. YouTube Premium wird im eingebetteten Player nicht garantiert. Der Server ist für einen lokalen Nutzer gedacht und darf ohne zusätzliche Sicherheitsarchitektur nicht öffentlich bereitgestellt werden.
 
-PersonalTube-Code und Dokumentation: [MIT](LICENSE). Der HackerTube/open-index-Katalog behält seine ODC-By-1.0-Bedingungen; Schriften und DEEDA-Markenmaterial haben eigene Hinweise. Siehe [NOTICE](NOTICE.md). PersonalTube ist ein unabhängiges Projekt, kein offizielles Produkt von Karpathy oder YouTube.
+PersonalTube-Code und Dokumentation: [Apache 2.0](LICENSE). Der HackerTube/open-index-Katalog behält seine ODC-By-1.0-Bedingungen; Schriften und DEEDA-Markenmaterial haben eigene Hinweise. Siehe [NOTICE](NOTICE.md). PersonalTube ist ein unabhängiges Projekt, kein offizielles Produkt von Karpathy oder YouTube.
 
 Die neue Ansicht **Connections** trennt Abonnement, Cloud-API, lokales Modell, YouTube sowie Verbrauch/Hilfe. **Find available models** liest die Modellliste des lokalen Servers, ohne Analyse oder Download. LLMs und kleine SLMs benötigen geeignete JSON-Ausgabe. Nicht jedes Chat-Abonnement ist integrierbar; Google unterstützt private Antigravity-Anmeldungen in Drittanbieter-Apps nicht; Copilot ist über die offizielle CLI integriert, Kimi Code wird für diesen automatischen Ablauf nicht angeboten. [Kompatibilität und Grenzen](docs/CONNECTION_CATALOG.md).
 
 Unter **Abonnement → Mein Konto oder Abonnement finden** zeigt die Kontoauswahl den passenden Weg. Sie meldet dich nicht an, wechselt nicht den Anbieter und verbraucht kein Analysekontingent.
+
+Die früheren MIT-Rechte bleiben erhalten; siehe den [historischen Lizenztext](docs/licenses/MIT-legacy.txt). Bei Weitergabe [NOTICE](NOTICE) und die Hinweise Dritter beilegen.
