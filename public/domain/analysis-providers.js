@@ -1,10 +1,10 @@
 import { localModelEndpoint } from './local-models.js';
 import { AppError } from './errors.js';
 
-export const subscriptionProviders = ['codex', 'claude'];
+export const subscriptionProviders = ['codex', 'claude', 'copilot'];
 export const apiProviderIds = ['openai', 'anthropic', 'openrouter', 'gemini', 'deepseek', 'mistral', 'groq', 'ollama', 'lmstudio', 'local-openai'];
 export const providerIds = [...subscriptionProviders, ...apiProviderIds, 'minimax'];
-export const providerNames = { gemini:'Google Gemini API', deepseek:'DeepSeek API', mistral:'Mistral API', groq:'Groq', 'local-openai':'OpenAI-compatible · Local', minimax:'MiniMax', codex:'Codex', claude:'Claude Code', openai:'OpenAI API', anthropic:'Anthropic API', openrouter:'OpenRouter', ollama:'Ollama', lmstudio:'LM Studio' };
+export const providerNames = { copilot:'GitHub Copilot', gemini:'Google Gemini API', deepseek:'DeepSeek API', mistral:'Mistral API', groq:'Groq', 'local-openai':'OpenAI-compatible · Local', minimax:'MiniMax', codex:'Codex', claude:'Claude Code', openai:'OpenAI API', anthropic:'Anthropic API', openrouter:'OpenRouter', ollama:'Ollama', lmstudio:'LM Studio' };
 export const isLocalProvider = provider => ['ollama', 'lmstudio', 'local-openai'].includes(provider);
 export function validateApiConfiguration(value) {
   if (!value || Object.keys(value).sort().join(',') !== (value.provider==='local-openai'?'acknowledgeCost,key,model,port,provider':'acknowledgeCost,key,model,provider') || !apiProviderIds.includes(value.provider)) throw new AppError('invalidSetup');

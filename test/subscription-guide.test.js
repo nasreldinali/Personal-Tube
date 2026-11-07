@@ -12,7 +12,7 @@ test('account finder explains unsupported subscriptions and only navigates after
   n('subscription-account').value='google';n('subscription-account').listeners.change();assert.equal(n('subscription-guide-copy').textContent,'guideGoogle');assert.equal(n('subscription-guide-action').hidden,true);assert.equal(n('subscription-guide-api').hidden,false);assert.equal(n('subscription-guide-source').hidden,false);assert.deepEqual(methods,[]);
   n('subscription-guide-api').listeners.click();assert.deepEqual(methods,[['api','gemini']]);assert.equal(n('method-api').attributes['aria-pressed'],'true');
   n('subscription-guide-local').listeners.click();assert.deepEqual(methods.at(-1),['local',undefined]);
-  n('subscription-account').value='copilot';n('subscription-account').listeners.change();assert.equal(n('subscription-guide-copy').textContent,'guideCopilot');assert.equal(n('subscription-guide-source').hidden,true);assert.equal(n('subscription-guide-action').hidden,true);
+  n('subscription-account').value='copilot';n('subscription-account').listeners.change();assert.equal(n('subscription-guide-copy').textContent,'guideCopilot');assert.equal(n('subscription-guide-source').hidden,true);assert.equal(n('subscription-guide-action').hidden,false);
   n('subscription-account').value='kimi';n('subscription-account').listeners.change();assert.equal(n('subscription-guide-copy').textContent,'guideKimi');assert.equal(n('subscription-guide-action').hidden,true);
   n('subscription-account').value='constructor';n('subscription-account').listeners.change();assert.equal(n('subscription-guide-copy').textContent,'guideHint');assert.equal(n('subscription-guide-api').hidden,true);
  }finally{globalThis.document=before;}

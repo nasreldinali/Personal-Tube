@@ -3,7 +3,7 @@
   <head>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <meta name="description" content="PersonalTube by DEEDA — your channels and the original HackerTube collection, in a personal bilingual dashboard.">
+    <meta name="description" content="PersonalTube by DEEDA — your channels and the original HackerTube collection, in a personal dashboard with English, Arabic, German and Spanish controls.">
     <title>PersonalTube · DEEDA IT-Solutions</title>
     <link rel="icon" href="/assets/logo/favicon.ico">
     <link rel="apple-touch-icon" href="/assets/logo/apple-touch-icon.png">
@@ -386,6 +386,18 @@
               <div class="provider-secondary"><button type="button" id="setup-test-claude" class="text-button" data-i18n="apiTest" hidden></button>
               <button id="setup-logout-claude" class="text-button provider-logout" data-i18n="signOut" hidden></button></div>
             </article>
+            <article class="provider-card" id="setup-card-copilot">
+              <div class="provider-heading"><h4>GitHub Copilot</h4><span id="setup-badge-copilot" class="connection-badge"></span></div>
+              <p id="copilot-state" class="provider-state" role="status"></p>
+              <button id="copilot-login" type="button" class="d-btn d-btn-secondary" data-i18n="signInAction"></button>
+              <button id="copilot-use" type="button" class="d-btn d-btn-secondary" hidden></button>
+              <div class="provider-secondary"><button id="copilot-test" type="button" class="text-button" data-i18n="apiTest" hidden></button></div>
+              <div class="copilot-help">
+                <div id="copilot-install" hidden><code dir="ltr">npm install -g @github/copilot@1.0.107</code></div>
+                <p class="help" data-i18n="copilotLimits"></p>
+                <a href="https://github.com/nasreldinali/Personal-Tube/blob/main/docs/COPILOT_SUBSCRIPTION.md" target="_blank" rel="noopener noreferrer" data-i18n="copilotGuide"></a>
+              </div>
+            </article>
           </div>
           <p class="help" data-i18n="subscriptionMethodHelp"></p>
           <details id="minimax-panel" class="minimax-connection setup-details">
@@ -481,9 +493,37 @@
       <div class="setup-footer"><button id="setup-check" class="text-button" data-i18n="checkRequirements"></button><button id="setup-finish" class="d-btn d-btn-primary" data-i18n="done"></button></div>
     </dialog>
     <dialog id="settings-dialog" aria-labelledby="settings-title">
-      <button id="settings-back" class="text-button settings-back" data-i18n="backToSetup" hidden></button>
-      <div class="dialog-header"><h2 id="settings-title" data-i18n="settings">Settings &amp; data</h2><button class="close" data-close="settings-dialog" data-i18n-label="close" aria-label="Close">×</button></div>
-      <section class="api-usage" aria-labelledby="usage-title">
+      <div class="dialog-header">
+        <div><p class="setup-eyebrow">PERSONALTUBE</p><h2 id="settings-title" data-i18n="settings">Settings &amp; data</h2></div>
+        <button class="close" data-close="settings-dialog" data-i18n-label="close" aria-label="Close">×</button>
+      </div>
+      <p class="setup-active" data-i18n="settingsIntro"></p>
+      <div class="connection-workspace">
+        <nav class="connection-methods" data-i18n-label="settingsSections">
+          <button type="button" id="settings-nav-youtube" aria-controls="settings-panel-youtube" aria-pressed="true">YouTube</button>
+          <button type="button" id="settings-nav-usage" aria-controls="settings-panel-usage" aria-pressed="false" data-i18n="settingsUsage"></button>
+          <button type="button" id="settings-nav-refresh" aria-controls="settings-panel-refresh" aria-pressed="false" data-i18n="refreshSettingsTitle"></button>
+          <button type="button" id="settings-nav-data" aria-controls="settings-panel-data" aria-pressed="false" data-i18n="settingsData"></button>
+        </nav>
+        <div id="settings-body" class="setup-body">
+          <section id="settings-panel-youtube" aria-labelledby="settings-nav-youtube">
+      <h3 data-i18n="connection">Connect YouTube</h3>
+      <p class="muted" data-i18n="connectionDescription"></p>
+      <p class="help" data-i18n="youtubeFree"></p>
+      <form id="settings-form">
+        <label class="d-field"><span data-i18n="apiKey">YouTube API key</span><input class="d-input" id="api-key" type="password" dir="ltr" autocomplete="off" spellcheck="false" data-i18n-placeholder="keyPlaceholder" maxlength="250" required></label>
+        <label class="check"><input type="checkbox" id="remember-key"><span data-i18n="rememberKey">Remember the key in this browser</span></label>
+        <p class="help" data-i18n="keyHelp"></p>
+        <p id="settings-error" class="error" role="alert"></p>
+        <div class="button-row"><button class="d-btn d-btn-primary" data-i18n="saveConnection">Save connection</button><button id="forget-key" type="button" class="d-btn d-btn-secondary" data-i18n="forgetKey">Remove saved key</button></div>
+      </form>
+      <details>
+        <summary data-i18n="keyGuide">Get a YouTube API key</summary>
+        <ol><li><span data-i18n="guide1"></span> <a href="https://console.cloud.google.com/" target="_blank" rel="noopener noreferrer">Google Cloud Console ↗</a></li><li data-i18n="guide2"></li><li data-i18n="guide3"></li><li><span data-i18n="guide4"></span><code>http://127.0.0.1:4173/*</code></li><li data-i18n="guide5"></li></ol>
+        <p class="help" data-i18n="quotaHelp"></p>
+      </details>
+          </section>
+      <section id="settings-panel-usage" hidden class="api-usage" aria-labelledby="usage-title">
         <div class="usage-heading"><h3 id="usage-title" data-i18n="usageTitle"></h3><span class="usage-badge" data-i18n="usageEstimated"></span></div>
         <p id="usage-day" class="help"></p>
         <div id="usage-totals" class="usage-totals">
@@ -506,7 +546,7 @@
           <a href="https://console.cloud.google.com/apis/api/youtube.googleapis.com/quotas" target="_blank" rel="noopener noreferrer" data-i18n="usageActual"></a>
         </details>
       </section>
-      <section class="refresh-settings" aria-labelledby="refresh-settings-title">
+      <section id="settings-panel-refresh" hidden class="refresh-settings" aria-labelledby="refresh-settings-title">
         <h3 id="refresh-settings-title" data-i18n="refreshSettingsTitle"></h3>
         <form id="refresh-settings-form">
           <div class="refresh-fields">
@@ -531,22 +571,7 @@
           <p id="refresh-settings-error" class="error" role="alert"></p>
         </form>
       </section>
-      <h3 data-i18n="connection">Connect YouTube</h3>
-      <p class="muted" data-i18n="connectionDescription"></p>
-      <p class="help" data-i18n="youtubeFree"></p>
-      <form id="settings-form">
-        <label class="d-field"><span data-i18n="apiKey">YouTube API key</span><input class="d-input" id="api-key" type="password" dir="ltr" autocomplete="off" spellcheck="false" data-i18n-placeholder="keyPlaceholder" maxlength="250" required></label>
-        <label class="check"><input type="checkbox" id="remember-key"><span data-i18n="rememberKey">Remember the key in this browser</span></label>
-        <p class="help" data-i18n="keyHelp"></p>
-        <p id="settings-error" class="error" role="alert"></p>
-        <div class="button-row"><button class="d-btn d-btn-primary" data-i18n="saveConnection">Save connection</button><button id="forget-key" type="button" class="d-btn d-btn-secondary" data-i18n="forgetKey">Remove saved key</button></div>
-      </form>
-      <details>
-        <summary data-i18n="keyGuide">Get a YouTube API key</summary>
-        <ol><li><span data-i18n="guide1"></span> <a href="https://console.cloud.google.com/" target="_blank" rel="noopener noreferrer">Google Cloud Console ↗</a></li><li data-i18n="guide2"></li><li data-i18n="guide3"></li><li><span data-i18n="guide4"></span><code>http://127.0.0.1:4173/*</code></li><li data-i18n="guide5"></li></ol>
-        <p class="help" data-i18n="quotaHelp"></p>
-      </details>
-      <section class="settings-data">
+      <section id="settings-panel-data" hidden class="settings-data">
         <h3 data-i18n="dataTitle"></h3>
         <p class="muted" data-i18n="dataHelp"></p>
         <div class="button-row">
@@ -555,8 +580,14 @@
           <button id="restore-hidden" class="d-btn d-btn-secondary" data-i18n="restoreHidden"></button>
           <button id="clear-data" class="d-btn danger-button" data-i18n="clearData"></button>
         </div>
-      </section>
       <p class="d-note" data-i18n="privacy"></p>
+      </section>
+        </div>
+      </div>
+      <div class="setup-footer">
+        <button id="settings-back" type="button" class="text-button settings-back" data-i18n="backToSetup" hidden></button>
+        <button type="button" class="d-btn d-btn-secondary" data-close="settings-dialog" data-i18n="close">Close</button>
+      </div>
     </dialog>
     <dialog id="channels-dialog" aria-labelledby="channels-title">
       <div class="dialog-header"><h2 id="channels-title" data-i18n="manage"></h2><button class="close" data-close="channels-dialog" data-i18n-label="close" aria-label="Close">×</button></div>

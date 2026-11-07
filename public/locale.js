@@ -1,3 +1,5 @@
+import { settingsLayoutMessages } from './locales/settings-layout.js';
+import { copilotMessages } from './locales/copilot.js';
 import { guideMessages } from './locales/subscription-guide.js';
 import { centerMessages } from './locales/connection-center.js';
 import { connectionMessages } from './locales/connections.js';
@@ -7,7 +9,7 @@ const pairs = {
   youtubeFree: ['YouTube Data API is free within its daily quota. PersonalTube adds no API fee. Frequent searches and refreshes can exhaust the quota; saved videos remain available.', 'YouTube Data API مجاني ضمن الحصة اليومية. PersonalTube مش بيضيف رسوم API. البحث والتحديث الكتير ممكن يخلّصوا الحصة؛ الفيديوهات المحفوظة بتفضل متاحة.'],
   analysisCost: ['Optional analysis uses your own eligible account and its limits. A paid plan may be needed. Nobody uses the project owner’s allowance. There is no automatic switch to paid API requests.', 'التحليل اختياري وبيستخدم حسابك المؤهل وحدوده، وممكن يحتاج خطة مدفوعة. محدش بيستخدم رصيد صاحب المشروع، ومفيش تحويل تلقائي لطلبات API مدفوعة.'],
   setupStepsTitle: ['First time here?', 'أول مرة تستخدم التحليل؟'],
-  setupStepInstall: ['Install a supported official CLI on the same computer as PersonalTube. A browser login alone is not enough. Reviewed versions: Codex 0.155.1 or Claude Code 2.1.281.', 'ثبّت الأداة الرسمية المدعومة على نفس جهاز PersonalTube. تسجيل الدخول في المتصفح لوحده مش كفاية. الإصدارات المراجَعة: Codex 0.155.1 أو Claude Code 2.1.281.'],
+  setupStepInstall: ['Install a supported official CLI on the same computer as PersonalTube. A browser login alone is not enough. Reviewed versions: Codex 0.155.1, Claude Code 2.1.281 or GitHub Copilot 1.0.107.', 'ثبّت الأداة الرسمية المدعومة على نفس جهاز PersonalTube. تسجيل الدخول في المتصفح لوحده مش كفاية. الإصدارات المراجَعة: Codex 0.155.1 أو Claude Code 2.1.281 أو GitHub Copilot 1.0.107.'],
   setupStepLogin: ['Choose Sign in above and finish the official login in your browser. If the tool is missing, open Installation help first.', 'اضغط تسجيل الدخول فوق وكمّل الدخول الرسمي في المتصفح. لو الأداة مش موجودة، افتح مساعدة التثبيت الأول.'],
   setupStepVerify: ['Return here and check the connection. Then start a search in Recommendations. Connected confirms login only; a completed analysis confirms that the feature has worked.', 'ارجع هنا وافحص الاتصال، وبعدها ابدأ بحث في التوصيات. «متصل» بتأكد تسجيل الدخول بس؛ نجاح طلب تحليل هو اللي يثبت إن الميزة اشتغلت.'],
   setupFullGuide: ['Step-by-step guide and troubleshooting', 'دليل خطوة بخطوة وحل مشاكل الدخول'],
@@ -433,7 +435,7 @@ const pairs = {
 };
 
 const baseMessages = { ...extraMessages, en: Object.fromEntries(Object.entries(pairs).map(([key, value]) => [key, value[0]])), ar: Object.fromEntries(Object.entries(pairs).map(([key, value]) => [key, value[1]])) };
-export const messages = Object.freeze(Object.fromEntries(['en','ar','de','es'].map(language=>[language,{...baseMessages[language],...connectionMessages[language],...centerMessages[language],...guideMessages[language]}])));
+export const messages = Object.freeze(Object.fromEntries(['en','ar','de','es'].map(language=>[language,{...baseMessages[language],...connectionMessages[language],...centerMessages[language],...guideMessages[language],...copilotMessages[language],...settingsLayoutMessages[language]}])));
 
 export function t(language, key, values = {}) {
   const text = messages[language]?.[key];

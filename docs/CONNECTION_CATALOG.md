@@ -14,7 +14,7 @@ In **Subscription → Find my account or subscription**, choose the service you 
 | Claude with eligible Claude Code access | Supported through the reviewed Claude Code CLI | Install the supported CLI, sign in, select it, then test one sample. |
 | Global MiniMax M Plan | Optional direct subscription connector | Expand **Add another subscription**. Save, test, then explicitly select it. Existing credit packs may be consumed after quota. No account is assumed or required. |
 | Google Gemini / Antigravity consumer subscription | Consumer login pass-through is not supported for third-party apps | Google’s current FAQ also rules out wrapping `agy` in a third-party application under a consumer plan. PersonalTube offers Gemini API separately; it does not use this subscription. |
-| GitHub Copilot | No adapter in PersonalTube yet | A provider-specific integration and review are needed. |
+| GitHub Copilot | Supported through the reviewed official CLI 1.0.107 | [Sign in, test a sample, then explicitly choose Use Copilot](COPILOT_SUBSCRIPTION.md). Login/test preserve the selected account. Your GitHub billing/overage settings apply. |
 | Kimi Code | Not offered for this automated batch flow | Its current guidelines restrict scripted batches/data annotation; a chat subscription is not a general API entitlement. |
 | Any other chat subscription | Not automatically compatible | The provider must offer an eligible official integration. Do not enter its credentials in another service's form. |
 

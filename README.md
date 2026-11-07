@@ -32,6 +32,13 @@ PersonalTube is a local YouTube dashboard built on **Andrej Karpathy’s [Hacker
 
 *Illustrative mixed-date selection, not a live last-week feed. The app normally displays the selected 1–7 day window. [Video sources and presentation notes](docs/REPOSITORY_PRESENTATION.md).*
 
+<details>
+<summary>Settings & data · organized like Connections</summary>
+
+![Settings with fixed navigation and separate YouTube, API usage, refresh and data sections](docs/images/settings-en-light.jpg)
+
+</details>
+
 ## What this adds to the HackerTube foundation
 
 Karpathy’s work supplies the starting idea: discover YouTube videos through recommendations in Hacker News comments. This repository retains the supplied catalog and taxonomy, and includes a derived evidence index with source links and related recommendations. **It uses the data export, not HackerTube’s original application or server code.**
@@ -45,7 +52,7 @@ PersonalTube adds a workflow for ongoing personal use:
 | Four interface languages | English, Arabic, German and Spanish controls; Arabic right-to-left layout, light/dark/system themes and responsive cards. Source titles and quotes keep their original language; catalog topic/category labels currently have English and Arabic translations. |
 | Live community discovery | Choose a topic and source; collect and analyze the selected comments automatically, with progress and supporting quotes. |
 | Visible recommendation requirements | Adjust minimum views/likes, declared audio language and endorsement count. Unverified results are withheld. |
-| Your choice of analysis provider | Sign in/out of Codex or Claude Code; connect your MiniMax M Plan subscription; choose among seven cloud API services; or connect Ollama, LM Studio or a compatible local model server. Each user supplies their own access. |
+| Your choice of analysis provider | Sign in/out of Codex or Claude Code; sign in and test GitHub Copilot; connect your MiniMax M Plan subscription; choose among seven cloud API services; or connect Ollama, LM Studio or a compatible local model server. Each user supplies their own access. |
 | Refresh and usage controls | Manual or scheduled channel refresh, selectable intervals and an explicitly estimated daily YouTube API counter. |
 | Personal library controls | Watch later, watched history, confirmed single/bulk hiding, restore, category management and portable backups. |
 | A choice of video images | Original thumbnail or a video-frame image; sticky filters and a collapsible sidebar. |
@@ -91,7 +98,7 @@ See [current verification](docs/VERIFICATION.md) and the [earlier clean-download
 
 This can comfortably fit moderate personal channel-following, but is not an unlimited-use promise. For illustration, 20 channels refreshed four times a day at two data requests per channel would use about 160 units; additional upload pages, searches, comments, retries and other apps using the same project add usage. Select manual refresh or a longer interval to reduce requests. Playing a video does not consume Data API quota. Reaching the limit stops new requests until quota is available; the app does not buy extra quota automatically.
 
-**Comment analysis is separate and optional.** Choose your own eligible Codex/ChatGPT, Claude Code or MiniMax M Plan subscription, an explicitly configured cloud API, or a local model. API billing is separate from subscriptions and requires acknowledgement before configuration; connection tests can incur charges. Local models require your own hardware and setup. There is no automatic provider switch, shared allowance or unlimited analysis promise. The original library needs none of these connections.
+**Comment analysis is separate and optional.** Choose your own eligible Codex/ChatGPT, Claude Code, GitHub Copilot or MiniMax M Plan subscription, an explicitly configured cloud API, or a local model. API billing is separate from subscriptions and requires acknowledgement before configuration; connection tests can incur charges. Local models require your own hardware and setup. There is no automatic provider switch, shared allowance or unlimited analysis promise. The original library needs none of these connections.
 
 ## What do I need for each feature?
 
@@ -105,13 +112,13 @@ This can comfortably fit moderate personal channel-following, but is not an unli
 
 **Downloading this repository never gives someone access to the maintainer’s API key or subscription.** Each installation supplies its own YouTube key and analysis access. Subscription analysis uses that account’s allowance; cloud API analysis uses its separate billing; the app does not sell credits, bundle a model, or provide a shared analysis service. Public comments go to the selected analysis service. A truly local model can keep analysis on your computer, while YouTube and community requests still use the internet.
 
-For live features, open **Connections**. Create a key with **YouTube Data API v3** enabled, restrict it to that API and the local website origin, then enter it in **Settings & data**. Install/sign in to your chosen analysis CLI separately if needed; PersonalTube does not install it for you. The app currently accepts **Codex CLI 0.155.1** and **Claude Code 2.1.281** only; other versions are refused until their execution policies are reviewed. A paid account alone does not replace the local CLI requirement. Follow the [first-time account setup guide](docs/ANALYSIS_SETUP.md), or choose **Cloud API** or **Local model** using the [provider guide](docs/ANALYSIS_PROVIDERS.md). Connection detection and a successful analysis are shown separately; the guide explains what has been tested and how to complete your own first-use check.
+For live features, open **Connections**. Create a key with **YouTube Data API v3** enabled, restrict it to that API and the local website origin, then enter it in **Settings & data**. Install/sign in to your chosen analysis CLI separately if needed; PersonalTube does not install it for you. The app currently accepts **Codex CLI 0.155.1**, **Claude Code 2.1.281**, and **GitHub Copilot CLI 1.0.107**; other versions are refused until their execution policies are reviewed. A paid account alone does not replace the local CLI requirement. Follow the [first-time account setup guide](docs/ANALYSIS_SETUP.md), or choose **Cloud API** or **Local model** using the [provider guide](docs/ANALYSIS_PROVIDERS.md). Connection detection and a successful analysis are shown separately; the guide explains what has been tested and how to complete your own first-use check.
 
 ## Choose your analysis connection
 
 | You prefer… | Choose… | You need… |
 |---|---|---|
-| Your existing eligible subscription | Codex or Claude Code | Supported CLI and your own login |
+| Your existing eligible subscription | Codex, Claude Code or GitHub Copilot | Supported CLI and your own login |
 | Direct MiniMax subscription | MiniMax M Plan | Global subscription key; included quota, then existing credit packs. [Setup and test](docs/MINIMAX_SUBSCRIPTION.md) |
 | Direct cloud API access | OpenAI, Anthropic, Google Gemini, DeepSeek, Mistral or Groq | API key, model ID and explicit billing acknowledgement |
 | A wider choice of hosted closed/open-weight models | OpenRouter | Its API key and a compatible model ID |
@@ -119,7 +126,11 @@ For live features, open **Connections**. Create a key with **YouTube Data API v3
 
 Connections now has five separate sections: **Subscription, Cloud API, Local model, YouTube, Usage & help**. The active analysis service stays visible. **Subscription → Find my account or subscription** explains the route for your existing account without switching providers or making a request. MiniMax is optional under **Add another subscription**; no MiniMax account is required.
 
-**Not every chat subscription is an integration.** Google does not support consumer Antigravity login pass-through in third-party apps, and Copilot is not integrated; Kimi Code is not offered for this automated batch flow. API access is separate. See the [connection compatibility catalog](docs/CONNECTION_CATALOG.md).
+**Not every chat subscription is an integration.** Google does not support consumer Antigravity login pass-through in third-party apps; Kimi Code is not offered for this automated batch flow. API access is separate. See the [connection compatibility catalog](docs/CONNECTION_CATALOG.md).
+
+**GitHub Copilot has real Sign in, Test with one sample and Use Copilot controls.** Login and an inactive test preserve your selected account and Codex/Claude sign-ins. It uses your GitHub allowance, with no BYOK API fallback. Disable paid overage in GitHub billing to stay within your plan. The official CLI/protocol and deterministic flow are tested; a live Copilot account analysis has not been verified here. [Setup and limits](docs/COPILOT_SUBSCRIPTION.md).
+
+**Settings & data** now matches Connections: fixed navigation and close controls, with separate YouTube, API usage, video refresh and backup/data sections. Unsubmitted fields stay in place while you switch sections.
 
 MiniMax has a separate **save → test → use** flow. Saving/testing keeps your selected provider and Codex/Claude logins unchanged. It accepts M Plan keys only, without pay-as-you-go fallback; MiniMax may consume existing credit packs after plan quota. Actual MiniMax account compatibility still needs your explicit sample test.
 

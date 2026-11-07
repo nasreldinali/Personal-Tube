@@ -1,9 +1,11 @@
+import { createSettingsSections } from './settings-sections.js';
 import { AppError } from '../domain/errors.js';
 import { parsePreferences, refreshSettings, REFRESH_INTERVALS } from '../domain/preferences.js';
 import { number } from '../locale.js';
 import { byId as $, selectOptions } from './dom.js';
 
 export function createSettingsPanel({ text, readPreferences, readUsage, hiddenCount, readKey, remembersKey, saveKey, forgetKey, savePreferences, isBusy, bind, render, notify, refresh }) {
+  const sections=createSettingsSections();
   function renderUsage() {
     const value = readUsage();
     $('usage-unavailable').hidden = Boolean(value);
@@ -28,7 +30,7 @@ export function createSettingsPanel({ text, readPreferences, readUsage, hiddenCo
     renderRefreshDraft();
   }
   function openSettings() {
-    renderUsage(); renderRefreshSettings();
+    sections.reset(); renderUsage(); renderRefreshSettings();
     $('restore-hidden').disabled = !hiddenCount();
     $('api-key').value = readKey(); $('settings-error').textContent = '';
     try { $('remember-key').checked = remembersKey(); } catch { $('remember-key').checked = false; }

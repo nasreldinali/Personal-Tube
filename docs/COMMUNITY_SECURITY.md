@@ -64,3 +64,9 @@ MEASURED: deferred analysis and metadata tests reproduce expiry during active wo
 | ASVS L1 | Applies to validation, access boundary, browser safety, communications, secrets, errors and data handling; hosting/accounts are outside this local architecture. |
 
 No new training, payment, cloud deployment, mobile binary, IoT or CI/CD service was added. Their corresponding standards are not applicable to this change. Public release/history cleanup remains a separate owner decision.
+
+## Copilot subscription adapter, 2026-11-07
+
+The existing L1 applicability map remains. Additional boundaries: same-origin explicit login/test → provider manager → pinned official CLI/protocol → GitHub OAuth and model service → exact-quote validator. C1/C3/C5/C7, API2/API4/API8, LLM01/02/05/06/10 and ASI02/03/04/05/06/10 apply through OAuth-only checks, allowlisted environment, bounded frames/process lifetime, disabled tools/hooks/discovery/memory, fixed model and no paid API fallback. Unlike the Codex adapter, this connector does not claim an OS filesystem sandbox around inference; it removes model tools and rejects capability requests. The process retains local-user privileges.
+
+GitHub manages OAuth storage, which may use the OS keychain or a plaintext fallback in the dedicated ignored profile. Never commit that profile. CLI credit limits are soft; GitHub billing configuration controls overage. No actual Copilot account/model analysis is certified by deterministic or signed-out probes. New code adds no payment processing, hosted identity system or storage schema. [Connection contract and verification limits](COPILOT_SUBSCRIPTION.md).

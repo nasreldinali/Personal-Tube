@@ -1,6 +1,9 @@
 # Changelog
 
-## Unreleased — changes on main since 1.8.2
+## Unreleased
+
+- Add official GitHub Copilot CLI subscription login, an isolated sample test and explicit provider selection, without changing Codex/Claude sign-ins or falling back to BYOK APIs. Pin reviewed CLI/protocol versions and disclose GitHub allowance/overage and live-account verification limits.
+- Align Settings & data with Connections: fixed navigation and close controls, four focused sections, preserved drafts and the existing return path. — changes on main since 1.8.2
 
 - Add German and Spanish controls and README introductions alongside English and Arabic; retain Arabic RTL and source-language video content.
 - Separate frontend behavior and styles by responsibility, preserving workflows and stylesheet order with characterization tests.

@@ -4,6 +4,14 @@ import { join } from 'node:path';
 import { spawnSync } from 'node:child_process';
 
 const cases = [
+  { name: 'copilot-oauth-only', file: 'server/copilot-policy.js', from: "value.authType === 'user'", to: 'true', test: 'test/copilot-policy.test.js' },
+  { name: 'copilot-no-tools', file: 'server/copilot-policy.js', from: 'availableTools:[]', to: "availableTools:['shell']", test: 'test/copilot-policy.test.js' },
+  { name: 'copilot-no-inherited-api-key', file: 'server/copilot-policy.js', from: "['PATH','HOME','USER','TMPDIR']", to: "['PATH','HOME','USER','TMPDIR','OPENAI_API_KEY']", test: 'test/copilot-policy.test.js' },
+  { name: 'copilot-protocol-pin', file: 'server/copilot-rpc.js', from: 'connection?.protocolVersion!==copilotProtocol', to: 'false', test: 'test/copilot-rpc.test.js' },
+  { name: 'copilot-message-budget', file: 'server/copilot-rpc.js', from: 'size>1000000', to: 'false', test: 'test/copilot-rpc.test.js' },
+  { name: 'copilot-evidence-validation', file: 'server/copilot-subscription.js', from: 'applyClassifications(rows,result);', to: '', test: 'test/copilot-subscription.test.js' },
+  { name: 'copilot-test-preserves-selection', file: 'server/provider-manager.js', from: "if (input.action === 'test') {", to: "if (input.action === 'test') { if(provider==='copilot')selected=provider;", test: 'test/copilot-connection-flow.test.js' },
+
   { name: 'local-port-boundary', file: 'public/domain/local-models.js', from: 'port<1024', to: 'port<1', test: 'test/local-models.test.js' },
   { name: 'local-model-list-budget', file: 'public/domain/local-models.js', from: 'rows.length>500', to: 'false', test: 'test/local-models.test.js' },
   { name: 'local-model-cloud-exclusion', file: 'public/domain/local-models.js', from: '!/(?:[:-])cloud$/i.test(id)', to: 'true', test: 'test/local-models.test.js' },
@@ -16,7 +24,7 @@ const cases = [
   { name: 'minimax-test-preserves-selection', file: 'server/provider-manager.js', from: "if (input.action === 'test') {", to: "if (input.action === 'test') { if (provider === 'minimax') selected=provider;", test: 'test/provider-options.test.js' },
   { name: 'minimax-fixed-endpoint', file: 'server/analysis-request.js', from: 'https://api.minimax.io/anthropic/v1/messages', to: 'https://api.openai.com/v1/chat/completions', test: 'test/analysis-request.test.js' },
   { name: 'minimax-evidence-validation', file: 'server/minimax-subscription.js', from: 'applyClassifications(rows,result);', to: '', test: 'test/minimax-subscription.test.js' },
-  { name: 'sample-test-selected-provider', file: 'server/provider-manager.js', from: "if (selected !== provider && provider !== 'minimax')", to: 'if (false)', test: 'test/provider-options.test.js' },
+  { name: 'sample-test-selected-provider', file: 'server/provider-manager.js', from: "if (selected !== provider && !['minimax','copilot'].includes(provider))", to: 'if (false)', test: 'test/provider-options.test.js' },
   { name: 'sample-test-cooldown', file: 'server/provider-manager.js', from: 'now() - (lastTest[provider] ?? -Infinity) < 60000', to: 'false', test: 'test/provider-options.test.js' },
   { name: 'local-cloud-tag-refusal', file: 'public/domain/analysis-providers.js', from: 'model)))', to: "'local')))" , test: 'test/analysis-providers.test.js' },
   { name: 'api-explicit-cost-consent', file: 'public/domain/analysis-providers.js', from: 'acknowledgeCost !== true', to: 'false', test: 'test/analysis-providers.test.js' },

@@ -4,7 +4,7 @@
 
 You can browse the included library without an analysis account. Automatic comment analysis is optional. **Every user connects their own account on their own computer. Downloading PersonalTube does not give anyone the maintainer’s credentials or allowance.**
 
-For direct [MiniMax M Plan setup](MINIMAX_SUBSCRIPTION.md), cloud API keys or local Ollama/LM Studio models, use [the provider guide](ANALYSIS_PROVIDERS.md); those connections do not require either CLI. This page covers subscription CLI sign-in. Connected cards now also offer **Sign out**, with a confirmation explaining that other tools may share that login.
+For [GitHub Copilot sign-in and testing](COPILOT_SUBSCRIPTION.md), see its separate guide. For direct [MiniMax M Plan setup](MINIMAX_SUBSCRIPTION.md), cloud API keys or local Ollama/LM Studio models, use [the provider guide](ANALYSIS_PROVIDERS.md); those connections do not require either CLI. This page covers subscription CLI sign-in. Connected cards now also offer **Sign out**, with a confirmation explaining that other tools may share that login.
 
 ## What you need
 

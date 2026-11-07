@@ -1,8 +1,8 @@
 /* Keep navigation and the selected connection visible while forms scroll. */
-#setup-dialog { width:min(1000px,calc(100vw - 32px)); padding:0; height:min(720px,92dvh); max-height:92dvh; }
-#setup-dialog[open] { display:flex; flex-direction:column; overflow:hidden; }
-#setup-dialog .dialog-header { padding:22px 26px 14px; margin:0; flex-shrink:0; align-items:center; }
-#setup-dialog h2 { font-size:24px; margin:0; }
+:is(#setup-dialog,#settings-dialog) { width:min(1000px,calc(100vw - 32px)); padding:0; height:min(720px,92dvh); max-height:92dvh; }
+:is(#setup-dialog,#settings-dialog)[open] { display:flex; flex-direction:column; overflow:hidden; }
+:is(#setup-dialog,#settings-dialog) .dialog-header { padding:22px 26px 14px; margin:0; flex-shrink:0; align-items:center; }
+:is(#setup-dialog,#settings-dialog) h2 { font-size:24px; margin:0; }
 .setup-eyebrow { font:700 10px var(--deeda-font-body); letter-spacing:.16em; color:var(--muted); margin:0 0 6px; }
 .setup-active { margin:0 26px 16px; padding:10px 14px; border-inline-start:3px solid var(--primary); background:var(--blue-soft); border-radius:6px; font-size:13px; font-weight:700; }
 .connection-workspace { display:grid; grid-template-columns:180px minmax(0,1fr); flex:1; min-height:0; border-top:1px solid var(--line); }
@@ -11,9 +11,9 @@
 .connection-methods button[aria-pressed=true] { background:var(--surface); color:var(--ink); border-color:var(--line); box-shadow:0 1px 3px #0001; }
 .connection-methods button:focus-visible { outline:2px solid var(--focus); outline-offset:2px; }
 .setup-body { padding:24px; overflow-y:auto; min-height:0; overscroll-behavior:contain; }
-#setup-dialog h3 { font-size:18px; margin:0 0 6px; }
-#setup-dialog h4 { font-size:15px; margin:0; }
-#setup-dialog .help { font-size:13px; line-height:1.7; margin:6px 0 14px; color:var(--muted); }
+:is(#setup-dialog,#settings-dialog) h3 { font-size:18px; margin:0 0 6px; }
+:is(#setup-dialog,#settings-dialog) h4 { font-size:15px; margin:0; }
+:is(#setup-dialog,#settings-dialog) .help { font-size:13px; line-height:1.7; margin:6px 0 14px; color:var(--muted); }
 .provider-grid { display:grid; gap:12px; margin:20px 0; }
 .provider-card { display:grid; grid-template-columns:minmax(0,1fr) auto; gap:2px 20px; border:1px solid var(--line); border-radius:12px; padding:18px; }
 .provider-card[data-active=true] { border-color:var(--primary); background:var(--blue-soft); }
@@ -25,7 +25,7 @@
 .provider-card > .d-btn { grid-column:2; grid-row:1/3; align-self:center; min-height:40px; padding:8px 14px; font-size:12px; }
 .provider-card button[aria-pressed=true] { background:var(--deeda-cyan); border-color:var(--deeda-cyan); color:var(--deeda-navy); }
 .provider-secondary { grid-column:2; display:flex; flex-wrap:wrap; align-items:center; gap:4px 12px; justify-content:flex-end; }
-#setup-dialog .text-button { min-height:40px; font-size:12px; }
+:is(#setup-dialog,#settings-dialog) .text-button { min-height:40px; font-size:12px; }
 .provider-secondary .text-button { padding:0; }
 .setup-details { border:0; border-top:1px solid var(--line); margin:0; padding:14px 0; font-size:13px; }
 .setup-details summary { cursor:pointer; font-weight:600; min-height:28px; }
@@ -40,8 +40,8 @@
 .setup-footer .d-btn { min-height:40px; padding:8px 24px; font-size:13px; }
 .api-model-fields { display:grid; grid-template-columns:1fr 1fr; gap:16px; margin:20px 0 12px; }
 .api-model-fields .d-field { min-width:0; }
-#setup-dialog .d-field > span { font-size:13px; }
-#setup-dialog .d-input, #setup-dialog .d-select { font-size:14px; min-height:44px; }
+:is(#setup-dialog,#settings-dialog) .d-field > span { font-size:13px; }
+:is(#setup-dialog,#settings-dialog) .d-input, :is(#setup-dialog,#settings-dialog) .d-select { font-size:14px; min-height:44px; }
 .api-consent { align-items:start; margin-block:16px; font-size:13px; line-height:1.6; }
 .api-connection-actions, .minimax-actions { display:flex; flex-wrap:wrap; align-items:center; gap:12px; }
 .api-connections .d-btn, .minimax-body .d-btn { font-size:13px; min-height:42px; padding:8px 16px; }
@@ -56,9 +56,9 @@
 .local-model-picker .d-btn { justify-self:start; }
 #local-model-status:empty { display:none; }
 @media(max-width:700px) {
-  #setup-dialog { width:calc(100vw - 20px); height:94dvh; max-height:94dvh; }
-  #setup-dialog .dialog-header { padding:16px 18px 12px; }
-  #setup-dialog h2 { font-size:21px; }
+  :is(#setup-dialog,#settings-dialog) { width:calc(100vw - 20px); height:94dvh; max-height:94dvh; }
+  :is(#setup-dialog,#settings-dialog) .dialog-header { padding:16px 18px 12px; }
+  :is(#setup-dialog,#settings-dialog) h2 { font-size:21px; }
   .setup-active { margin:0 18px 12px; font-size:12px; }
   .connection-workspace { display:flex; flex-direction:column; }
   .connection-methods { flex-direction:row; overflow-x:auto; padding:10px 12px; gap:4px; border-inline-end:0; border-bottom:1px solid var(--line); flex-shrink:0; }
@@ -76,3 +76,14 @@
 .subscription-guide .d-field { margin-top:12px; }
 .subscription-guide .d-btn { font-size:13px; min-height:42px; padding:8px 16px; }
 .subscription-guide .api-connection-actions { margin-top:8px; }
+
+.copilot-help { grid-column:1 / -1; margin-top:12px; font-size:13px; overflow-wrap:anywhere; }
+
+#settings-dialog .api-usage, #settings-dialog .refresh-settings, #settings-dialog .settings-data { padding:0; margin:0; border:0; border-radius:0; background:transparent; }
+#settings-dialog .button-row { flex-wrap:wrap; gap:10px; }
+#settings-dialog .d-btn { font-size:13px; min-height:40px; padding:8px 16px; }
+#settings-dialog .setup-footer { justify-content:flex-end; }
+#settings-dialog .settings-back { margin-inline-end:auto; margin-block:0; }
+#settings-dialog details { font-size:13px; line-height:1.7; }
+#settings-panel-data .button-row { display:grid; grid-template-columns:1fr 1fr; margin-top:20px; }
+@media(max-width:480px) { #settings-panel-data .button-row { grid-template-columns:1fr; } }

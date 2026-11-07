@@ -54,10 +54,10 @@ const entries = {
     "Tu plan Google puede incluir Antigravity, pero Google no admite reutilizar su sesión personal en apps externas. PersonalTube ofrece Gemini API por separado, sin usar esa suscripción."
   ],
   "guideCopilot": [
-    "Copilot subscription login is not integrated in PersonalTube yet. You can choose an explicitly configured API or a local model; neither uses your Copilot subscription.",
-    "تسجيل دخول اشتراك Copilot لسه مش مدمج هنا. تقدر تختار API بإعداد منفصل أو نموذج محلي؛ ولا واحد فيهم بيستخدم اشتراك Copilot.",
-    "Copilot-Abonnements sind hier noch nicht integriert. Du kannst eine separat konfigurierte API oder ein lokales Modell wählen; beides nutzt kein Copilot-Abonnement.",
-    "La suscripción Copilot aún no está integrada. Puedes configurar una API o un modelo local; ninguno usa tu suscripción Copilot."
+      "Use the official GitHub Copilot CLI connection below: install the reviewed version, sign in with GitHub, test a sample, then explicitly choose Use Copilot. Login and tests keep your current provider selected.",
+      "استخدم ربط GitHub Copilot الرسمي تحت: ثبّت الإصدار المدعوم، سجّل دخول GitHub، اختبر عينة، وبعدها اختار استخدام Copilot بنفسك. الدخول والاختبار مش بيغيّروا الحساب النشط.",
+      "Nutze unten die offizielle GitHub Copilot CLI: geprüfte Version installieren, mit GitHub anmelden, Probe testen und Copilot ausdrücklich auswählen. Anmeldung und Test ändern den aktiven Dienst nicht.",
+      "Usa la conexión oficial de GitHub Copilot CLI: instala la versión revisada, inicia sesión, prueba una muestra y elige Usar Copilot. El inicio de sesión y la prueba mantienen tu servicio activo."
   ],
   "guideKimi": [
     "Kimi Code is not offered for this automated comment-batch workflow under its current usage guidelines. A separately billed API or a local model is a different connection.",

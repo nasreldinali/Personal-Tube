@@ -1,5 +1,13 @@
 # Verification
 
+## Copilot connection and settings layout — 2026-11-07
+
+MEASURED: the full check passes **254 deterministic tests and 65 deliberate-defect checks**. New coverage exercises isolated Copilot login/test selection, official fixed login arguments, OAuth-only auth, version/protocol refusal, disabled tools/config discovery, bounded frames and process lifetime, exact evidence and the UI → same-origin HTTP → manager → classifier → protocol path with synthetic responses. Existing Codex/Claude tests remain unchanged. No runtime dependency was added.
+
+MEASURED: official Copilot CLI 1.0.107 returned its version, negotiated protocol 3 and returned signed-out status in an OS sandbox with networking denied. No OAuth completion or model call was made. A live signed-in Copilot account analysis remains **unverified**; the sample test is the user's explicit verification step. This adapter does not promise quota-only billing independently of GitHub's overage settings.
+
+MEASURED: Settings sections and the Connections return route were exercised in the browser. English/light desktop, Arabic/dark at 390×844 and German/Spanish tablet at 768×1024 were inspected. The measured mobile dialog/body had no horizontal overflow. A checkbox draft survived section switches; navigation/unit tests also verify unsaved fields. Browser warning/error capture was empty. The actual preview still detected Codex and Claude without login/logout or analysis requests. The README preview shows an empty key field, not a real credential.
+
 ## Account finder for new users — 2026-11-07
 
 MEASURED: full check passes **241 deterministic tests and 58 deliberate-defect checks**. RED-first interaction tests cover explicit-only navigation, supported account controls, unknown choice refusal and no automatic provider selection. The optional finder explains Codex, Claude, MiniMax, Google, Copilot, Kimi and other accounts in all four interface languages; named guidance is not a claim of seven subscription integrations.

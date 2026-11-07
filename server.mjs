@@ -1,3 +1,4 @@
+import { createCopilotSubscription } from './server/copilot-subscription.js';
 import { createLocalModels } from './server/local-models.js';
 import { createMiniMaxSubscription } from './server/minimax-subscription.js';
 import { createApiAnalysis } from './server/api-analysis.js';
@@ -21,7 +22,7 @@ const root = new URL('./', import.meta.url);
 const log = event => console.error(JSON.stringify(event));
 const catalog = createCatalogRepository(root);
 const processes = createProviderProcesses();
-const providers = createProviderManager({ ...processes, localModels:createLocalModels(), api:createApiAnalysis(), minimax:createMiniMaxSubscription(), classifiers: { codex:createCodexClassifier(), claude:createCodexClassifier({executable:'claude',provider:'claude'}) }, now:Date.now });
+const providers = createProviderManager({ ...processes, copilot:createCopilotSubscription(), localModels:createLocalModels(), api:createApiAnalysis(), minimax:createMiniMaxSubscription(), classifiers: { codex:createCodexClassifier(), claude:createCodexClassifier({executable:'claude',provider:'claude'}) }, now:Date.now });
 const classify = providers.classify;
 const youtubeAnalysis = createYouTubeAnalysis({ classify, now: Date.now });
 const community = createCommunityController({ archive: createCommunityRepository({ root, catalog }), collect: createCommunityCollector({ request: boundedJSON, now: Date.now }), analyze: createCommunityAnalysis({ classify }), enrich: createCommunityMetadata({ request: boundedJSON, now: Date.now }), catalog, now: Date.now, id: randomUUID, schedule: (task, delay) => { const timer=setTimeout(task,delay); timer.unref(); return ()=>clearTimeout(timer); } });

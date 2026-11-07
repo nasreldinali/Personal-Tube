@@ -5,7 +5,7 @@ const choices = new Map([
   ['claude', {name:'Claude / Claude Code',copy:'guideClaude',target:'setup-card-claude'}],
   ['minimax', {name:'MiniMax M Plan',copy:'guideMinimax',target:'minimax-panel'}],
   ['google', {name:'Google Gemini / Antigravity',copy:'guideGoogle',api:'gemini'}],
-  ['copilot', {name:'GitHub Copilot',copy:'guideCopilot'}],
+  ['copilot', {name:'GitHub Copilot',copy:'guideCopilot',target:'setup-card-copilot'}],
   ['kimi', {name:'Kimi / Kimi Code',copy:'guideKimi'}],
   ['other', {copy:'guideOther'}],
 ]);

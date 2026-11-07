@@ -41,6 +41,10 @@ No requiere `npm install`, compilación ni base de datos. No abras `index.html` 
 
 ## Conexiones y costes
 
+**GitHub Copilot:** instala CLI 1.0.107, inicia sesión desde la app, prueba una muestra y selecciónalo explícitamente. El inicio de sesión y la prueba mantienen el servicio activo y las sesiones de Codex/Claude. Usa tu cuota GitHub sin alternativa API; desactiva los excesos de pago en GitHub. Aún no se ha verificado aquí un análisis con una cuenta real de Copilot. [Configuración y límites](docs/COPILOT_SUBSCRIPTION.md).
+
+**Settings & data** comparte la navegación fija de Connections: YouTube, uso de API, actualizaciones y copias/datos.
+
 **MiniMax M Plan:** En **Setup & connections → Subscription → MiniMax**, guarda tu clave de suscripción (`sk-cp-…`) y prueba una muestra. Guardar/probar no cambia el proveedor seleccionado ni las sesiones de Codex/Claude. **Use MiniMax** lo selecciona explícitamente. Sin alternativa de pago por uso; MiniMax puede consumir paquetes de créditos existentes al agotar la cuota. Falta verificar una cuenta real. [Configuración y límites](docs/MINIMAX_SUBSCRIPTION.md).
 
 | Función | Requisito |
@@ -48,6 +52,7 @@ No requiere `npm install`, compilación ni base de datos. No abras `index.html` 
 | Biblioteca incluida | Node.js y navegador |
 | Nuevos datos de canales y búsqueda en directo | Tu propia clave de YouTube Data API |
 | Suscripción MiniMax M Plan | Tu clave global de suscripción; sin CLI. Cuota y después posibles paquetes de créditos existentes. |
+| GitHub Copilot | CLI oficial 1.0.107, inicio de sesión GitHub y prueba antes de seleccionarlo |
 | Suscripción Codex/Claude | CLI compatible de Codex o Claude Code y tu cuenta elegible |
 | Análisis en la nube | Tu clave de OpenAI, Anthropic, OpenRouter, Gemini, DeepSeek, Mistral o Groq y un ID de modelo compatible |
 | Análisis local | Ollama, LM Studio o un servidor local compatible ejecutándose con un modelo local adecuado |
@@ -66,6 +71,6 @@ El análisis automático puede equivocarse. Los Shorts se estiman por duración.
 
 Código y documentación de PersonalTube: [MIT](LICENSE). El catálogo HackerTube/open-index conserva sus condiciones ODC-By 1.0; las fuentes y la marca DEEDA tienen avisos propios. Consulta [NOTICE](NOTICE.md). PersonalTube es independiente y no es un producto oficial de Karpathy ni de YouTube.
 
-La nueva vista **Connections** separa suscripción, API en la nube, modelo local, YouTube y uso/ayuda. MiniMax es opcional en **Add another subscription**. **Find available models** lee la lista del servidor local sin analizar ni descargar modelos. Los LLM y SLM pequeños necesitan una salida JSON adecuada. No toda suscripción de chat permite integración: Google no admite sesiones personales de Antigravity en apps externas; Copilot aún no está integrado, y Kimi Code no se ofrece para este flujo automático. [Compatibilidad y límites](docs/CONNECTION_CATALOG.md).
+La nueva vista **Connections** separa suscripción, API en la nube, modelo local, YouTube y uso/ayuda. MiniMax es opcional en **Add another subscription**. **Find available models** lee la lista del servidor local sin analizar ni descargar modelos. Los LLM y SLM pequeños necesitan una salida JSON adecuada. No toda suscripción de chat permite integración: Google no admite sesiones personales de Antigravity en apps externas; Copilot está integrado mediante su CLI oficial, y Kimi Code no se ofrece para este flujo automático. [Compatibilidad y límites](docs/CONNECTION_CATALOG.md).
 
 En **Suscripción → Encontrar mi cuenta o suscripción**, elige tu servicio para ver la vía disponible. Elegir un nombre no inicia sesión, cambia el proveedor ni consume cuota de análisis.

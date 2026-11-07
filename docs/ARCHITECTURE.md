@@ -10,6 +10,8 @@ INFERRED: a functional core with explicit adapters suits this local app without 
 
 Frontend factory ports are internal to this package, not a public extension API. Callbacks read current state at action time, including after awaited requests; no feature imports the composition root. `public/styles.css` loads ordered functional fragments, with brand tokens first. See [frontend maintenance contract](FRONTEND_CLEANUP.md).
 
+Copilot subscription integration separates pure session/auth policy (`server/copilot-policy.js`), bounded framed transport (`server/copilot-rpc.js`), CLI/profile orchestration (`server/copilot-subscription.js`) and UI controls (`public/ui/copilot-connection.js`). The provider manager retains explicit selection and usage/evidence rules. [Protocol and safety limits](COPILOT_SUBSCRIPTION.md). Settings section navigation is independent of stored settings and uses the shared Connections shell; see [settings layout](SETTINGS_LAYOUT.md).
+
 ## Trust and access boundaries
 
 - User input, imported JSON, stored data and API responses are untrusted. Schema versions, types, bounds, IDs and enums are checked. Text is rendered through safe DOM properties, never HTML interpolation.

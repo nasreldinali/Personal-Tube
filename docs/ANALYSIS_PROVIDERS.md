@@ -2,12 +2,13 @@
 
 [Setup guide](ANALYSIS_SETUP.md) · [README](../README.md)
 
-PersonalTube supports two subscription CLIs, a direct MiniMax M Plan connection, seven cloud API services and three local model connection types. Choose one explicitly in **Connections**. The **Subscription → Find my account or subscription** guide helps new users identify the correct route without logging in or switching their active connection. It never changes services to work around an error or an exhausted allowance.
+PersonalTube supports three subscription CLIs, a direct MiniMax M Plan connection, seven cloud API services and three local model connection types. Choose one explicitly in **Connections**. The **Subscription → Find my account or subscription** guide helps new users identify the correct route without logging in or switching their active connection. It never changes services to work around an error or an exhausted allowance.
 
 | Connection | What you supply | Where analysis runs | Billing |
 |---|---|---|---|
 | Codex | Supported official CLI and your ChatGPT login | OpenAI | Your eligible plan and allowance |
 | Claude Code | Supported official CLI and your Claude login | Anthropic | Your eligible plan and allowance |
+| GitHub Copilot | Official CLI 1.0.107 and your GitHub OAuth login | GitHub Copilot | Your plan allowance; disable paid overage in GitHub billing |
 | MiniMax M Plan | Your global subscription key (`sk-cp-…`) | MiniMax | Included quota, then existing credit packs; no pay-as-you-go fallback |
 | OpenAI API | Your API key and exact model ID | OpenAI | Separate API billing |
 | Anthropic API | Your API key and exact model ID | Anthropic | Separate API billing |
@@ -19,13 +20,17 @@ PersonalTube supports two subscription CLIs, a direct MiniMax M Plan connection,
 
 Closed and open-weight models are available through these services. Support for a service does **not** mean every model supports the required JSON output, context length or requested generation limit. Cloud endpoints are fixed. The generic local connector accepts only a numeric loopback port, not a destination URL. Ollama's `:cloud` and `-cloud` model suffixes are refused in the local option; you are responsible for ensuring the local server actually uses a local model.
 
-## Subscription sign-in and sign-out
+## Codex and Claude sign-in and sign-out
 
 Install a supported CLI using [the account guide](ANALYSIS_SETUP.md). A signed-out card offers **Sign in**. A connected card offers **Use** and **Sign out**. Sign out asks for confirmation because it invokes the official CLI logout on this computer; other tools sharing that CLI login may need to authenticate again. It does not remove your PersonalTube library or cancel your subscription. After sign-out, use Sign in to reconnect or choose another account in the provider's browser flow.
 
 **Test with one sample** also works for the selected connected subscription. It sends one synthetic comment through the same classifier, uses your plan allowance, requires confirmation and has a one-minute per-service cooldown. It does not log out, fetch YouTube data or fall back to a paid API.
 
 Tests use synthetic accounts for logout. Existing personal credentials are never removed for an automated test.
+
+## GitHub Copilot subscription setup
+
+[Install the reviewed CLI, sign in, test a sample and explicitly select Copilot](COPILOT_SUBSCRIPTION.md). Unlike Codex/Claude, its login and test do not change the active provider. No Copilot sign-out control is provided; use the official tool with the documented dedicated profile.
 
 ## MiniMax subscription setup
 
@@ -53,7 +58,7 @@ Choose the local service, press **Find available models**, and select a model or
 
 ## Limits and errors
 
-Every analysis request has a two-minute deadline, a 1 MB response limit and no automatic retries. API output is capped at 8,192 tokens. Inputs keep the existing limits: up to 160 YouTube comments per request or 24 community comment/video pairs per call, with at most three community calls per search. An insufficient model context or truncated output fails the request; it is not displayed as a recommendation.
+Every analysis request has a two-minute deadline, a 1 MB response limit (Copilot: 1 MB per protocol message and 4 MB cumulative output) and no automatic retries. API output is capped at 8,192 tokens. Inputs keep the existing limits: up to 160 YouTube comments per request or 24 community comment/video pairs per call, with at most three community calls per search. An insufficient model context or truncated output fails the request; it is not displayed as a recommendation.
 
 Only validated JSON classifications and exact quotes from the supplied comments are accepted. API models receive no browsing, file, shell or agent tools. Requests use fixed service endpoints and refuse redirects. Failed requests may still cost money or consume allowance; the app's counters measure requests, not a live token balance or bill. Set spending limits with your provider.
 
@@ -63,12 +68,13 @@ API-key rejection, rate limits, unavailable servers and invalid model output are
 
 `POST /api/setup` requires same-origin JSON and a body of at most 6,000 bytes. Existing status/select/connect actions remain. New actions:
 
-- `logout`: subscription `provider`, `confirm: true`.
+- `login`: `provider: "copilot"` only. Starts bounded official browser OAuth without switching the selected provider.
+- `logout`: Codex/Claude `provider`, `confirm: true`.
 - `configure` for MiniMax: `provider: "minimax"`, `configuration` containing exactly `provider: "minimax"`, `key` starting with `sk-cp-`, and `confirmSubscription: true`. Saves without selection or network access.
 - `configure`: API/local `provider`, `configuration` containing exactly `provider`, `model`, `key`, `acknowledgeCost`. Cloud options require a nonempty key and `true`; local options require an empty key and `false`. The `local-openai` configuration additionally requires an integer `port` between 1024 and 65535; other configurations reject this extra field.
 - `models`: local `provider` only, plus `port` only for `local-openai`. Returns validated model IDs without selection or analysis. Cloud providers and extra fields are refused.
 - `forget`: MiniMax/API/local `provider`, `confirm: true`.
-- `test`: selected subscription/API/local `provider`, `confirm: true`. MiniMax may also be tested while inactive; its isolated test preserves selection.
+- `test`: selected subscription/API/local `provider`, `confirm: true`. MiniMax and Copilot may also be tested while inactive; its isolated test preserves selection.
 
 Every request includes `version: 1`; unknown versions, providers and additional input fields are refused. Status returns availability, method, model ID, local port where applicable, tested state and aggregate usage, never keys. Login, analysis and configuration mutations cannot race. The server is for one local user, not a publicly hosted account service.
 

@@ -1,3 +1,4 @@
+import { createCopilotConnection } from './copilot-connection.js';
 import { createSubscriptionGuide } from './subscription-guide.js';
 import { createMiniMaxConnection } from './minimax-connection.js';
 import { createConnectionMethod } from './connection-method.js';
@@ -20,6 +21,7 @@ export function createSetupPanel({ context, finish, openYouTube, onError, schedu
   const name = provider => provider === 'claude' ? 'Claude' : providerNames[provider];
   const text = (key, values) => t(context().language, key, values);
   const apiPanel = createApiConnections({text,request,confirm});
+  const copilotPanel = createCopilotConnection({text,request,confirm});
   const minimaxPanel = createMiniMaxConnection({text,request,confirm});
   const clearSecrets = () => { apiPanel.clearSecret(); minimaxPanel.clearSecret(); };
   const methods = createConnectionMethod({setMethod:apiPanel.setMethod,clearSecret:clearSecrets});
@@ -51,8 +53,9 @@ export function createSetupPanel({ context, finish, openYouTube, onError, schedu
     $('setup-status').replaceChildren(...['setupRuntime', context().storageReady ? 'setupStorageReady' : 'setupStorageBlocked'].map(key => element('li', '', text(key))));
     $('setup-message').textContent = running ? text(message === 'analysisTesting' ? 'analysisTesting' : 'setupChecking') : message ? text(message, messageValues) : '';
     $('setup-usage').replaceChildren();
-    const connectionBusy = running || context().busy || Boolean(result?.busy) || Boolean(result && providers.some(p=>result.providers[p]?.connection==='pending' && !result.providers[p]?.connected));
+    const connectionBusy = running || context().busy || Boolean(result?.busy) || Boolean(result && Object.keys(result.providers).some(p=>result.providers[p]?.connection==='pending' && !result.providers[p]?.connected));
     apiPanel.render(result, connectionBusy);
+    copilotPanel.render(result,connectionBusy);
     minimaxPanel.render(result, connectionBusy);
     methods.render(result?.selected);
     accountGuide.render();
@@ -63,7 +66,7 @@ export function createSetupPanel({ context, finish, openYouTube, onError, schedu
   }
   function poll() {
     stopPolling();
-    if (!opened || !result || !providers.some(p => result.providers[p].connection === 'pending' && !result.providers[p].connected)) return;
+    if (!opened || !result || !Object.keys(result.providers).some(p => result.providers[p].connection === 'pending' && !result.providers[p].connected)) return;
     if (!pollUntil) pollUntil = now() + 185000;
     if (now() >= pollUntil) { message = 'connectionFailed'; render(); return; }
     timer = schedule(() => {
@@ -85,7 +88,7 @@ export function createSetupPanel({ context, finish, openYouTube, onError, schedu
       if (data.version !== 1 || !providerIds.includes(data.selected) || !data.providers || !data.usage) throw new AppError('invalidSetup');
       for (const p of providers) if (!data.providers[p] || !data.usage[p] || ['attempted', 'completed', 'failed', 'inputs'].some(k => !Number.isSafeInteger(data.usage[p][k]) || data.usage[p][k] < 0)) throw new AppError('invalidSetup');
       result = data; responseData=data; succeeded = true; message = action === 'test' ? 'analysisTested' : '';
-      if (action === 'connect') { pollUntil = now() + 185000; message = data.providers[provider].connected ? 'providerSelected' : 'loginAutoCheck'; messageValues = { provider: name(provider) }; }
+      if (action === 'connect' || action === 'login') { pollUntil = now() + 185000; message = data.providers[provider].connected ? 'providerSelected' : 'loginAutoCheck'; messageValues = { provider: name(provider) }; }
     } catch (error) {
       const allowed = ['busy', 'providerMissing', 'classifierVersion', 'connectionCooldown', 'connectionFailed', 'invalidSetup', 'analysisConnectionRequired', 'analysisKeyRequired', 'analysisCostRequired', 'analysisModelRequired', 'analysisAuthFailed', 'analysisRateLimit', 'analysisUnavailable', 'invalidClassification', 'minimaxSubscriptionKeyRequired', 'minimaxSubscriptionConsent'];
       message = allowed.includes(error.code) ? error.code : 'setupCheckFailed';
